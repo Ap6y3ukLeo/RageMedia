@@ -1,0 +1,6 @@
+{
+  "name": "Rage Media",
+  "description": "A bold, brutalist-style landing page for a creative marketing agency with high-energy animations and distressed visual elements.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
