@@ -703,7 +703,7 @@ export default function App() {
          </div>
 
          {/* Background Hero Image - only visible on desktop */}
-          <div className="hidden lg:block absolute bottom-[-110px] sm:bottom-[-150px] md:bottom-[-180px] lg:bottom-[-200px] xl:bottom-[-240px] left-1/2 -translate-x-1/2 lg:left-auto lg:translate-x-0 lg:-right-[80px] xl:-right-[140px] 2xl:-right-[180px] w-[130vw] sm:w-[110vw] lg:w-[160vw] xl:w-[180vw] 2xl:w-[200vw] max-w-[620px] sm:max-w-[750px] lg:max-w-[1250px] xl:max-w-[1500px] 2xl:max-w-[1700px] origin-bottom select-none z-10 pointer-events-none">
+          <div className="lg:absolute bottom-[-110px] sm:bottom-[-150px] md:bottom-[-180px] lg:bottom-[-200px] xl:bottom-[-240px] left-1/2 -translate-x-1/2 lg:left-auto lg:translate-x-0 lg:-right-[80px] xl:-right-[140px] 2xl:-right-[180px] w-[130vw] sm:w-[110vw] lg:w-[160vw] xl:w-[180vw] 2xl:w-[200vw] max-w-[620px] sm:max-w-[750px] lg:max-w-[1250px] xl:max-w-[1500px] 2xl:max-w-[1700px] origin-bottom select-none z-10 pointer-events-none hidden lg:block">
             <img 
               src="/images/hero_megaphone_photoroom.png" 
               alt="Rage Media Slogan and Megaphone"
