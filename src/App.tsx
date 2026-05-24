@@ -1323,7 +1323,7 @@ export default function App() {
                 <motion.img 
                   src="/images/rage_logo_uploaded.png"
                   alt="Rage Media Logo"
-                  className="h-12 md:h-16 w-auto object-contain cursor-pointer filter drop-shadow-[0_0_12px_rgba(172,255,42,0.15)] hover:drop-shadow-[0_0_25px_rgba(172,255,42,0.45)] transition-shadow"
+                  className="h-24 md:h-32 w-auto object-contain cursor-pointer filter drop-shadow-[0_0_12px_rgba(172,255,42,0.15)] hover:drop-shadow-[0_0_25px_rgba(172,255,42,0.45)] transition-shadow"
                   referrerPolicy="no-referrer"
                   animate={{
                     y: [0, -8, 0],
