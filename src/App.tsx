@@ -756,7 +756,7 @@ export default function App() {
             </motion.div>
 
             {/* Right Centered Artwork: Combined Megaphone and Slogan Artwork (Image 1) - empty placeholder for grid balance */}
-             <div className="lg:col-span-7 min-h-[0px] sm:min-h-[0px] lg:min-h-[720px] xl:min-h-[850px]"></div>
+              <div className="lg:col-span-7 relative flex items-center justify-center min-h-[440px] sm:min-h-[560px] lg:min-h-[720px] xl:min-h-[850px] pb-12 lg:pb-0"></div>
 
          </div>
 
