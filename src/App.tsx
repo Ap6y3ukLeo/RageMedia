@@ -746,7 +746,7 @@ export default function App() {
             </motion.div>
 
             {/* Right Centered Artwork: Combined Megaphone and Slogan Artwork (Image 1) */}
-            <div className="lg:col-span-7 relative flex items-center justify-center min-h-[440px] sm:min-h-[560px] lg:min-h-[720px] xl:min-h-[850px] pb-12 lg:pb-0">
+            <div className="lg:col-span-7 relative flex items-center justify-center min-h-[0px] sm:min-h-[0px] lg:min-h-[720px] xl:min-h-[850px] pb-0 lg:pb-0">
               
               <motion.div 
                 initial={{ opacity: 0, scale: 0.94, y: 40 }}
