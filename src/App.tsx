@@ -753,7 +753,7 @@ export default function App() {
               whileInView={{ opacity: 1, scale: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.85, type: "spring", stiffness: 45 }}
-              className="relative lg:absolute w-full max-w-[280px] sm:max-w-[320px] mx-auto lg:mx-0 lg:w-[130vw] lg:sm:w-[110vw] lg:lg:w-[160vw] lg:xl:w-[180vw] lg:2xl:w-[200vw] lg:max-w-[620px] lg:sm:max-w-[750px] lg:lg:max-w-[1250px] lg:xl:max-w-[1500px] lg:2xl:max-w-[1700px] origin-bottom select-none z-10 lg:bottom-[-110px] lg:sm:bottom-[-150px] lg:md:bottom-[-180px] lg:lg:bottom-[-200px] lg:xl:bottom-[-240px] lg:left-1/2 lg:-translate-x-1/2 lg:lg:left-auto lg:lg:translate-x-0 lg:lg:-right-[80px] lg:xl:-right-[140px] lg:2xl:-right-[180px]"
+              className="lg:absolute w-full max-w-[280px] sm:max-w-[320px] mx-auto lg:mx-0 lg:w-[130vw] lg:sm:w-[110vw] lg:lg:w-[160vw] lg:xl:w-[180vw] lg:2xl:w-[200vw] lg:max-w-[620px] lg:sm:max-w-[750px] lg:lg:max-w-[1250px] lg:xl:max-w-[1500px] lg:2xl:max-w-[1700px] origin-bottom select-none z-0 lg:z-10 lg:bottom-[-110px] lg:sm:bottom-[-150px] lg:md:bottom-[-180px] lg:lg:bottom-[-200px] lg:xl:bottom-[-240px] lg:left-1/2 lg:-translate-x-1/2 lg:lg:left-auto lg:lg:translate-x-0 lg:lg:-right-[80px] lg:xl:-right-[140px] lg:2xl:-right-[180px]"
             >
               
               {/* Combined Hero Artwork (Megaphone & Slogan) */}
@@ -761,7 +761,7 @@ export default function App() {
                 <img 
                   src="/images/hero_megaphone_photoroom.png" 
                   alt="Rage Media Slogan and Megaphone"
-                  className="w-full h-auto object-contain transition-transform duration-750 group-hover:scale-[1.01]"
+                  className="w-full h-auto object-contain transition-transform duration-750 group-hover:scale-[1.01] opacity-30 lg:opacity-100"
                   referrerPolicy="no-referrer"
                 />
               </div>
