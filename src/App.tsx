@@ -529,7 +529,8 @@ export default function App() {
         className="absolute inset-0 pointer-events-none -z-10 bg-repeat-y bg-top"
         style={{ 
           backgroundImage: "linear-gradient(to bottom, rgba(4, 4, 6, 0.25), rgba(4, 4, 6, 0.35)), url('/images/site_background.png')",
-          backgroundSize: "100% auto",
+          backgroundSize: "cover",
+          backgroundPosition: "center top",
         }}
       />
       
