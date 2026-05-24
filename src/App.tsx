@@ -673,105 +673,94 @@ export default function App() {
       </nav>
 
       {/* 2. HERO / MAIN CONTENT SECTION */}
-      <section className="relative min-h-screen pt-32 pb-48 md:pb-64 lg:pb-80 xl:pb-[340px] px-6 overflow-hidden flex flex-col justify-center">
-        {/* Abstract spray splatter and cyber web wireframe behind megaphone and title */}
-        <div className="absolute inset-0 z-0 pointer-events-none select-none overflow-hidden">
-          {/* Neon glows */}
-          <div className="absolute top-1/3 right-1/4 w-[550px] h-[550px] bg-rage-brand/12 blur-[130px] rounded-full mix-blend-screen" />
-          <div className="absolute top-1/4 right-1/3 w-80 h-80 bg-rage-pink/12 blur-[100px] rounded-full mix-blend-screen" />
-          
-          {/* SVG Spiderweb Geo Net */}
-          <svg className="absolute inset-0 w-full h-full opacity-35" xmlns="http://www.w3.org/2000/svg">
-            {/* Green lines & coordinates */}
-            <path d="M 50,-10 L 150,120 L 80,280 L -10,180 Z M 150,120 L -10,180 M 50,-10 L 80,280" stroke="#CCFF00" strokeWidth="0.5" fill="none" opacity="0.12" />
-            <path d="M 450,100 L 620,180 L 510,360 L 380,290 Z M 620,180 L 380,290 M 450,100 L 510,360" stroke="#CCFF00" strokeWidth="0.5" fill="none" opacity="0.1" />
-            
-            {/* Pink spiderweb grid behind content */}
-            <path d="M 850,220 L 1050,140 L 1180,310 L 980,420 Z L 850,220 L 1180,310 M 1050,140 L 980,420" stroke="#FF007A" strokeWidth="0.6" fill="none" opacity="0.15" />
-            <path d="M 900,180 L 1120,270 L 1020,490 Z" stroke="#FF007A" strokeWidth="0.5" fill="none" opacity="0.08" />
-            
-            {/* Nodes */}
-            <circle cx="150" cy="120" r="1.5" fill="#CCFF00" opacity="0.3" />
-            <circle cx="80" cy="280" r="1.5" fill="#CCFF00" opacity="0.3" />
-            <circle cx="620" cy="180" r="1.5" fill="#CCFF00" opacity="0.25" />
-            <circle cx="380" cy="290" r="1.5" fill="#CCFF00" opacity="0.25" />
-            <circle cx="850" cy="220" r="2" fill="#FF007A" opacity="0.4" />
-            <circle cx="1050" cy="140" r="2" fill="#FF007A" opacity="0.4" />
-            <circle cx="1180" cy="310" r="2" fill="#FF007A" opacity="0.4" />
-            <circle cx="980" cy="420" r="2" fill="#FF007A" opacity="0.4" />
-          </svg>
-        </div>
+       <section className="relative min-h-screen pt-32 pb-48 md:pb-64 lg:pb-80 xl:pb-[340px] px-6 overflow-hidden flex flex-col justify-center">
+         {/* Abstract spray splatter and cyber web wireframe behind megaphone and title */}
+         <div className="absolute inset-0 z-0 pointer-events-none select-none overflow-hidden">
+           {/* Neon glows */}
+           <div className="absolute top-1/3 right-1/4 w-[550px] h-[550px] bg-rage-brand/12 blur-[130px] rounded-full mix-blend-screen" />
+           <div className="absolute top-1/4 right-1/3 w-80 h-80 bg-rage-pink/12 blur-[100px] rounded-full mix-blend-screen" />
+           
+           {/* SVG Spiderweb Geo Net */}
+           <svg className="absolute inset-0 w-full h-full opacity-35" xmlns="http://www.w3.org/2000/svg">
+             {/* Green lines & coordinates */}
+             <path d="M 50,-10 L 150,120 L 80,280 L -10,180 Z M 150,120 L -10,180 M 50,-10 L 80,280" stroke="#CCFF00" strokeWidth="0.5" fill="none" opacity="0.12" />
+             <path d="M 450,100 L 620,180 L 510,360 L 380,290 Z M 620,180 L 380,290 M 450,100 L 510,360" stroke="#CCFF00" strokeWidth="0.5" fill="none" opacity="0.1" />
+             
+             {/* Pink spiderweb grid behind content */}
+             <path d="M 850,220 L 1050,140 L 1180,310 L 980,420 Z L 850,220 L 1180,310 M 1050,140 L 980,420" stroke="#FF007A" strokeWidth="0.6" fill="none" opacity="0.15" />
+             <path d="M 900,180 L 1120,270 L 1020,490 Z" stroke="#FF007A" strokeWidth="0.5" fill="none" opacity="0.08" />
+             
+             {/* Nodes */}
+             <circle cx="150" cy="120" r="1.5" fill="#CCFF00" opacity="0.3" />
+             <circle cx="80" cy="280" r="1.5" fill="#CCFF00" opacity="0.3" />
+             <circle cx="620" cy="180" r="1.5" fill="#CCFF00" opacity="0.25" />
+             <circle cx="380" cy="290" r="1.5" fill="#CCFF00" opacity="0.25" />
+             <circle cx="850" cy="220" r="2" fill="#FF007A" opacity="0.4" />
+             <circle cx="1050" cy="140" r="2" fill="#FF007A" opacity="0.4" />
+             <circle cx="1180" cy="310" r="2" fill="#FF007A" opacity="0.4" />
+             <circle cx="980" cy="420" r="2" fill="#FF007A" opacity="0.4" />
+           </svg>
+         </div>
 
-        <div className="container mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
-          
-          {/* Left Text / CTAs */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="lg:col-span-5 max-w-2xl relative z-20 pb-12 lg:pb-0"
-          >
-            {/* Main heading exactly as ref image */}
-            <h1 className="section-title mb-6 text-white text-5xl sm:text-6xl md:text-7.5xl leading-[0.9] tracking-tighter uppercase font-black">
-              МЫ ДЕЛАЕМ <br />
-              <span className="text-rage-brand block text-6xl sm:text-7xl md:text-8.5xl mt-1 tracking-tighter">
-                РАЗНИЦУ
-              </span>
-            </h1>
-            
-            <p className="text-base sm:text-lg md:text-xl text-white/70 mb-8 leading-relaxed font-sans max-w-lg">
-              Rage Media — это не просто реклама. <br />
-              Это влияние. Это культура. Это результат.
-            </p>
+         {/* Background Hero Image - only visible on desktop */}
+         <div className="hidden lg:block absolute bottom-[-110px] sm:bottom-[-150px] md:bottom-[-180px] lg:bottom-[-200px] xl:bottom-[-240px] left-1/2 -translate-x-1/2 lg:left-auto lg:translate-x-0 lg:-right-[80px] xl:-right-[140px] 2xl:-right-[180px] w-[130vw] sm:w-[110vw] lg:w-[160vw] xl:w-[180vw] 2xl:w-[200vw] max-w-[620px] sm:max-w-[750px] lg:max-w-[1250px] xl:max-w-[1500px] 2xl:max-w-[1700px] origin-bottom select-none z-0 pointer-events-none">
+           <img 
+             src="/images/hero_megaphone_photoroom.png" 
+             alt="Rage Media Slogan and Megaphone"
+             className="w-full h-auto object-contain opacity-100"
+             referrerPolicy="no-referrer"
+           />
+         </div>
 
-            {/* Interactive Custom Styled CTA Buttons */}
-            <div className="flex flex-wrap gap-4">
-              <button 
-                onClick={() => openDiscussWithRole('advertiser')}
-                className="btn-primary group font-extrabold cursor-pointer"
-              >
-                {lang === 'RU' ? 'Хочу рекламу' : 'I want ads'}
-                <ArrowUpRight size={16} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </button>
-              
-              <button 
-                onClick={() => openDiscussWithRole('blogger')}
-                className="px-7 py-3 bg-transparent border-2 border-rage-pink text-white font-extrabold rounded-full uppercase tracking-tight text-xs sm:text-sm transition-all hover:bg-rage-pink/10 active:scale-95 flex items-center gap-2 group cursor-pointer"
-              >
-                {lang === 'RU' ? 'Я блогер' : 'Become blogger'}
-                <ArrowUpRight size={16} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </button>
-            </div>
-          </motion.div>
-
-          {/* Right Centered Artwork: Combined Megaphone and Slogan Artwork (Image 1) */}
-           <div className="lg:col-span-7 relative flex items-center justify-center min-h-[440px] sm:min-h-[560px] lg:min-h-[720px] xl:min-h-[850px] pb-12 lg:pb-0">
+         <div className="container mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
             
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.94, y: 40 }}
-              whileInView={{ opacity: 1, scale: 1, y: 0 }}
+            {/* Left Text / CTAs */}
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.85, type: "spring", stiffness: 45 }}
-              className="lg:absolute w-full max-w-[280px] sm:max-w-[320px] mx-auto lg:mx-0 lg:w-[130vw] lg:sm:w-[110vw] lg:lg:w-[160vw] lg:xl:w-[180vw] lg:2xl:w-[200vw] lg:max-w-[620px] lg:sm:max-w-[750px] lg:lg:max-w-[1250px] lg:xl:max-w-[1500px] lg:2xl:max-w-[1700px] origin-bottom select-none z-0 lg:z-10 lg:bottom-[-110px] lg:sm:bottom-[-150px] lg:md:bottom-[-180px] lg:lg:bottom-[-200px] lg:xl:bottom-[-240px] lg:left-1/2 lg:-translate-x-1/2 lg:lg:left-auto lg:lg:translate-x-0 lg:lg:-right-[80px] lg:xl:-right-[140px] lg:2xl:-right-[180px]"
+              transition={{ duration: 0.8 }}
+              className="lg:col-span-5 max-w-2xl relative z-20 pb-12 lg:pb-0"
             >
+              {/* Main heading exactly as ref image */}
+              <h1 className="section-title mb-6 text-white text-5xl sm:text-6xl md:text-7.5xl leading-[0.9] tracking-tighter uppercase font-black">
+                МЫ ДЕЛАЕМ <br />
+                <span className="text-rage-brand block text-6xl sm:text-7xl md:text-8.5xl mt-1 tracking-tighter">
+                  РАЗНИЦУ
+                </span>
+              </h1>
               
-              {/* Combined Hero Artwork (Megaphone & Slogan) */}
-              <div className="relative group overflow-visible">
-                <img 
-                  src="/images/hero_megaphone_photoroom.png" 
-                  alt="Rage Media Slogan and Megaphone"
-                  className="w-full h-auto object-contain transition-transform duration-750 group-hover:scale-[1.01] opacity-30 lg:opacity-100"
-                  referrerPolicy="no-referrer"
-                />
+              <p className="text-base sm:text-lg md:text-xl text-white/70 mb-8 leading-relaxed font-sans max-w-lg">
+                Rage Media — это не просто реклама. <br />
+                Это влияние. Это культура. Это результат.
+              </p>
+
+              {/* Interactive Custom Styled CTA Buttons */}
+              <div className="flex flex-wrap gap-4">
+                <button 
+                  onClick={() => openDiscussWithRole('advertiser')}
+                  className="btn-primary group font-extrabold cursor-pointer"
+                >
+                  {lang === 'RU' ? 'Хочу рекламу' : 'I want ads'}
+                  <ArrowUpRight size={16} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </button>
+                
+                <button 
+                  onClick={() => openDiscussWithRole('blogger')}
+                  className="px-7 py-3 bg-transparent border-2 border-rage-pink text-white font-extrabold rounded-full uppercase tracking-tight text-xs sm:text-sm transition-all hover:bg-rage-pink/10 active:scale-95 flex items-center gap-2 group cursor-pointer"
+                >
+                  {lang === 'RU' ? 'Я блогер' : 'Become blogger'}
+                  <ArrowUpRight size={16} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </button>
               </div>
-
             </motion.div>
-          </div>
 
-        </div>
+            {/* Right Centered Artwork: Combined Megaphone and Slogan Artwork (Image 1) - empty placeholder for grid balance */}
+             <div className="lg:col-span-7 min-h-[0px] sm:min-h-[0px] lg:min-h-[720px] xl:min-h-[850px]"></div>
 
-      </section>
+         </div>
+
+       </section>
 
       {/* 4. CASES / ГРОМКИЕ ПРОЕКТЫ SECTION */}
       <section id="cases" className="py-24 px-6 relative mt-12 bg-black/15 backdrop-blur-xs border-t border-b border-white/5">
