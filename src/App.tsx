@@ -746,14 +746,14 @@ export default function App() {
           </motion.div>
 
           {/* Right Centered Artwork: Combined Megaphone and Slogan Artwork (Image 1) */}
-          <div className="lg:col-span-7 relative flex items-center justify-center min-h-[440px] sm:min-h-[560px] lg:min-h-[720px] xl:min-h-[850px] pb-12 lg:pb-0">
+           <div className="lg:col-span-7 relative flex items-center justify-center min-h-[440px] sm:min-h-[560px] lg:min-h-[720px] xl:min-h-[850px] pb-12 lg:pb-0">
             
             <motion.div 
               initial={{ opacity: 0, scale: 0.94, y: 40 }}
               whileInView={{ opacity: 1, scale: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.85, type: "spring", stiffness: 45 }}
-              className="absolute bottom-[-110px] sm:bottom-[-150px] md:bottom-[-180px] lg:bottom-[-200px] xl:bottom-[-240px] left-1/2 -translate-x-1/2 lg:left-auto lg:translate-x-0 lg:-right-[80px] xl:-right-[140px] 2xl:-right-[180px] w-[130vw] sm:w-[110vw] lg:w-[160vw] xl:w-[180vw] 2xl:w-[200vw] max-w-[620px] sm:max-w-[750px] lg:max-w-[1250px] xl:max-w-[1500px] 2xl:max-w-[1700px] origin-bottom select-none z-10"
+              className="relative lg:absolute w-full max-w-[280px] sm:max-w-[320px] mx-auto lg:mx-0 lg:w-[130vw] lg:sm:w-[110vw] lg:lg:w-[160vw] lg:xl:w-[180vw] lg:2xl:w-[200vw] lg:max-w-[620px] lg:sm:max-w-[750px] lg:lg:max-w-[1250px] lg:xl:max-w-[1500px] lg:2xl:max-w-[1700px] origin-bottom select-none z-10 lg:bottom-[-110px] lg:sm:bottom-[-150px] lg:md:bottom-[-180px] lg:lg:bottom-[-200px] lg:xl:bottom-[-240px] lg:left-1/2 lg:-translate-x-1/2 lg:lg:left-auto lg:lg:translate-x-0 lg:lg:-right-[80px] lg:xl:-right-[140px] lg:2xl:-right-[180px]"
             >
               
               {/* Combined Hero Artwork (Megaphone & Slogan) */}
