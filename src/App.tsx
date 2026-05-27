@@ -646,12 +646,13 @@ export default function App() {
               </div>
 
               {[
-                { title: lang === 'RU' ? 'ГЛАВНАЯ' : 'MAIN', href: '#' },
-                { title: lang === 'RU' ? 'КЕЙСЫ' : 'CASES', href: '#cases' },
-                { title: lang === 'RU' ? 'УСЛУГИ' : 'SERVICES', href: '#services' },
-                { title: lang === 'RU' ? 'БЛОГЕРЫ' : 'BLOGGERS', href: '#bloggers' },
-                { title: lang === 'RU' ? 'КОНТАКТЫ' : 'CONTACTS', href: '#contacts' }
-              ].map((item, index) => (
+                 { title: lang === 'RU' ? 'ГЛАВНАЯ' : 'MAIN', href: '#' },
+                 { title: lang === 'RU' ? 'КЕЙСЫ' : 'CASES', href: '#cases' },
+                 { title: lang === 'RU' ? 'УСЛУГИ' : 'SERVICES', href: '#services' },
+                 { title: lang === 'RU' ? 'БЛОГЕРЫ' : 'BLOGGERS', href: '#bloggers' },
+                 { title: lang === 'RU' ? 'КАРЬЕРА' : 'CAREER', href: '/career' },
+                 { title: lang === 'RU' ? 'КОНТАКТЫ' : 'CONTACTS', href: '#contacts' }
+               ].map((item, index) => (
                 <motion.a
                   key={index}
                   href={item.href}
@@ -743,6 +744,14 @@ export default function App() {
                   {lang === 'RU' ? 'Я блогер' : 'Become blogger'}
                   <ArrowUpRight size={16} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </button>
+                
+                <a 
+                  href="/career"
+                  className="px-7 py-3 bg-transparent border-2 border-rage-brand text-white font-extrabold rounded-full uppercase tracking-tight text-xs sm:text-sm transition-all hover:bg-rage-brand/10 active:scale-95 flex items-center gap-2 group cursor-pointer"
+                >
+                  {lang === 'RU' ? 'Карьера' : 'Career'}
+                  <ArrowUpRight size={16} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </a>
               </div>
             </motion.div>
 
@@ -1349,9 +1358,10 @@ export default function App() {
           <div className="pt-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6 text-white/40 text-xs font-mono">
             <div>© 2026 Rage Media. {lang === 'RU' ? 'Все права защищены.' : 'All rights reserved.'}</div>
             <div className="flex gap-6 sm:gap-8">
-              <a href="#privacy" className="hover:text-white transition-colors">Политика конфиденциальности</a>
-              <a href="#terms" className="hover:text-white transition-colors">Публичная оферта</a>
-            </div>
+               <a href="/career" className="hover:text-rage-brand transition-colors">Карьера в RageMedia</a>
+               <a href="#privacy" className="hover:text-white transition-colors">Политика конфиденциальности</a>
+               <a href="#terms" className="hover:text-white transition-colors">Публичная оферта</a>
+             </div>
           </div>
         </div>
       </footer>
