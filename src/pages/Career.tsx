@@ -1,9 +1,22 @@
+import { useState } from 'react';
 import { motion } from 'motion/react';
 import { ArrowUpRight } from 'lucide-react';
 
 export default function Career() {
+  const [lang, setLang] = useState<'RU' | 'EN'>('RU');
+
   return (
     <div className="min-h-screen bg-black text-white">
+      {/* Header */}
+      <nav className="fixed top-0 left-0 w-full z-50 px-6 py-4 bg-black/90 backdrop-blur-md border-b border-white/5">
+        <div className="container mx-auto flex items-center justify-between">
+          <a href="/" className="text-2xl font-black text-rage-brand uppercase">RageMedia</a>
+          <a href="/" className="px-4 py-2 bg-transparent border border-white/20 text-white font-extrabold rounded-full uppercase tracking-tight text-xs transition-all hover:bg-white/10">
+            {lang === 'RU' ? 'На главную' : 'Back to main'}
+          </a>
+        </div>
+      </nav>
+
       {/* Hero Section */}
       <section className="relative min-h-screen pt-32 pb-24 px-6 flex items-center justify-center overflow-hidden">
         {/* Background effects */}
