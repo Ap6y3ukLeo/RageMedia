@@ -29,7 +29,8 @@ import {
   Award,
   Sun,
   Moon,
-  ChevronDown
+  ChevronDown,
+  Briefcase
 } from 'lucide-react';
 import { cn } from './lib/utils';
 import RageLogo from './components/RageLogo';
@@ -1115,7 +1116,14 @@ export default function App() {
 
           {/* Right menu triggers / widgets - Designed like Photo 2 */}
           <div className="flex items-center gap-4 sm:gap-6 ml-auto">
-
+            {/* Vacancies / Career button link */}
+            <a
+              href="/career"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#121212] border border-white/10 hover:border-rage-brand/30 rounded-md text-[11px] font-black uppercase tracking-wider text-white hover:text-rage-brand transition-all cursor-pointer shadow-sm"
+            >
+              <Briefcase size={11} className="opacity-80" />
+              <span>{lang === 'RU' ? 'Вакансии' : 'Careers'}</span>
+            </a>
 
             {/* Lang dropdown switcher pill */}
             <button
