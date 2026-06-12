@@ -900,27 +900,71 @@ export default function App() {
     }
   }, [loading]);
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.contact) return;
     setIsSubmitting(true);
+    setSubmitStatus('idle');
 
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setSubmitStatus('success');
-      // Reset form
-      setFormData({
-        name: '',
-        contact: '',
-        role: formData.role,
-        desc: '',
-        budget: '500k-1m',
-        customBudget: '',
-        niche: '',
-        metrics: ''
+    // Generate text message for Telegram bot
+    const typeText = formData.role === 'advertiser'
+      ? (lang === 'RU' ? 'Рекламодатель' : 'Advertiser')
+      : (lang === 'RU' ? 'Блогер' : 'Blogger');
+    
+    const budgetValue = formData.budget === 'other' 
+      ? (formData.customBudget || (lang === 'RU' ? 'Свой бюджет' : 'Custom budget')) 
+      : formData.budget;
+
+    const detailText = formData.role === 'advertiser'
+      ? (lang === 'RU'
+        ? `\nОписание: ${formData.desc || 'Не указано'}\nБюджет: ${budgetValue}`
+        : `\nDescription: ${formData.desc || 'Not specified'}\nBudget: ${budgetValue}`)
+      : (lang === 'RU'
+        ? `\nНиша: ${formData.niche || 'Не указано'}\nСсылка на канал: ${formData.metrics || 'Не указано'}`
+        : `\nNiche: ${formData.niche || 'Not specified'}\nChannel Link: ${formData.metrics || 'Not specified'}`);
+
+    const message = lang === 'RU'
+      ? `⚡️ Новая заявка RAGE MEDIA!\n👤 Имя: ${formData.name}\n🏷 Роль: ${typeText}\n📞 Контакты: ${formData.contact}${detailText}`
+      : `⚡️ New RAGE MEDIA Request!\n👤 Name: ${formData.name}\n🏷 Role: ${typeText}\n📞 Contacts: ${formData.contact}${detailText}`;
+
+    try {
+      const token = import.meta.env.VITE_TELEGRAM_BOT_TOKEN || '8661662093:AAEGFaoQuvZfuoDY-NPf3I59u4NRzk_jbS4';
+      const chatId = import.meta.env.VITE_TELEGRAM_CHAT_ID || '849886384';
+
+      const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: message,
+        }),
       });
-    }, 1500);
+
+      if (response.ok) {
+        setSubmitStatus('success');
+        // Reset form
+        setFormData({
+          name: '',
+          contact: '',
+          role: formData.role,
+          desc: '',
+          budget: '500k-1m',
+          customBudget: '',
+          niche: '',
+          metrics: ''
+        });
+      } else {
+        console.error('Telegram API error:', await response.text());
+        setSubmitStatus('error');
+      }
+    } catch (err) {
+      console.error('Submit error:', err);
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const submitViaTelegram = () => {
@@ -1809,6 +1853,14 @@ export default function App() {
                 </motion.div>
               ) : (
                 <form onSubmit={handleFormSubmit} className="space-y-6">
+
+                  {submitStatus === 'error' && (
+                    <div className="bg-red-500/10 border border-red-500/30 text-red-500 px-4 py-3.5 rounded-xl text-xs font-bold font-sans">
+                      {lang === 'RU' 
+                        ? 'Произошла ошибка при отправке заявки в Telegram. Пожалуйста, попробуйте еще раз.' 
+                        : 'An error occurred while sending your request to Telegram. Please try again.'}
+                    </div>
+                  )}
 
                   {/* Selector role toggles */}
                   <div className="flex bg-[#121215] border border-white/10 rounded-xl p-1">
