@@ -128,6 +128,14 @@
   background: var(--color-rage-brand);
 }
 
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
 @keyframes tv-glitch {
   0% {
     transform: translate(0, 0) scale(1) skew(0deg);

@@ -371,6 +371,125 @@ const CASE_LOGOS: Record<string, string> = {
 };
 
 
+interface AutoScrollContainerProps {
+  children: React.ReactNode;
+  direction?: 'ltr' | 'rtl';
+  speed?: number;
+  className?: string;
+}
+
+function AutoScrollContainer({
+  children,
+  direction = 'ltr',
+  speed = 0.6,
+  className
+}: AutoScrollContainerProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInteractingRef = useRef(false);
+  const rafRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    let scrollAmount = direction === 'ltr' ? speed : -speed;
+    let totalWidth = container.scrollWidth;
+    let visibleWidth = container.clientWidth;
+    let oneThird = totalWidth / 3;
+
+    const updateDimensions = () => {
+      if (container) {
+        totalWidth = container.scrollWidth;
+        visibleWidth = container.clientWidth;
+        oneThird = totalWidth / 3;
+      }
+    };
+
+    window.addEventListener('resize', updateDimensions);
+
+    // Set initial scroll position to the center to allow seamless looping
+    const setInitialScroll = () => {
+      if (container) {
+        totalWidth = container.scrollWidth;
+        visibleWidth = container.clientWidth;
+        oneThird = totalWidth / 3;
+        container.scrollLeft = (totalWidth - visibleWidth) / 2;
+      }
+    };
+
+    const timer = setTimeout(setInitialScroll, 100);
+
+    const animate = () => {
+      if (!isInteractingRef.current && container) {
+        container.scrollLeft += scrollAmount;
+
+        const currentScroll = container.scrollLeft;
+
+        // Loop seamlessly
+        if (direction === 'ltr' && currentScroll >= oneThird * 2) {
+          container.scrollLeft -= oneThird;
+        } else if (direction === 'rtl' && currentScroll <= oneThird) {
+          container.scrollLeft += oneThird;
+        }
+      }
+      rafRef.current = requestAnimationFrame(animate);
+    };
+
+    rafRef.current = requestAnimationFrame(animate);
+
+    let interactionTimeout: NodeJS.Timeout | null = null;
+
+    const handleInteractionStart = () => {
+      isInteractingRef.current = true;
+      if (interactionTimeout) clearTimeout(interactionTimeout);
+    };
+
+    const handleInteractionEnd = () => {
+      if (interactionTimeout) clearTimeout(interactionTimeout);
+      interactionTimeout = setTimeout(() => {
+        // Reset scroll position to center copy if they scrolled too far out of bounds
+        if (container) {
+          const currentScroll = container.scrollLeft;
+          if (currentScroll >= oneThird * 2) {
+            container.scrollLeft -= oneThird;
+          } else if (currentScroll <= oneThird) {
+            container.scrollLeft += oneThird;
+          }
+        }
+        isInteractingRef.current = false;
+      }, 1500);
+    };
+
+    container.addEventListener('touchstart', handleInteractionStart, { passive: true });
+    container.addEventListener('touchend', handleInteractionEnd, { passive: true });
+    container.addEventListener('mousedown', handleInteractionStart);
+    container.addEventListener('mouseup', handleInteractionEnd);
+    container.addEventListener('mouseleave', handleInteractionEnd);
+
+    return () => {
+      window.removeEventListener('resize', updateDimensions);
+      clearTimeout(timer);
+      if (interactionTimeout) clearTimeout(interactionTimeout);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      container.removeEventListener('touchstart', handleInteractionStart);
+      container.removeEventListener('touchend', handleInteractionEnd);
+      container.removeEventListener('mousedown', handleInteractionStart);
+      container.removeEventListener('mouseup', handleInteractionEnd);
+      container.removeEventListener('mouseleave', handleInteractionEnd);
+    };
+  }, [direction, speed]);
+
+  return (
+    <div
+      ref={containerRef}
+      className={cn("overflow-x-auto scrollbar-none flex select-none cursor-grab active:cursor-grabbing", className)}
+      style={{ WebkitOverflowScrolling: 'touch' }}
+    >
+      {children}
+    </div>
+  );
+}
+
 // --- Blogger Card Component for Hover Effects ---
 function BloggerCard({
   blg,
@@ -397,7 +516,7 @@ function BloggerCard({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       whileHover={{ scale: 1.05, rotate: 1 }}
-      className="w-[480px] h-[156px] px-10 py-6 flex items-center gap-6 shrink-0 cursor-pointer bg-transparent border-none shadow-none overflow-visible text-black select-none"
+      className="w-[300px] sm:w-[480px] h-[110px] sm:h-[156px] px-6 py-4 sm:px-10 sm:py-6 flex items-center gap-3 sm:gap-6 shrink-0 cursor-pointer bg-transparent border-none shadow-none overflow-visible text-black select-none"
       style={{
         backgroundImage: `url('${isHovered ? paper.imgHover : paper.img}')`,
         backgroundSize: "100% 100%",
@@ -409,27 +528,27 @@ function BloggerCard({
         <img
           src={BLOGGER_AVATARS[blg.name]}
           alt={blg.name}
-          className="w-[72px] h-[72px] rounded-full object-cover shrink-0 border border-black/10 shadow-sm"
+          className="w-12 h-12 sm:w-[72px] sm:h-[72px] rounded-full object-cover shrink-0 border border-black/10 shadow-sm"
         />
       ) : (
-        <div className={cn("w-[72px] h-[72px] rounded-full flex items-center justify-center font-display font-black text-2xl uppercase shrink-0 shadow-inner border", paper.badgeColor)}>
+        <div className={cn("w-12 h-12 sm:w-[72px] sm:h-[72px] rounded-full flex items-center justify-center font-display font-black text-lg sm:text-2xl uppercase shrink-0 shadow-inner border", paper.badgeColor)}>
           {blg.name[0]}
         </div>
       )}
 
       <div className="text-black text-left">
-        <h4 className="font-display font-black text-xl uppercase text-black leading-none mb-1 truncate max-w-[320px]">
+        <h4 className="font-display font-black text-sm sm:text-xl uppercase text-black leading-none mb-1 truncate max-w-[160px] sm:max-w-[320px]">
           {blg.name}
         </h4>
-        <div className="flex items-center gap-3 mt-1">
+        <div className="flex items-center gap-1.5 sm:gap-3 mt-1">
           <span className={cn(
-            "text-[16px] font-sans uppercase font-black px-2 py-1 rounded-sm flex items-center justify-center border",
+            "text-[10px] sm:text-[16px] font-sans uppercase font-black px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-sm flex items-center justify-center border leading-none",
             blg.engagement === 'exclusive' ? "bg-rage-pink text-white border-rage-pink" : "bg-neutral-400 text-white border-neutral-400"
           )}>
             {blg.engagement === 'exclusive' ? 'Э' : 'П'}
           </span>
-          <span className="text-[20px] font-mono uppercase font-black tracking-wider text-black/85">{blg.followers}</span>
-          <span className={cn("text-[16px] font-sans uppercase border px-2 py-1 rounded-sm", paper.tagColor)}>{lang === 'RU' ? blg.tagRU : blg.tagEN}</span>
+          <span className="text-[12px] sm:text-[20px] font-mono uppercase font-black tracking-wider text-black/85 leading-none">{blg.followers}</span>
+          <span className={cn("text-[10px] sm:text-[16px] font-sans uppercase border px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-sm leading-none", paper.tagColor)}>{lang === 'RU' ? blg.tagRU : blg.tagEN}</span>
         </div>
       </div>
     </motion.a>
@@ -1096,25 +1215,25 @@ export default function App() {
           </h2>
         </div>
 
-        {/* Automatic infinite horizontal scroll (custom animation) */}
-        <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden select-none">
-
-          {/* Duplicate cases array 3 times for continuous loops */}
-          <div className="animate-marquee-ltr flex gap-6 px-6 py-4">
-            {[...CASES, ...CASES, ...CASES].map((item, i) => {
-              const originalIndex = CASES.findIndex(c => c.name === item.name);
-              return (
-                <CaseCard
-                  key={item.name + '-' + i}
-                  item={item}
-                  paper={getCasePaper(originalIndex)}
-                  lang={lang}
-                  onSelect={setSelectedCase}
-                />
-              );
-            })}
-          </div>
-        </div>
+        {/* Automatic infinite horizontal scroll (custom animation & swipeable on mobile) */}
+        <AutoScrollContainer 
+          direction="ltr"
+          speed={0.6}
+          className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] py-4 px-6 gap-6"
+        >
+          {[...CASES, ...CASES, ...CASES].map((item, i) => {
+            const originalIndex = CASES.findIndex(c => c.name === item.name);
+            return (
+              <CaseCard
+                key={item.name + '-' + i}
+                item={item}
+                paper={getCasePaper(originalIndex)}
+                lang={lang}
+                onSelect={setSelectedCase}
+              />
+            );
+          })}
+        </AutoScrollContainer>
       </section>
 
       {/* 5. BLOCK 3. STATS (Reference Photo #2 sticker/poster aesthetic & counting animation) */}
@@ -1363,47 +1482,53 @@ export default function App() {
           </div>
         </div>
 
-        {/* Marquee Row 1 (Left-to-Right scrolling) */}
-        <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden mb-6">
-          <div className="animate-marquee-ltr flex gap-5 px-4 py-2">
-            {[...bloggersRow1, ...bloggersRow1, ...bloggersRow1].map((blg, i) => (
-              <BloggerCard
-                key={blg.name + '-r1-' + i}
-                blg={blg}
-                paper={getBloggerPaper(i)}
-                lang={lang}
-              />
-            ))}
-          </div>
-        </div>
+        {/* Marquee Row 1 (Left-to-Right scrolling & swipeable on mobile) */}
+        <AutoScrollContainer 
+          direction="ltr"
+          speed={0.6}
+          className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] py-2 px-4 gap-5 mb-6"
+        >
+          {[...bloggersRow1, ...bloggersRow1, ...bloggersRow1].map((blg, i) => (
+            <BloggerCard
+              key={blg.name + '-r1-' + i}
+              blg={blg}
+              paper={getBloggerPaper(i)}
+              lang={lang}
+            />
+          ))}
+        </AutoScrollContainer>
 
-        {/* Marquee Row 2 (Right-to-Left scrolling) */}
-        <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden mb-6">
-          <div className="animate-marquee-rtl flex gap-5 px-4 py-2">
-            {[...bloggersRow2, ...bloggersRow2, ...bloggersRow2].map((blg, i) => (
-              <BloggerCard
-                key={blg.name + '-r2-' + i}
-                blg={blg}
-                paper={getBloggerPaper(i + 1)}
-                lang={lang}
-              />
-            ))}
-          </div>
-        </div>
+        {/* Marquee Row 2 (Right-to-Left scrolling & swipeable on mobile) */}
+        <AutoScrollContainer 
+          direction="rtl"
+          speed={0.6}
+          className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] py-2 px-4 gap-5 mb-6"
+        >
+          {[...bloggersRow2, ...bloggersRow2, ...bloggersRow2].map((blg, i) => (
+            <BloggerCard
+              key={blg.name + '-r2-' + i}
+              blg={blg}
+              paper={getBloggerPaper(i + 1)}
+              lang={lang}
+            />
+          ))}
+        </AutoScrollContainer>
 
-        {/* Marquee Row 3 (Left-to-Right scrolling) */}
-        <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden mb-16">
-          <div className="animate-marquee-ltr flex gap-5 px-4 py-2">
-            {[...bloggersRow3, ...bloggersRow3, ...bloggersRow3].map((blg, i) => (
-              <BloggerCard
-                key={blg.name + '-r3-' + i}
-                blg={blg}
-                paper={getBloggerPaper(i + 2)}
-                lang={lang}
-              />
-            ))}
-          </div>
-        </div>
+        {/* Marquee Row 3 (Left-to-Right scrolling & swipeable on mobile) */}
+        <AutoScrollContainer 
+          direction="ltr"
+          speed={0.6}
+          className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] py-2 px-4 gap-5 mb-16"
+        >
+          {[...bloggersRow3, ...bloggersRow3, ...bloggersRow3].map((blg, i) => (
+            <BloggerCard
+              key={blg.name + '-r3-' + i}
+              blg={blg}
+              paper={getBloggerPaper(i + 2)}
+              lang={lang}
+            />
+          ))}
+        </AutoScrollContainer>
 
         {/* Premium Additional Banner */}
         <div className="container mx-auto max-w-5xl">
