@@ -784,8 +784,8 @@ export default function App() {
         ? `%0AОписание: ${formData.desc || 'Не указано'}%0AБюджет: ${budgetValue}`
         : `%0ADescription: ${formData.desc || 'Not specified'}%0ABudget: ${budgetValue}`)
       : (lang === 'RU'
-        ? `%0AНиша: ${formData.niche || 'Не указано'}%0AПодписчики: ${formData.metrics || 'Не указано'}`
-        : `%0ANiche: ${formData.niche || 'Not specified'}%0ASubscribers: ${formData.metrics || 'Not specified'}`);
+        ? `%0AНиша: ${formData.niche || 'Не указано'}%0AСсылка на канал: ${formData.metrics || 'Не указано'}`
+        : `%0ANiche: ${formData.niche || 'Not specified'}%0AChannel Link: ${formData.metrics || 'Not specified'}`);
 
     const message = lang === 'RU'
       ? `Новая заявка RAGE MEDIA!%0AИмя: ${formData.name || 'Не указано'}%0AРоль: ${typeText}%0AКонтакты: ${formData.contact || 'Не указано'}${detailText}`
@@ -1782,11 +1782,12 @@ export default function App() {
 
                         <div>
                           <label className="text-[10px] font-mono font-black uppercase tracking-widest text-white/50 block mb-1">
-                            {lang === 'RU' ? 'ПОДПИСЧИКИ & ССЫЛКА НА КАНАЛ' : 'SUBSCRIBERS & CHANNEL LINK'}
+                            {lang === 'RU' ? 'ССЫЛКА НА КАНАЛ' : 'CHANNEL LINK'}
                           </label>
                           <input
                             type="text"
-                            placeholder={lang === 'RU' ? 'YouTube (450k+ подписчиков), ссылка...' : 'YouTube (450k+ subscribers), link...'}
+                            required
+                            placeholder="https://..."
                             value={formData.metrics}
                             onChange={e => setFormData(p => ({ ...p, metrics: e.target.value }))}
                             className="w-full bg-white/[0.03] border border-white/10 px-4 py-3.5 text-white text-sm focus:border-rage-brand outline-none transition-colors rounded-xl font-sans"
