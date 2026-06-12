@@ -30,7 +30,8 @@ import {
   Sun,
   Moon,
   ChevronDown,
-  Briefcase
+  Briefcase,
+  Eye
 } from 'lucide-react';
 import { cn } from './lib/utils';
 import RageLogo from './components/RageLogo';
@@ -113,9 +114,9 @@ const CASES: CaseItem[] = [
     resultsRU: "500k+ Установок",
     resultsEN: "500k+ Installs",
     link: "#contacts",
-    badgeColor: "bg-purple-500 text-white",
-    glowColor: "shadow-[0_0_20px_rgba(168,85,247,0.45)] hover:border-purple-500",
-    accentText: "text-purple-500"
+    badgeColor: "bg-[#f72689] text-white",
+    glowColor: "shadow-[0_0_20px_rgba(247,38,137,0.45)] hover:border-[#f72689]",
+    accentText: "text-[#f72689]"
   },
   {
     name: "Radmir RP",
@@ -201,15 +202,15 @@ const BLOGGERS: BloggerItem[] = [
   { name: "Неркин", followers: "225k", tagRU: "Майнкрафт", tagEN: "Minecraft", engagement: "partner", platform: "youtube", color: "from-emerald-500 to-teal-700", link: "https://www.youtube.com/@Nerkin" },
   { name: "PWGood", followers: "3M", tagRU: "Майнкрафт", tagEN: "Minecraft", engagement: "partner", platform: "youtube", color: "from-blue-500 to-indigo-700", link: "https://www.youtube.com/@pwgood" },
   { name: "40 Литров Пива", followers: "700k", tagRU: "Майнкрафт", tagEN: "Minecraft", engagement: "partner", platform: "youtube", color: "from-amber-500 to-orange-700", link: "https://www.youtube.com/@40_JIuTpoB_IIuBa" },
-  { name: "SKIJL", followers: "415k", tagRU: "Майнкрафт", tagEN: "Minecraft", engagement: "partner", platform: "youtube", color: "from-purple-500 to-pink-700", link: "https://www.youtube.com/@SKIJL" },
+  { name: "SKIJL", followers: "415k", tagRU: "Майнкрафт", tagEN: "Minecraft", engagement: "partner", platform: "youtube", color: "from-[#f72689] to-pink-700", link: "https://www.youtube.com/@SKIJL" },
   { name: "Шут", followers: "600k", tagRU: "Майнкрафт", tagEN: "Minecraft", engagement: "exclusive", platform: "youtube", color: "from-red-500 to-rose-700", link: "https://www.youtube.com/@шут-228" },
   { name: "Honey", followers: "120k", tagRU: "Майнкрафт", tagEN: "Minecraft", engagement: "exclusive", platform: "youtube", color: "from-pink-500 to-rose-700", link: "https://www.youtube.com/@Honey_l1fe" },
   { name: "Лолотрек", followers: "225k", tagRU: "Майнкрафт", tagEN: "Minecraft", engagement: "partner", platform: "youtube", color: "from-green-500 to-emerald-700", link: "https://www.youtube.com/@lolotrack_minecraft" },
   { name: "Квист", followers: "250k", tagRU: "Майнкрафт", tagEN: "Minecraft", engagement: "partner", platform: "youtube", color: "from-cyan-500 to-blue-700", link: "https://www.youtube.com/@kW1sst" },
   { name: "Магмуст", followers: "700k", tagRU: "Майнкрафт", tagEN: "Minecraft", engagement: "partner", platform: "youtube", color: "from-teal-500 to-emerald-700", link: "https://www.youtube.com/@MagmustX" },
   { name: "Mud Flaps На Русском", followers: "2.5M", tagRU: "Майнкрафт", tagEN: "Minecraft", engagement: "exclusive", platform: "youtube", color: "from-yellow-500 to-amber-700", link: "https://youtube.com/@mudflapsrussian" },
-  { name: "Myles На Русском", followers: "250k", tagRU: "Майнкрафт", tagEN: "Minecraft", engagement: "exclusive", platform: "youtube", color: "from-indigo-500 to-violet-700", link: "https://youtube.com/@mylesmcrussian" },
-  { name: "Нео", followers: "115k", tagRU: "Майнкрафт", tagEN: "Minecraft", engagement: "partner", platform: "youtube", color: "from-violet-500 to-fuchsia-700", link: "https://www.youtube.com/@neo_archangel" },
+  { name: "Myles На Русском", followers: "250k", tagRU: "Майнкрафт", tagEN: "Minecraft", engagement: "exclusive", platform: "youtube", color: "from-indigo-500 to-[#f72689]", link: "https://youtube.com/@mylesmcrussian" },
+  { name: "Нео", followers: "115k", tagRU: "Майнкрафт", tagEN: "Minecraft", engagement: "partner", platform: "youtube", color: "from-[#f72689] to-pink-700", link: "https://www.youtube.com/@neo_archangel" },
   { name: "Гельмо", followers: "50k", tagRU: "Майнкрафт", tagEN: "Minecraft", engagement: "partner", platform: "youtube", color: "from-rose-500 to-red-700", link: "https://www.youtube.com/@Gelmo" },
   { name: "KtoWho", followers: "95k", tagRU: "Гейминг", tagEN: "Gaming", engagement: "partner", platform: "youtube", color: "from-slate-500 to-neutral-700", link: "https://youtube.com/@ktowho" },
   { name: "Мэншен", followers: "100k", tagRU: "Гейминг", tagEN: "Gaming", engagement: "partner", platform: "youtube", color: "from-fuchsia-500 to-pink-700", link: "https://www.youtube.com/@itsmansion/videos" },
@@ -652,7 +653,7 @@ function BloggerCard({
           )}>
             {blg.engagement === 'exclusive' ? 'Э' : 'П'}
           </span>
-          <span className="text-[10px] sm:text-[20px] font-mono uppercase font-black tracking-wider text-black/85 leading-none">{blg.followers}</span>
+          <span className="text-[10px] sm:text-[20px] font-mono uppercase font-black tracking-wider text-black/85 leading-none flex items-center gap-0.5 sm:gap-1"><Eye size={10} className="sm:w-[18px] sm:h-[18px] text-black/60" />{blg.followers}</span>
           <span className={cn("text-[8px] sm:text-[16px] font-sans uppercase border px-1 py-0.5 sm:px-2 sm:py-1 rounded-sm leading-none", paper.tagColor)}>{lang === 'RU' ? blg.tagRU : blg.tagEN}</span>
         </div>
       </div>
@@ -823,7 +824,7 @@ function CaseModal({
         </button>
 
         <div className="relative z-10 flex flex-col gap-6 text-left">
-          
+
           {/* Header Row: Big Avatar + Name */}
           <div className="flex items-center gap-6">
             {CASE_LOGOS[item.name] ? (
@@ -1015,9 +1016,9 @@ export default function App() {
     const typeText = formData.role === 'advertiser'
       ? (lang === 'RU' ? 'Рекламодатель' : 'Advertiser')
       : (lang === 'RU' ? 'Блогер' : 'Blogger');
-    
-    const budgetValue = formData.budget === 'other' 
-      ? (formData.customBudget || (lang === 'RU' ? 'Свой бюджет' : 'Custom budget')) 
+
+    const budgetValue = formData.budget === 'other'
+      ? (formData.customBudget || (lang === 'RU' ? 'Свой бюджет' : 'Custom budget'))
       : formData.budget;
 
     const detailText = formData.role === 'advertiser'
@@ -1077,8 +1078,8 @@ export default function App() {
     const typeText = formData.role === 'advertiser'
       ? (lang === 'RU' ? 'Рекламодатель' : 'Advertiser')
       : (lang === 'RU' ? 'Блогер' : 'Blogger');
-    const budgetValue = formData.budget === 'other' 
-      ? (formData.customBudget || (lang === 'RU' ? 'Свой бюджет' : 'Custom budget')) 
+    const budgetValue = formData.budget === 'other'
+      ? (formData.customBudget || (lang === 'RU' ? 'Свой бюджет' : 'Custom budget'))
       : formData.budget;
     const detailText = formData.role === 'advertiser'
       ? (lang === 'RU'
@@ -1257,7 +1258,7 @@ export default function App() {
               exit={{ opacity: 0, height: 0 }}
               className="absolute top-full left-0 w-full bg-black/95 backdrop-blur-md border-b border-white/10 flex flex-col p-6 gap-6 z-40 select-none overflow-hidden"
             >
-            
+
 
               <div className="flex flex-col items-center gap-4 font-display font-black text-2xl sm:text-3xl uppercase tracking-tighter text-center">
                 <a href="#cases" onClick={() => setIsMenuOpen(false)} className="hover:text-rage-brand transition-colors">{lang === 'RU' ? 'Кейсы' : 'Cases'}</a>
@@ -1314,12 +1315,12 @@ export default function App() {
         {/* === Text content overlaid on top === */}
         <div className="container mx-auto max-w-7xl z-10 w-full relative">
           <div className="max-w-2xl xl:max-w-3xl">
-            
+
             {/* Huge typography */}
             <h1 className="font-display font-black text-5xl sm:text-7xl lg:text-[5.5rem] xl:text-[7rem] leading-[0.85] uppercase tracking-tighter text-white select-none flex flex-col gap-4 relative">
               {lang === 'RU'
-                ? 'Жду какой Ваня придумает слоган'
-                : 'Waiting for Vanya to come up with a slogan'}
+                ? 'Результат важнее слов'
+                : 'Results speak louder than words'}
             </h1>
 
             {/* Subtext description below */}
@@ -1339,8 +1340,8 @@ export default function App() {
 
             {/* Action triggers */}
             <div className="flex flex-wrap gap-4 mt-8">
-              <a 
-                href="#contacts" 
+              <a
+                href="#contacts"
                 className="px-8 py-3.5 bg-rage-brand text-black font-extrabold rounded-full uppercase tracking-wider text-xs sm:text-sm transition-all duration-300 hover:scale-105 hover:shadow-[0_0_25px_rgba(172,255,42,0.6)] active:scale-95 flex items-center gap-2 border border-black cursor-pointer"
               >
                 {lang === 'RU' ? 'Хочу рекламу' : 'I want ads'}
@@ -1363,20 +1364,7 @@ export default function App() {
               </a>
             </div>
 
-            {/* Partners / Trusted by logo bar */}
-            <div className="pt-8 border-t border-white/10 w-full max-w-xl mt-10">
-              <span className="text-[10px] font-mono uppercase text-white/30 tracking-wider block mb-4">
-                {lang === 'RU' ? 'НАМ ДОВЕРЯЮТ ЛИДЕРЫ ИНДУСТРИИ' : 'TRUSTED BY INDUSTRY LEADERS'}
-              </span>
-              <div className="flex flex-wrap items-center gap-x-8 gap-y-4 grayscale opacity-35 hover:opacity-75 transition-all duration-300">
-                <img src="/images/warthunder_logo.jpg" alt="War Thunder" className="h-9 w-auto object-contain rounded-sm border border-white/5" />
-                <img src="/images/zone51_logo.jpg" alt="Zona51" className="h-9 w-auto object-contain rounded-sm border border-white/5" />
-                <img src="/images/yandexmarket_logo.png" alt="Яндекс Маркет" className="h-9 w-auto object-contain rounded-sm" />
-                <img src="/images/Playerok.png" alt="Playerok" className="h-9 w-auto object-contain rounded-sm" />
-                <img src="/images/Arizona RP.png" alt="Arizona RP" className="h-9 w-auto object-contain rounded-sm" />
-                <img src="/images/Radmir RP.jpg" alt="Radmir RP" className="h-9 w-auto object-contain rounded-sm border border-white/5" />
-              </div>
-            </div>
+
           </div>
         </div>
 
@@ -1405,7 +1393,7 @@ export default function App() {
         </div>
 
         {/* Automatic infinite horizontal scroll (custom animation & swipeable on mobile) */}
-        <AutoScrollContainer 
+        <AutoScrollContainer
           direction="ltr"
           speed={0.6}
           className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] py-4 px-6 gap-6"
@@ -1672,7 +1660,7 @@ export default function App() {
         </div>
 
         {/* Marquee Row 1 (Left-to-Right scrolling & swipeable on mobile) */}
-        <AutoScrollContainer 
+        <AutoScrollContainer
           direction="ltr"
           speed={0.6}
           className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] py-2 px-4 gap-5 mb-6"
@@ -1688,7 +1676,7 @@ export default function App() {
         </AutoScrollContainer>
 
         {/* Marquee Row 2 (Right-to-Left scrolling & swipeable on mobile) */}
-        <AutoScrollContainer 
+        <AutoScrollContainer
           direction="rtl"
           speed={0.6}
           className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] py-2 px-4 gap-5 mb-6"
@@ -1704,7 +1692,7 @@ export default function App() {
         </AutoScrollContainer>
 
         {/* Marquee Row 3 (Left-to-Right scrolling & swipeable on mobile) */}
-        <AutoScrollContainer 
+        <AutoScrollContainer
           direction="ltr"
           speed={0.6}
           className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] py-2 px-4 gap-5 mb-16"
@@ -1968,8 +1956,8 @@ export default function App() {
 
                   {submitStatus === 'error' && (
                     <div className="bg-red-500/10 border border-red-500/30 text-red-500 px-4 py-3.5 rounded-xl text-xs font-bold font-sans">
-                      {lang === 'RU' 
-                        ? 'Произошла ошибка при отправке заявки в Telegram. Пожалуйста, попробуйте еще раз.' 
+                      {lang === 'RU'
+                        ? 'Произошла ошибка при отправке заявки в Telegram. Пожалуйста, попробуйте еще раз.'
                         : 'An error occurred while sending your request to Telegram. Please try again.'}
                     </div>
                   )}
