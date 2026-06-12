@@ -1,465 +1,744 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
-  Users, 
-  Lightbulb, 
-  Video, 
-  LineChart, 
-  UserPlus, 
-  ArrowUpRight, 
-  Menu, 
-  X, 
-  Sun, 
-  Moon, 
-  Settings, 
-  ChevronRight, 
+import {
+  Users,
+  Lightbulb,
+  Video,
+  LineChart,
+  UserPlus,
+  ArrowUpRight,
+  Menu,
+  X,
+  ChevronRight,
   ChevronLeft,
   Youtube,
-  Instagram,
-  Twitch,
+  Send,
   Zap,
   Sparkles,
   Phone,
   Mail,
-  Send,
-  Search,
-  Globe,
-  Plus,
-  Tv,
-  Eye,
   CheckCircle,
-  TrendingUp,
-  Award
+  HelpCircle,
+  Megaphone,
+  Palette,
+  Volume2,
+  Lock,
+  Layers,
+  Star,
+  Flame,
+  Award,
+  Sun,
+  Moon,
+  ChevronDown
 } from 'lucide-react';
 import { cn } from './lib/utils';
 import RageLogo from './components/RageLogo';
 import { LogoLoader } from './components/LogoLoader';
+import TornStrip from './components/TornStrip';
 
 // --- Types ---
 interface CaseItem {
   name: string;
-  logo: string;
-  category: string;
-  desc: string;
-  results: string;
+  categoryRU: string;
+  categoryEN: string;
+  descRU: string;
+  descEN: string;
+  resultsRU: string;
+  resultsEN: string;
   link: string;
+  badgeColor: string;
+  glowColor: string;
+  accentText: string;
 }
 
 interface BloggerItem {
   name: string;
   followers: string;
-  image: string;
-  socials: string[];
-  engagement: string;
-  tag: string;
-  youtubeLink?: string;
+  tagRU: string;
+  tagEN: string;
+  engagement: 'exclusive' | 'partner';
+  platform: 'youtube' | 'twitch' | 'telegram';
+  color: string;
+  link: string;
 }
 
 // --- Constants ---
-
-const TOP_BLOGGERS: BloggerItem[] = [
+const CASES: CaseItem[] = [
   {
-    name: "Краун4к",
-    followers: "12,7 тыс. подписчиков",
-    image: "/images/kraunchik_logo.jpg",
-    socials: ["youtube"],
-    engagement: "partner",
-    tag: "Гейминг",
-    youtubeLink: "https://www.youtube.com/@krayngame/videos"
+    name: "War Thunder",
+    categoryRU: "Медиа-кампания",
+    categoryEN: "Media Campaign",
+    descRU: "Масштабный запуск и танковое шоу у топовых СНГ стримеров с интеграциями в геймплей.",
+    descEN: "Large-scale launch and tank show with top CIS streamers featuring gameplay integrations.",
+    resultsRU: "12M+ Охватов",
+    resultsEN: "12M+ Reach",
+    link: "#contacts",
+    badgeColor: "bg-orange-600 text-white",
+    glowColor: "shadow-[0_0_20px_rgba(234,88,12,0.45)] hover:border-orange-500",
+    accentText: "text-orange-500"
   },
   {
-    name: "EnoT",
-    followers: "65 тыс. подписчиков",
-    image: "/images/enot_logo.jpg",
-    socials: ["youtube"],
-    engagement: "partner",
-    tag: "Гейминг",
-    youtubeLink: "https://www.youtube.com/@EnoT47/videos"
+    name: "Zona51",
+    categoryRU: "Спецпроект",
+    categoryEN: "Special Project",
+    descRU: "Промо-кампания геймерских кресел и периферии с нативными интеграциями в стримы.",
+    descEN: "Promo campaign for gaming chairs and peripherals with native stream integrations.",
+    resultsRU: "15k+ Продаж",
+    resultsEN: "15k+ Sales",
+    link: "#contacts",
+    badgeColor: "bg-lime-500 text-black",
+    glowColor: "shadow-[0_0_20px_rgba(172,255,42,0.45)] hover:border-rage-brand",
+    accentText: "text-rage-brand"
   },
   {
-    name: "Mud Flaps На Русском",
-    followers: "426 тыс. подписчиков",
-    image: "/images/mudflaps_logo.jpg",
-    socials: ["youtube"],
-    engagement: "exclusive",
-    tag: "Майнкрафт",
-    youtubeLink: "https://www.youtube.com/@mudflapsrussian"
+    name: "Playerok",
+    categoryRU: "Инфлюенс-кампания",
+    categoryEN: "Influence Campaign",
+    descRU: "Масштабный закуп рекламы на игровом маркетплейсе у молодых ютуберов и стримеров.",
+    descEN: "Large-scale ad buying on a gaming marketplace with young YouTubers and streamers.",
+    resultsRU: "+180% Лидов",
+    resultsEN: "+180% Leads",
+    link: "#contacts",
+    badgeColor: "bg-blue-500 text-white",
+    glowColor: "shadow-[0_0_20px_rgba(59,130,246,0.45)] hover:border-blue-500",
+    accentText: "text-blue-500"
   },
   {
-    name: "Магмуст",
-    followers: "63,1 тыс. подписчиков",
-    image: "/images/magmust_logo.jpg",
-    socials: ["youtube"],
-    engagement: "exclusive",
-    tag: "Майнкрафт",
-    youtubeLink: "https://www.youtube.com/@MagmustX_"
+    name: "Block Blast",
+    categoryRU: "Запуск",
+    categoryEN: "Launch",
+    descRU: "Вирусный челлендж среди мобильных геймеров на прохождение рекордных уровней.",
+    descEN: "Viral challenge among mobile gamers to beat record levels.",
+    resultsRU: "500k+ Установок",
+    resultsEN: "500k+ Installs",
+    link: "#contacts",
+    badgeColor: "bg-purple-500 text-white",
+    glowColor: "shadow-[0_0_20px_rgba(168,85,247,0.45)] hover:border-purple-500",
+    accentText: "text-purple-500"
+  },
+  {
+    name: "Radmir RP",
+    categoryRU: "Интеграция",
+    categoryEN: "Integration",
+    descRU: "Массовое внедрение игровых кодов у популярных GTA-криэйторов с лайв-стримами.",
+    descEN: "Mass integration of game codes with popular GTA creators during live streams.",
+    resultsRU: "50k+ Игроков",
+    resultsEN: "50k+ Players",
+    link: "#contacts",
+    badgeColor: "bg-pink-500 text-white",
+    glowColor: "shadow-[0_0_20px_rgba(236,72,153,0.45)] hover:border-pink-500",
+    accentText: "text-pink-500"
+  },
+  {
+    name: "100 Балльный Репетитор",
+    categoryRU: "Продвижение",
+    categoryEN: "Promotion",
+    descRU: "Креативная интеграция образовательной платформы в подростковые развлекательные блоги.",
+    descEN: "Creative integration of an educational platform into teen entertainment blogs.",
+    resultsRU: "+250% Конверсия",
+    resultsEN: "+250% Conversion",
+    link: "#contacts",
+    badgeColor: "bg-rose-500 text-white",
+    glowColor: "shadow-[0_0_20px_rgba(244,63,94,0.45)] hover:border-rose-500",
+    accentText: "text-rose-500"
+  },
+  {
+    name: "Ded VPN",
+    categoryRU: "Коллаборация",
+    categoryEN: "Collaboration",
+    descRU: "Инфлюенс-волна в поддержку свободного интернета с нативной рекламой безопасности.",
+    descEN: "Influence wave supporting free internet with native safety ads.",
+    resultsRU: "300k+ Лидов",
+    resultsEN: "300k+ Leads",
+    link: "#contacts",
+    badgeColor: "bg-emerald-500 text-white",
+    glowColor: "shadow-[0_0_20px_rgba(16,185,129,0.45)] hover:border-emerald-500",
+    accentText: "text-emerald-500"
+  },
+  {
+    name: "Arizona RP",
+    categoryRU: "Медиа-кампания",
+    categoryEN: "Media Campaign",
+    descRU: "Рекламный марафон у крупнейших летсплееров с уникальным промо-сервером.",
+    descEN: "Advertising marathon with top letsplayers featuring a unique promo server.",
+    resultsRU: "80k+ Активаций",
+    resultsEN: "80k+ Activations",
+    link: "#contacts",
+    badgeColor: "bg-red-500 text-white",
+    glowColor: "shadow-[0_0_20px_rgba(239,68,68,0.45)] hover:border-red-500",
+    accentText: "text-red-500"
+  },
+  {
+    name: "Arknights Endfield",
+    categoryRU: "Запуск",
+    categoryEN: "Launch",
+    descRU: "Вирусная инфлюенс-кампания предстоящей 3D RPG игры с привлечением топовых аниме и гейминг блогеров.",
+    descEN: "Viral influencer campaign for the upcoming 3D RPG game, partnering with top anime and gaming creators.",
+    resultsRU: "2.5M+ Предрегистраций",
+    resultsEN: "2.5M+ Pre-registrations",
+    link: "#contacts",
+    badgeColor: "bg-amber-600 text-white",
+    glowColor: "shadow-[0_0_20px_rgba(217,119,6,0.45)] hover:border-amber-500",
+    accentText: "text-amber-500"
+  },
+  {
+    name: "NTE",
+    categoryRU: "Спецпроект",
+    categoryEN: "Special Project",
+    descRU: "Громкий анонс нового урбанистического экшена с интеграциями у крупнейших гейминг каналов.",
+    descEN: "High-profile announcement of the new urban action RPG game with integrations across major gaming channels.",
+    resultsRU: "5M+ Просмотров",
+    resultsEN: "5M+ Views",
+    link: "#contacts",
+    badgeColor: "bg-teal-500 text-black",
+    glowColor: "shadow-[0_0_20px_rgba(20,184,166,0.45)] hover:border-teal-500",
+    accentText: "text-teal-500"
   }
 ];
 
-const CASES: CaseItem[] = [
-  { 
-    name: "Дед VPN", 
-    logo: "🛡️", 
-    category: "Интеграция",
-    desc: "Коллаборация с Exile & Deepins. Охватили молодую целевую аудиторию.",
-    results: "+240% скачиваний за неделю",
-    link: "https://t.me/ragemedia"
-  },
-  { 
-    name: "ZONA51", 
-    logo: "🎮", 
-    category: "Спецпроект",
-    desc: "Серия игровых стримов с брендированием девайсов и эксклюзивными промокодами.",
-    results: "Продано 15,000+ девайсов",
-    link: "https://t.me/ragemedia"
-  },
-  { 
-    name: "WAR THUNDER", 
-    logo: "🎖️", 
-    category: "Медиа-кампания",
-    desc: "Масштабный турнир среди топ-стримеров СНГ с трансляцией на Twitch.",
-    results: "8.5M уникальных просмотров",
-    link: "https://t.me/ragemedia"
-  },
-  { 
-    name: "100-балльный репетитор", 
-    logo: "🎓", 
-    category: "Продвижение",
-    desc: "Креативные ролики у подростковых блогеров про эффективную подготовку к ЕГЭ.",
-    results: "9,000+ регистраций на курсы",
-    link: "https://t.me/ragemedia"
-  },
-  { 
-    name: "Яндекс Маркет", 
-    logo: "📦", 
-    category: "Амбассадорство",
-    desc: "Серия лайфстайл-интеграций в социальные сети с распаковками и обзорами.",
-    results: "CTR интеграций вырос на 35%",
-    link: "https://t.me/ragemedia"
-  }
+const BLOGGERS: BloggerItem[] = [
+  { name: "Неркин", followers: "225k", tagRU: "Майнкрафт", tagEN: "Minecraft", engagement: "partner", platform: "youtube", color: "from-emerald-500 to-teal-700", link: "https://www.youtube.com/@Nerkin" },
+  { name: "PWGood", followers: "3M", tagRU: "Майнкрафт", tagEN: "Minecraft", engagement: "partner", platform: "youtube", color: "from-blue-500 to-indigo-700", link: "https://www.youtube.com/@pwgood" },
+  { name: "40 Литров Пива", followers: "700k", tagRU: "Майнкрафт", tagEN: "Minecraft", engagement: "partner", platform: "youtube", color: "from-amber-500 to-orange-700", link: "https://www.youtube.com/@40_JIuTpoB_IIuBa" },
+  { name: "SKIJL", followers: "415k", tagRU: "Майнкрафт", tagEN: "Minecraft", engagement: "partner", platform: "youtube", color: "from-purple-500 to-pink-700", link: "https://www.youtube.com/@SKIJL" },
+  { name: "Шут", followers: "600k", tagRU: "Майнкрафт", tagEN: "Minecraft", engagement: "exclusive", platform: "youtube", color: "from-red-500 to-rose-700", link: "https://www.youtube.com/@шут-228" },
+  { name: "Honey", followers: "120k", tagRU: "Майнкрафт", tagEN: "Minecraft", engagement: "exclusive", platform: "youtube", color: "from-pink-500 to-rose-700", link: "https://www.youtube.com/@Honey_l1fe" },
+  { name: "Лолотрек", followers: "225k", tagRU: "Майнкрафт", tagEN: "Minecraft", engagement: "partner", platform: "youtube", color: "from-green-500 to-emerald-700", link: "https://www.youtube.com/@lolotrack_minecraft" },
+  { name: "Квист", followers: "250k", tagRU: "Майнкрафт", tagEN: "Minecraft", engagement: "partner", platform: "youtube", color: "from-cyan-500 to-blue-700", link: "https://www.youtube.com/@kW1sst" },
+  { name: "Магмуст", followers: "700k", tagRU: "Майнкрафт", tagEN: "Minecraft", engagement: "partner", platform: "youtube", color: "from-teal-500 to-emerald-700", link: "https://www.youtube.com/@MagmustX" },
+  { name: "Mud Flaps На Русском", followers: "2.5M", tagRU: "Майнкрафт", tagEN: "Minecraft", engagement: "exclusive", platform: "youtube", color: "from-yellow-500 to-amber-700", link: "https://youtube.com/@mudflapsrussian" },
+  { name: "Myles На Русском", followers: "250k", tagRU: "Майнкрафт", tagEN: "Minecraft", engagement: "exclusive", platform: "youtube", color: "from-indigo-500 to-violet-700", link: "https://youtube.com/@mylesmcrussian" },
+  { name: "Нео", followers: "115k", tagRU: "Майнкрафт", tagEN: "Minecraft", engagement: "partner", platform: "youtube", color: "from-violet-500 to-fuchsia-700", link: "https://www.youtube.com/@neo_archangel" },
+  { name: "Гельмо", followers: "50k", tagRU: "Майнкрафт", tagEN: "Minecraft", engagement: "partner", platform: "youtube", color: "from-rose-500 to-red-700", link: "https://www.youtube.com/@Gelmo" },
+  { name: "KtoWho", followers: "95k", tagRU: "Гейминг", tagEN: "Gaming", engagement: "partner", platform: "youtube", color: "from-slate-500 to-neutral-700", link: "https://youtube.com/@ktowho" },
+  { name: "Мэншен", followers: "100k", tagRU: "Гейминг", tagEN: "Gaming", engagement: "partner", platform: "youtube", color: "from-fuchsia-500 to-pink-700", link: "https://www.youtube.com/@itsmansion/videos" },
+  { name: "ReyZone", followers: "100k", tagRU: "Гейминг", tagEN: "Gaming", engagement: "exclusive", platform: "youtube", color: "from-blue-600 to-indigo-800", link: "https://www.youtube.com/@ReyZone" },
+  { name: "Soilinf", followers: "120k", tagRU: "Гейминг", tagEN: "Gaming", engagement: "exclusive", platform: "youtube", color: "from-lime-500 to-emerald-700", link: "https://youtube.com/@soilinf" },
+  { name: "Краун4к", followers: "180k", tagRU: "Гейминг", tagEN: "Gaming", engagement: "exclusive", platform: "youtube", color: "from-orange-500 to-red-700", link: "https://www.youtube.com/@krayngame" },
+  { name: "EnoT", followers: "300k", tagRU: "Гейминг", tagEN: "Gaming", engagement: "partner", platform: "youtube", color: "from-emerald-600 to-teal-800", link: "https://www.youtube.com/@EnoT47" },
+  { name: "Tearz", followers: "60k", tagRU: "Гейминг", tagEN: "Gaming", engagement: "partner", platform: "youtube", color: "from-pink-600 to-rose-800", link: "https://www.youtube.com/@Tearzed" }
 ];
 
 const SERVICES = [
-  { icon: <Users size={24} />, title: "Интеграции у блогеров", detail: "Нативное размещение продукта в роликах, стримах и публикациях лидеров мнений." },
-  { icon: <LineChart size={24} />, title: "Стратегия и аналитика", detail: "Формирование медиапланов, исследование аудитории и полный аудит эффективности запусков." },
-  { icon: <UserPlus size={24} />, title: "Подбор блогеров под задачи", detail: "Собственная база блогеров с разным охватом под фиксированные бюджеты." }
+  {
+    titleRU: "Интеграции у блогеров",
+    titleEN: "Blogger Integrations",
+    detailRU: "Подберем лучших под портрет вашей аудитории.",
+    detailEN: "We will select the best creators matching your audience profile.",
+    icon: <Users size={28} />,
+    doodle: "🔥",
+    doodleText: "ХИТ",
+    color: "border-rage-brand",
+    glowColor: "group-hover:shadow-[0_0_30px_rgba(172,255,42,0.25)]",
+    tag: "blogger"
+  },
+  {
+    titleRU: "Продакшен",
+    titleEN: "Production",
+    detailRU: "Создаем контент, который цепляет.",
+    detailEN: "We create content that hooks viewers.",
+    icon: <Video size={28} />,
+    doodle: "🎬",
+    doodleText: "PROD",
+    color: "border-rage-pink",
+    glowColor: "group-hover:shadow-[0_0_30px_rgba(255,0,255,0.25)]",
+    tag: "production"
+  },
+  {
+    titleRU: "Медиабаинг",
+    titleEN: "Media Buying",
+    detailRU: "Закупаем трафик по низу рынка и пробиваем планку KPI.",
+    detailEN: "We buy traffic at the lowest rates and exceed KPI targets.",
+    icon: <LineChart size={28} />,
+    doodle: "📈",
+    doodleText: "ROI",
+    color: "border-white",
+    glowColor: "group-hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]",
+    tag: "media"
+  },
+  {
+    titleRU: "Стратегия и консалтинг",
+    titleEN: "Strategy & Consulting",
+    detailRU: "Выстраиваем систему роста бренда.",
+    detailEN: "We build growth systems for your brand.",
+    icon: <Lightbulb size={28} />,
+    doodle: "🧠",
+    doodleText: "PLAN",
+    color: "border-rage-brand",
+    glowColor: "group-hover:shadow-[0_0_30px_rgba(172,255,42,0.25)]",
+    tag: "strategy"
+  },
+  {
+    titleRU: "Запуск совместных проектов",
+    titleEN: "Launch of Joint Projects",
+    detailRU: "Идея ваша. Реализация и рост — наши.",
+    detailEN: "Your idea. Our implementation and growth.",
+    icon: <UserPlus size={28} />,
+    doodle: "⭐",
+    doodleText: "LAUNCH",
+    color: "border-rage-pink",
+    glowColor: "group-hover:shadow-[0_0_30px_rgba(255,0,255,0.25)]",
+    tag: "projects"
+  }
 ];
 
-// --- Subcomponents ---
-
-interface DiscussModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  lang: 'RU' | 'EN';
-  initialRole?: 'blogger' | 'advertiser';
-}
-
-function DiscussModal({ isOpen, onClose, lang, initialRole = 'advertiser' }: DiscussModalProps) {
-  const [formData, setFormData] = useState({
-    name: '',
-    contact: '',
-    role: 'advertiser',
-    budget: '500k-1m',
-    message: ''
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isDone, setIsDone] = useState(false);
+// --- Count Up Animation Component ---
+function Counter({ value, duration = 1.5 }: { value: string; duration?: number }) {
+  const [count, setCount] = useState(0);
+  const numericValue = parseInt(value.replace(/\D/g, ''), 10) || 0;
+  const suffix = value.replace(/[\d]/g, '');
+  const ref = useRef<HTMLDivElement>(null);
+  const [hasStarted, setHasStarted] = useState(false);
 
   useEffect(() => {
-    if (isOpen) {
-      setFormData(prev => ({ ...prev, role: initialRole }));
-    }
-  }, [isOpen, initialRole]);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setHasStarted(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.name || !formData.contact) return;
-    setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsDone(true);
-    }, 1500);
-  };
+  useEffect(() => {
+    if (!hasStarted) return;
+    let start = 0;
+    const end = numericValue;
+    if (start === end) return;
 
-  if (!isOpen) return null;
+    let totalMiliseconds = duration * 1000;
+    let incrementTime = Math.max(Math.floor(totalMiliseconds / end), 20);
+
+    let timer = setInterval(() => {
+      start += Math.ceil(end / 40);
+      if (start >= end) {
+        clearInterval(timer);
+        setCount(end);
+      } else {
+        setCount(start);
+      }
+    }, incrementTime);
+
+    return () => clearInterval(timer);
+  }, [hasStarted, numericValue, duration]);
 
   return (
-    <AnimatePresence>
-      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-        {/* Backdrop overlay */}
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={onClose}
-          className="absolute inset-0 bg-black/90 backdrop-blur-md"
-        />
-
-        {/* Form Container */}
-        <motion.div 
-          initial={{ scale: 0.9, y: 50, opacity: 0 }}
-          animate={{ scale: 1, y: 0, opacity: 1 }}
-          exit={{ scale: 0.9, y: 50, opacity: 0 }}
-          className="relative bg-black border-2 border-rage-brand p-8 md:p-12 w-full max-w-xl select-none shadow-[8px_8px_0px_#FF00FF] z-10"
-        >
-          {/* Close trigger */}
-          <button 
-            onClick={onClose}
-            className="absolute top-4 right-4 text-white hover:text-rage-brand transition-colors p-2"
-          >
-            <X size={28} />
-          </button>
-
-          {!isDone ? (
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <span className="text-rage-pink font-display text-sm font-bold tracking-widest uppercase block mb-1">
-                  {lang === 'RU' ? 'Обсудить проект' : 'Discuss Project'}
-                </span>
-                <h3 className="text-3xl font-display font-black text-white uppercase tracking-tighter leading-none mb-6">
-                  {lang === 'RU' ? 'ГОТОВЫ СДЕЛАТЬ ШУМ?' : 'READY TO MAKE NOISE?'}
-                </h3>
-              </div>
-
-              {/* Role switch */}
-              <div className="grid grid-cols-2 gap-3 p-1 bg-white/5 border border-white/10 rounded-sm">
-                <button
-                  type="button"
-                  onClick={() => setFormData(prev => ({ ...prev, role: 'advertiser' }))}
-                  className={cn(
-                    "py-2 text-xs font-bold uppercase transition-all tracking-wider rounded-xs",
-                    formData.role === 'advertiser' ? "bg-rage-brand text-black" : "text-white/60 hover:text-white"
-                  )}
-                >
-                  {lang === 'RU' ? 'Я рекламодатель' : 'I am Advertiser'}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setFormData(prev => ({ ...prev, role: 'blogger' }))}
-                  className={cn(
-                    "py-2 text-xs font-bold uppercase transition-all tracking-wider rounded-xs",
-                    formData.role === 'blogger' ? "bg-rage-brand text-black" : "text-white/60 hover:text-white"
-                  )}
-                >
-                  {lang === 'RU' ? 'Я блогер' : 'I am Blogger'}
-                </button>
-              </div>
-
-              {/* Input fields */}
-              <div className="space-y-4">
-                <div>
-                  <label className="text-xs uppercase font-bold text-white/50 block mb-1">ФИО / Имя</label>
-                  <input 
-                    type="text" 
-                    required
-                    placeholder="Алексей"
-                    value={formData.name}
-                    onChange={e => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                    className="w-full bg-white/5 border border-white/10 p-3 text-white text-sm focus:border-rage-brand outline-none transition-colors rounded-sm"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-xs uppercase font-bold text-white/50 block mb-1">Telegram / Телефон</label>
-                  <input 
-                    type="text" 
-                    required
-                    placeholder="@username или +7..."
-                    value={formData.contact}
-                    onChange={e => setFormData(prev => ({ ...prev, contact: e.target.value }))}
-                    className="w-full bg-white/5 border border-white/10 p-3 text-white text-sm focus:border-rage-brand outline-none transition-colors rounded-sm"
-                  />
-                </div>
-
-                {formData.role === 'advertiser' && (
-                  <div>
-                    <label className="text-xs uppercase font-bold text-white/50 block mb-1">Рекламный бюджет</label>
-                    <select 
-                      value={formData.budget}
-                      onChange={e => setFormData(prev => ({ ...prev, budget: e.target.value }))}
-                      className="w-full bg-[#121212] border border-white/10 p-3 text-white text-sm focus:border-rage-brand outline-none transition-colors rounded-sm"
-                    >
-                      <option value="100k-500k">100,000 ₽ — 500,000 ₽</option>
-                      <option value="500k-1m">500,000 ₽ — 1,000,000 ₽</option>
-                      <option value="1m-3m">1,000,000 ₽ — 3,000,000 ₽</option>
-                      <option value="3m+">Более 3,000,000 ₽</option>
-                    </select>
-                  </div>
-                )}
-
-                <div>
-                  <label className="text-xs uppercase font-bold text-white/50 block mb-1">Пара слов о проекте</label>
-                  <textarea 
-                    rows={3}
-                    placeholder="Хотим охватить СНГ аудиторию с новым продуктом..."
-                    value={formData.message}
-                    onChange={e => setFormData(prev => ({ ...prev, message: e.target.value }))}
-                    className="w-full bg-white/5 border border-white/10 p-3 text-white text-sm focus:border-rage-brand outline-none transition-colors rounded-sm resize-none"
-                  />
-                </div>
-              </div>
-
-              {/* Submit trigger */}
-              <button 
-                type="submit" 
-                disabled={isSubmitting}
-                className="w-full btn-primary h-14 justify-center text-sm tracking-widest relative overflow-hidden flex items-center gap-3 group"
-              >
-                {isSubmitting ? (
-                  <span className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" />
-                ) : (
-                  <>
-                    {lang === 'RU' ? 'ОТПРАВИТЬ ЗАЯВКУ' : 'SUBMIT REQUEST'}
-                    <Send size={16} className="group-hover:translate-x-1 transition-transform" />
-                  </>
-                )}
-              </button>
-            </form>
-          ) : (
-            <div className="text-center py-8">
-              <div className="w-16 h-16 bg-rage-brand/10 text-rage-brand rounded-full flex items-center justify-center mx-auto mb-6 border border-rage-brand animate-bounce">
-                <CheckCircle size={36} />
-              </div>
-              <h4 className="text-2xl font-display font-black text-white uppercase mb-3">
-                {lang === 'RU' ? 'ЗАЯВКА ОТПРАВЛЕНА!' : 'SUBMITTED SUCCESSFULLY!'}
-              </h4>
-              <p className="text-white/60 text-sm max-w-sm mx-auto mb-8">
-                {lang === 'RU' 
-                  ? 'Мы напишем вам в Telegram или перезвоним в течение 15 минут. Давайте делать разницу!' 
-                  : 'We will contact you via Telegram or phone within 15 minutes. Let\'s make difference!'}
-              </p>
-              <button 
-                onClick={() => {
-                  setIsDone(false);
-                  onClose();
-                }}
-                className="border-2 border-white/20 hover:border-white text-white px-8 py-2.5 font-bold uppercase text-xs"
-              >
-                {lang === 'RU' ? 'ОТЛИЧНО' : 'GREAT'}
-              </button>
-            </div>
-          )}
-        </motion.div>
-      </div>
-    </AnimatePresence>
+    <div ref={ref} className="inline-block">
+      {count}
+      {suffix}
+    </div>
   );
 }
 
-const renderCaseGraphic = (name: string) => {
-  switch (name) {
-    case "Дед VPN":
-      return (
-        <div className="relative w-full h-full flex items-center justify-center select-none overflow-hidden">
-          {/* Radial grid background */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(172,255,42,0.02)_1px,transparent_1px)] bg-[size:12px_12px]" />
-          
-          {/* Neon green ambient glow behind glasses */}
-          <div className="absolute w-44 h-44 rounded-full bg-[#ACFF2A]/5 blur-3xl group-hover:bg-[#ACFF2A]/10 transition-all duration-500" />
-          
-          <div className="relative flex flex-col items-center">
-            {/* Outline Crest / Beard */}
-            <svg className="w-28 h-28 text-white/10 group-hover:text-white/15 transition-colors filter drop-shadow-[0_0_12px_rgba(255,255,255,0.05)]" viewBox="0 0 100 100" fill="currentColor">
-              <path d="M20 30 C20 45 35 60 50 85 C65 60 80 45 80 30 C75 25 25 25 20 30 Z" opacity="0.1" />
-              <path d="M35 15 C35 15 50 5 65 15 C75 30 75 50 50 78 C25 50 25 30 35 15 Z" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="4 4" />
-            </svg>
-            
-            {/* Cyberpunk sunglasses with Lime Green glow */}
-            <div className="absolute top-[38px] flex gap-1 z-10 group-hover:scale-110 transition-transform duration-500">
-              <div className="w-9 h-4.5 bg-[#ACFF2A] border border-black shadow-[0_0_20px_#ACFF2A] transform -skew-x-12 relative flex items-center justify-center">
-                <div className="w-1.5 h-1.5 bg-black rounded-full" />
-              </div>
-              <div className="w-2 h-0.5 bg-[#ACFF2A] self-center" />
-              <div className="w-9 h-4.5 bg-[#ACFF2A] border border-black shadow-[0_0_20px_#ACFF2A] transform -skew-x-12 relative flex items-center justify-center">
-                <div className="w-1.5 h-1.5 bg-black rounded-full" />
-              </div>
+// --- Brand and Collaboration Logos mapping ---
+const BLOGGER_AVATARS: Record<string, string> = {
+  "Магмуст": "/images/magmust_logo.jpg",
+  "Mud Flaps На Русском": "/images/mudflaps_logo.jpg",
+  "Краун4к": "/images/kraunchik_logo.jpg",
+  "EnoT": "/images/enot_logo.jpg",
+  "Honey": "/images/honey_logo.jpg",
+  "Неркин": "/images/av_u2uq5_logo.jpg",
+  "Tearz": "/images/tearz_logo.jpg",
+  "ReyZone": "/images/reyzone_logo.jpg",
+  "Soilinf": "/images/soilinf_logo.jpg",
+  "Шут": "/images/av_hk47u6_logo.jpg",
+  "Лолотрек": "/images/av_icq1u_logo.jpg",
+  "Гельмо": "/images/av_3li6bs_logo.jpg",
+  "Нео": "/images/av_tbmyvd_logo.jpg",
+  "PWGood": "/images/pwgood_logo.jpg",
+  "40 Литров Пива": "/images/40_logo.jpg",
+  "SKIJL": "/images/skijl_logo.jpg",
+  "Квист": "/images/av_584l4_logo.jpg",
+  "Мэншен": "/images/av_iabpv_logo.jpg",
+  "KtoWho": "/images/ktowho_logo.jpg",
+  "Myles На Русском": "/images/myles_logo.jpg"
+};
+
+const CASE_LOGOS: Record<string, string> = {
+  "War Thunder": "/images/warthunder_logo.jpg",
+  "Zona51": "/images/zone51_logo.jpg",
+  "Playerok": "/images/Playerok.png",
+  "Arknights Endfield": "/images/Arknights.jpg",
+  "NTE": "/images/NTE.png",
+  "Ded VPN": "/images/Дед ВПН.jpg",
+  "100 Балльный Репетитор": "/images/100 бальный.png",
+  "Arizona RP": "/images/Arizona RP.png",
+  "Block Blast": "/images/Block blast.jpg",
+  "Radmir RP": "/images/Radmir RP.jpg"
+};
+
+
+// --- Blogger Card Component for Hover Effects ---
+function BloggerCard({
+  blg,
+  paper,
+  lang
+}: {
+  blg: BloggerItem;
+  paper: {
+    img: string;
+    imgHover: string;
+    badgeColor: string;
+    followersColor: string;
+    tagColor: string;
+  };
+  lang: 'RU' | 'EN';
+}) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <motion.a
+      href={blg.link}
+      target="_blank"
+      rel="noopener noreferrer"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      whileHover={{ scale: 1.05, rotate: 1 }}
+      className="w-[480px] h-[156px] px-10 py-6 flex items-center gap-6 shrink-0 cursor-pointer bg-transparent border-none shadow-none overflow-visible text-black select-none"
+      style={{
+        backgroundImage: `url('${isHovered ? paper.imgHover : paper.img}')`,
+        backgroundSize: "100% 100%",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat"
+      }}
+    >
+      {BLOGGER_AVATARS[blg.name] ? (
+        <img
+          src={BLOGGER_AVATARS[blg.name]}
+          alt={blg.name}
+          className="w-[72px] h-[72px] rounded-full object-cover shrink-0 border border-black/10 shadow-sm"
+        />
+      ) : (
+        <div className={cn("w-[72px] h-[72px] rounded-full flex items-center justify-center font-display font-black text-2xl uppercase shrink-0 shadow-inner border", paper.badgeColor)}>
+          {blg.name[0]}
+        </div>
+      )}
+
+      <div className="text-black text-left">
+        <h4 className="font-display font-black text-xl uppercase text-black leading-none mb-1 truncate max-w-[320px]">
+          {blg.name}
+        </h4>
+        <div className="flex items-center gap-3 mt-1">
+          <span className={cn(
+            "text-[16px] font-sans uppercase font-black px-2 py-1 rounded-sm flex items-center justify-center border",
+            blg.engagement === 'exclusive' ? "bg-rage-pink text-white border-rage-pink" : "bg-neutral-400 text-white border-neutral-400"
+          )}>
+            {blg.engagement === 'exclusive' ? 'Э' : 'П'}
+          </span>
+          <span className="text-[20px] font-mono uppercase font-black tracking-wider text-black/85">{blg.followers}</span>
+          <span className={cn("text-[16px] font-sans uppercase border px-2 py-1 rounded-sm", paper.tagColor)}>{lang === 'RU' ? blg.tagRU : blg.tagEN}</span>
+        </div>
+      </div>
+    </motion.a>
+  );
+}
+
+// --- Case Card helper ---
+const getCasePaper = (index: number) => {
+  const papers = [
+    {
+      normal: "/images/case_paper_lime.png",
+      hover: "/images/case_paper_lime_hover.png",
+      badgeColor: "bg-black text-rage-brand border-black/15",
+      accentText: "text-black",
+      filterId: "torn-paper-0"
+    },
+    {
+      normal: "/images/case_paper_pink.png",
+      hover: "/images/case_paper_pink_hover.png",
+      badgeColor: "bg-black text-rage-pink border-black/15",
+      accentText: "text-black",
+      filterId: "torn-paper-1"
+    },
+    {
+      normal: "/images/case_paper_white.png",
+      hover: "/images/case_paper_white_hover.png",
+      badgeColor: "bg-black text-white border-black/15",
+      accentText: "text-black",
+      filterId: "torn-paper-2"
+    }
+  ];
+  return papers[index % 3];
+};
+
+// --- Case Card Component for Hover Effects ---
+function CaseCard({
+  item,
+  paper,
+  lang,
+  onSelect
+}: {
+  item: CaseItem;
+  paper: {
+    normal: string;
+    hover: string;
+    badgeColor: string;
+    accentText: string;
+    filterId: string;
+  };
+  lang: 'RU' | 'EN';
+  onSelect: (item: CaseItem) => void;
+}) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <motion.a
+      href={item.link}
+      onClick={(e) => {
+        e.preventDefault();
+        onSelect(item);
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      whileHover={{ scale: 1.03, rotate: -0.5 }}
+      className="w-[280px] sm:w-[360px] h-[220px] sm:h-[260px] bg-transparent flex flex-col justify-between transition-all duration-300 group shrink-0 relative overflow-visible cursor-pointer select-none text-black p-6 sm:p-8 border-none shadow-none"
+    >
+      {/* Background with SVG torn paper filter applied */}
+      <div
+        className="absolute inset-0 z-0 transition-transform duration-300 pointer-events-none"
+        style={{
+          backgroundImage: `url('${isHovered ? paper.hover : paper.normal}')`,
+          backgroundSize: "100% 100%",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          filter: `url(#${paper.filterId})`
+        }}
+      />
+
+      <div className="relative z-10 flex flex-col h-full w-full pointer-events-none">
+        {/* Main avatar and name row */}
+        <div className="flex items-center gap-4 text-left">
+          {CASE_LOGOS[item.name] ? (
+            <img
+              src={CASE_LOGOS[item.name]}
+              alt={item.name}
+              className="w-20 h-20 rounded-2xl object-cover border border-black/10 shrink-0 shadow-sm"
+            />
+          ) : (
+            <div className={cn("w-20 h-20 rounded-2xl flex items-center justify-center font-display font-black text-3xl uppercase shrink-0 shadow-inner border", paper.badgeColor)}>
+              {item.name[0]}
             </div>
-            
-            {/* Santa Hat outline with pink glow */}
-            <svg className="absolute -top-[12px] w-22 h-11 text-rage-pink/40 animate-pulse" viewBox="0 0 100 50" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <path d="M 15 50 C 15 20, 50 10, 80 40 L 85 30" />
-              <circle cx="85" cy="30" r="4" fill="currentColor" />
-            </svg>
+          )}
+          <div>
+            <h3 className="font-display font-black text-xl sm:text-2xl uppercase tracking-tighter text-black leading-none mb-1">
+              {item.name}
+            </h3>
           </div>
         </div>
-      );
-    case "ZONAS1":
-        case "ZONA51":
-          return (
-            <div className="relative w-full h-full flex items-center justify-center select-none overflow-hidden bg-black/90">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(172,255,42,0.03)_1px,transparent_1px)] bg-[size:12px_12px] z-10 pointer-events-none" />
-              {/* Subtle neon green glow aura in the center background */}
-              <div className="absolute w-36 h-36 bg-[#ACFF2A]/10 rounded-full blur-2xl group-hover:bg-[#ACFF2A]/20 transition-all duration-500 z-0" />
-              <img
-                src="/images/zone51_logo.jpg"
-                alt="ZONA51 Logo"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 filter brightness-90 group-hover:brightness-100 z-0"
-                referrerPolicy="no-referrer"
-              />
-            </div>
-          );
-        case "WAR THUNDER":
-          return (
-            <div className="relative w-full h-full flex items-center justify-center select-none overflow-hidden bg-black/90">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,0,127,0.03)_1px,transparent_1px)] bg-[size:12px_12px] z-10 pointer-events-none" />
-              {/* Subtle pink glow aura in the center background */}
-              <div className="absolute w-36 h-36 bg-rage-pink/10 rounded-full blur-2xl group-hover:bg-rage-pink/20 transition-all duration-500 z-0" />
-              <img
-                src="/images/warthunder_logo.jpg"
-                alt="War Thunder Logo"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 filter brightness-90 group-hover:brightness-100 z-0"
-                referrerPolicy="no-referrer"
-              />
-            </div>
-          );
-        case "100-балльный репетитор":
-          return (
-            <div className="relative w-full h-full flex items-center justify-center select-none overflow-hidden bg-black/90">
-              <div className="absolute inset-0 bg-[radial-gradient(rgba(255,0,255,0.05)_1px,transparent_1px)] bg-[size:16px_16px]" />
-              
-              {/* Ultra deep pink glow */}
-              <div className="absolute w-44 h-44 rounded-full bg-[#FF00FF]/5 blur-3xl group-hover:bg-[#FF00FF]/15 transition-all duration-500" />
-              <div className="absolute w-[120px] h-[120px] rounded-full border border-[#FF00FF]/5 bg-[#FF00FF]/2 filter blur-md animate-pulse" />
-              
-              <div className="relative z-10 font-display font-black text-7xl sm:text-8xl text-rage-pink drop-shadow-[0_0_35px_rgba(255,0,255,0.75)] tracking-tighter group-hover:scale-110 transition-transform duration-500">
-                100
-              </div>
-            </div>
-          );
-        case "Яндекс Маркет":
-          return (
-            <div className="relative w-full h-full flex items-center justify-center select-none overflow-hidden bg-black/90">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(172,255,42,0.03)_1px,transparent_1px)] bg-[size:12px_12px] z-10 pointer-events-none" />
-              {/* Subtle neon yellow-green glow aura in the center background */}
-              <div className="absolute w-36 h-36 bg-[#ACFF2A]/10 rounded-full blur-2xl group-hover:bg-[#ACFF2A]/20 transition-all duration-500 z-0" />
-              <img
-                src="/images/yandexmarket_logo.png"
-                alt="Yandex Market Logo"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 filter brightness-90 group-hover:brightness-100 z-0"
-                referrerPolicy="no-referrer"
-              />
-            </div>
-          );
-    default:
-      return (
-        <div className="relative w-full h-full flex items-center justify-center select-none">
-          <div className="absolute w-36 h-36 rounded-full bg-white/5 blur-3xl" />
-          <span className="text-5xl group-hover:scale-110 transition-transform duration-500">💼</span>
+
+        <div className="text-left mt-3 flex-grow">
+          <p className="text-black text-[13px] sm:text-[15px] line-clamp-3 leading-normal font-bold">
+            {lang === 'RU' ? item.descRU : item.descEN}
+          </p>
         </div>
-      );
-  }
-};
+      </div>
+    </motion.a>
+  );
+}
+
+// --- Case Modal Component for Detailed View ---
+function CaseModal({
+  item,
+  lang,
+  onClose,
+  onAction
+}: {
+  item: CaseItem;
+  lang: 'RU' | 'EN';
+  onClose: () => void;
+  onAction?: () => void;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md cursor-pointer"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ scale: 0.9, y: 20, rotate: -1 }}
+        animate={{ scale: 1, y: 0, rotate: 0 }}
+        exit={{ scale: 0.9, y: 20, rotate: -1 }}
+        className="w-full max-w-2xl relative p-8 sm:p-14 text-black cursor-default overflow-visible shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Background paper texture wrapper */}
+        <div
+          className="absolute inset-0 z-0 pointer-events-none"
+          style={{
+            backgroundImage: "url('/images/white_torn_paper.png')",
+            backgroundSize: "100% 100%",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            backgroundColor: "transparent"
+          }}
+        />
+
+        {/* Diagonal tapes (aesthetic duct tape on corners) */}
+        <div className="absolute top-4 left-[-35px] w-32 bg-rage-brand text-black text-[8px] font-mono font-black uppercase tracking-widest text-center py-1.5 rotate-[-45deg] border-y border-black/10 z-10">
+          CASE DETS
+        </div>
+        <div className="absolute bottom-4 right-[-35px] w-32 bg-rage-pink text-white text-[8px] font-mono font-black uppercase tracking-widest text-center py-1.5 rotate-[-45deg] border-y border-white/10 z-10">
+          RAGE CORE
+        </div>
+
+        {/* Tape pins */}
+        <div className="absolute top-[-8px] right-24 w-12 h-6 bg-black/15 border border-black/5 shadow-md z-20 backdrop-blur-xs rotate-[4deg] pointer-events-none" />
+        <div className="absolute bottom-[-8px] left-24 w-12 h-6 bg-black/15 border border-black/5 shadow-md z-20 backdrop-blur-xs rotate-[-6deg] pointer-events-none" />
+
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          className="absolute top-8 right-8 text-black/40 hover:text-black hover:scale-110 transition-all cursor-pointer font-black font-display text-xl z-20"
+        >
+          ✕
+        </button>
+
+        <div className="relative z-10 flex flex-col gap-6 text-left">
+          
+          {/* Header Row: Big Avatar + Name */}
+          <div className="flex items-center gap-6">
+            {CASE_LOGOS[item.name] ? (
+              <img
+                src={CASE_LOGOS[item.name]}
+                alt={item.name}
+                className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl object-cover border-2 border-black/10 shadow-md shrink-0 bg-white"
+              />
+            ) : (
+              <div className={cn("w-20 h-20 sm:w-24 sm:h-24 rounded-3xl flex items-center justify-center font-display font-black text-3xl sm:text-4xl uppercase shrink-0 shadow-md border-2 border-black/10", item.badgeColor)}>
+                {item.name[0]}
+              </div>
+            )}
+            <div>
+              <span className="text-[10px] font-mono font-black uppercase tracking-widest text-black/50 block mb-1">
+                {lang === 'RU' ? item.categoryRU : item.categoryEN}
+              </span>
+              <h2 className="font-display font-black text-2xl sm:text-3xl lg:text-4xl uppercase tracking-tighter text-black leading-none mb-2">
+                {item.name}
+              </h2>
+            </div>
+          </div>
+
+          {/* Description Section */}
+          <div className="border-t border-black/10 pt-6">
+            <h4 className="font-mono text-[10px] font-black uppercase tracking-widest text-black/40 mb-2">
+              {lang === 'RU' ? 'ОПИСАНИЕ КЕЙСА' : 'CASE DETAILS'}
+            </h4>
+            <p className="text-black text-sm sm:text-base md:text-lg leading-relaxed font-sans font-bold">
+              {lang === 'RU' ? item.descRU : item.descEN}
+            </p>
+          </div>
+
+          {/* Action Trigger inside modal */}
+          <div className="flex justify-end pt-4">
+            <button
+              onClick={() => {
+                onClose();
+                if (onAction) onAction();
+                const formElement = document.getElementById('contacts');
+                if (formElement) formElement.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="px-8 py-3 bg-black text-white font-display font-black text-xs uppercase tracking-wider rounded-md border-2 border-black shadow-[4px_4px_0px_#ACFF2A] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_#FF00FF] transition-all cursor-pointer"
+            >
+              {lang === 'RU' ? 'ХОЧУ ТАК ЖЕ' : 'I WANT THIS'}
+            </button>
+          </div>
+
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+
+// --- Stat Card Component for Crumpled Hover Effect ---
+function StatCard({
+  title,
+  desc,
+  paper,
+  rotateClass,
+  children
+}: {
+  title: string;
+  desc: string;
+  paper: {
+    normal: string;
+    hover: string;
+    filterId: string;
+  };
+  rotateClass: string;
+  children: React.ReactNode;
+}) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <div className="relative group/card flex flex-col">
+      <motion.div
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        whileHover={{ rotate: rotateClass.includes('-') ? -0.5 : 0.5, scale: 1.02 }}
+        className={cn(
+          "sticker-card text-black min-h-[240px] sm:min-h-[260px] md:min-h-[280px] p-4 sm:p-6 flex flex-col justify-center items-center text-center border-none shadow-none overflow-visible relative",
+          rotateClass
+        )}
+      >
+        {/* Background with SVG torn paper filter applied */}
+        <div
+          className="absolute inset-0 z-0 pointer-events-none"
+          style={{
+            backgroundImage: `url('${isHovered ? paper.hover : paper.normal}')`,
+            backgroundSize: "100% 100%",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            filter: `url(#${paper.filterId})`
+          }}
+        />
+
+        <div className="relative z-10 flex flex-col items-center justify-center max-w-[85%] pointer-events-none text-center">
+          <span className="font-mono text-[9px] font-black uppercase tracking-widest block mb-0.5 opacity-70">
+            {title}
+          </span>
+          {children}
+          <p className="font-sans font-black uppercase text-[10px] sm:text-xs tracking-tight leading-tight text-black/95">
+            {desc}
+          </p>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
 
 export default function App() {
   const [loading, setLoading] = useState(true);
-  const [lang, setLang] = useState<'RU' | 'EN'>('RU');
-  const [activeTab, setActiveTab] = useState<'blogger' | 'advertiser'>('blogger');
-  const [theme, setTheme] = useState<'dark' | 'neon'>('dark');
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [lang, setLang] = useState<'RU' | 'EN'>(() => (localStorage.getItem('rage_lang') as 'RU' | 'EN') || 'RU');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDiscussOpen, setIsDiscussOpen] = useState(false);
-  const [modalRole, setModalRole] = useState<'blogger' | 'advertiser'>('advertiser');
-  const [scrolled, setScrolled] = useState(false);
+  const [hoveredCareer, setHoveredCareer] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    contact: '',
+    role: 'advertiser', // advertiser | blogger
+    desc: '',
+    budget: '500k-1m',
+    customBudget: '',
+    niche: '',
+    metrics: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [selectedCase, setSelectedCase] = useState<CaseItem | null>(null);
+
+  // Carousel manual control index
+  const [caseIndex, setCaseIndex] = useState(0);
+  const [hoveredService, setHoveredService] = useState<number | null>(null);
+  const [hoveredStat, setHoveredStat] = useState<number | null>(null);
+
+  useEffect(() => {
+    localStorage.setItem('rage_lang', lang);
+  }, [lang]);
 
   useEffect(() => {
     if (loading) {
@@ -467,912 +746,1118 @@ export default function App() {
     } else {
       document.body.style.overflow = '';
     }
-    return () => {
-      document.body.style.overflow = '';
-    };
   }, [loading]);
 
-  const openDiscussWithRole = (role: 'blogger' | 'advertiser') => {
-    setModalRole(role);
-    setIsDiscussOpen(true);
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name || !formData.contact) return;
+    setIsSubmitting(true);
+
+    // Simulate API call
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setSubmitStatus('success');
+      // Reset form
+      setFormData({
+        name: '',
+        contact: '',
+        role: formData.role,
+        desc: '',
+        budget: '500k-1m',
+        customBudget: '',
+        niche: '',
+        metrics: ''
+      });
+    }, 1500);
   };
 
-  // Carousel Indexes
-  const [caseIndex, setCaseIndex] = useState(0);
-  const [bloggerIndex, setBloggerIndex] = useState(0);
-  const [selectedService, setSelectedService] = useState<number | null>(null);
+  const submitViaTelegram = () => {
+    // Generate text message for Telegram bot link
+    const typeText = formData.role === 'advertiser'
+      ? (lang === 'RU' ? 'Рекламодатель' : 'Advertiser')
+      : (lang === 'RU' ? 'Блогер' : 'Blogger');
+    const budgetValue = formData.budget === 'other' 
+      ? (formData.customBudget || (lang === 'RU' ? 'Свой бюджет' : 'Custom budget')) 
+      : formData.budget;
+    const detailText = formData.role === 'advertiser'
+      ? (lang === 'RU'
+        ? `%0AОписание: ${formData.desc || 'Не указано'}%0AБюджет: ${budgetValue}`
+        : `%0ADescription: ${formData.desc || 'Not specified'}%0ABudget: ${budgetValue}`)
+      : (lang === 'RU'
+        ? `%0AНиша: ${formData.niche || 'Не указано'}%0AПодписчики: ${formData.metrics || 'Не указано'}`
+        : `%0ANiche: ${formData.niche || 'Not specified'}%0ASubscribers: ${formData.metrics || 'Not specified'}`);
 
-  useEffect(() => {
-    document.documentElement.style.scrollBehavior = 'smooth';
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    const message = lang === 'RU'
+      ? `Новая заявка RAGE MEDIA!%0AИмя: ${formData.name || 'Не указано'}%0AРоль: ${typeText}%0AКонтакты: ${formData.contact || 'Не указано'}${detailText}`
+      : `New RAGE MEDIA Request!%0AName: ${formData.name || 'Not specified'}%0ARole: ${typeText}%0AContacts: ${formData.contact || 'Not specified'}${detailText}`;
 
-  // Filter cases based on search or interaction
-  const filteredCases = CASES.filter(c => 
-    c.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    c.desc.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const handleNextCase = () => {
-    setCaseIndex(prev => (prev + 1) % CASES.length);
+    // Redirect to Telegram
+    window.open(`https://t.me/ragemedia?text=${message}`, '_blank');
   };
 
-  const handlePrevCase = () => {
-    setCaseIndex(prev => (prev - 1 + CASES.length) % CASES.length);
+  // Split bloggers into 3 groups for rows
+  const bloggersRow1 = BLOGGERS.slice(0, 7);
+  const bloggersRow2 = BLOGGERS.slice(7, 13);
+  const bloggersRow3 = BLOGGERS.slice(13);
+
+  const getBloggerPaper = (index: number) => {
+    const papers = [
+      {
+        img: "/images/blogger_paper_lime.png",
+        imgHover: "/images/blogger_paper_lime_hover.png",
+        badgeColor: "bg-black text-rage-brand border-rage-brand/20",
+        followersColor: "text-black/80",
+        tagColor: "border-black/20 text-black/70 font-semibold"
+      },
+      {
+        img: "/images/blogger_paper_pink.png",
+        imgHover: "/images/blogger_paper_pink_hover.png",
+        badgeColor: "bg-black text-rage-pink border-rage-pink/20",
+        followersColor: "text-black/80",
+        tagColor: "border-black/20 text-black/70 font-semibold"
+      },
+      {
+        img: "/images/blogger_paper_white.png",
+        imgHover: "/images/blogger_paper_white_hover.png",
+        badgeColor: "bg-black text-white border-white/20",
+        followersColor: "text-black/80",
+        tagColor: "border-black/20 text-black/70 font-semibold"
+      }
+    ];
+    return papers[index % 3];
   };
 
-  const handleNextBlogger = () => {
-    setBloggerIndex(prev => (prev + 1) % TOP_BLOGGERS.length);
-  };
-
-  const handlePrevBlogger = () => {
-    setBloggerIndex(prev => (prev - 1 + TOP_BLOGGERS.length) % TOP_BLOGGERS.length);
+  const getServicePaperImages = (idx: number) => {
+    const mapping = [
+      {
+        normal: "/images/service_paper_lime.png",
+        hover: "/images/service_paper_lime_hover.png",
+        textColor: "text-black",
+        iconColor: "text-black",
+        iconBg: "bg-black/10 border-black/15",
+        arrowBg: "border-black/25 text-black/60 group-hover:bg-black group-hover:text-rage-brand group-hover:border-black",
+        doodleColor: "text-rage-pink border-black/15 bg-black/5"
+      },
+      {
+        normal: "/images/service_paper_pink.png",
+        hover: "/images/service_paper_pink_hover.png",
+        textColor: "text-black",
+        iconColor: "text-black",
+        iconBg: "bg-black/10 border-black/15",
+        arrowBg: "border-black/25 text-black/60 group-hover:bg-black group-hover:text-rage-pink group-hover:border-black",
+        doodleColor: "text-black border-black/15 bg-black/5"
+      },
+      {
+        normal: "/images/service_paper_white.png",
+        hover: "/images/service_paper_white_hover.png",
+        textColor: "text-black",
+        iconColor: "text-black",
+        iconBg: "bg-black/10 border-black/15",
+        arrowBg: "border-black/25 text-black/60 group-hover:bg-black group-hover:text-white group-hover:border-black",
+        doodleColor: "text-rage-brand border-black/15 bg-black/5"
+      },
+      {
+        normal: "/images/service_paper_lime.png",
+        hover: "/images/service_paper_lime_hover.png",
+        textColor: "text-black",
+        iconColor: "text-black",
+        iconBg: "bg-black/10 border-black/15",
+        arrowBg: "border-black/25 text-black/60 group-hover:bg-black group-hover:text-rage-brand group-hover:border-black",
+        doodleColor: "text-rage-pink border-black/15 bg-black/5"
+      },
+      {
+        normal: "/images/service_paper_pink.png",
+        hover: "/images/service_paper_pink_hover.png",
+        textColor: "text-black",
+        iconColor: "text-black",
+        iconBg: "bg-black/10 border-black/15",
+        arrowBg: "border-black/25 text-black/60 group-hover:bg-black group-hover:text-rage-pink group-hover:border-black",
+        doodleColor: "text-black border-black/15 bg-black/5"
+      }
+    ];
+    return mapping[idx % 5];
   };
 
   return (
-    <div className={cn(
-      "text-white min-h-screen relative overflow-x-hidden selection:bg-rage-brand selection:text-black",
-      theme === 'neon' ? "theme-neon" : ""
-    )}>
-      
-      {/* Intro Loader Animation */}
+    <div className="text-white min-h-screen relative overflow-x-hidden selection:bg-rage-brand selection:text-black bg-transparent">
+
+      {/* SVG Filters for procedurally generated torn paper edges */}
+      <svg className="absolute w-0 h-0 pointer-events-none" aria-hidden="true">
+        <defs>
+          <filter id="torn-paper-0">
+            <feTurbulence type="fractalNoise" baseFrequency="0.015 0.04" numOctaves="4" seed="12" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="12" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+          <filter id="torn-paper-1">
+            <feTurbulence type="fractalNoise" baseFrequency="0.02 0.035" numOctaves="4" seed="45" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="15" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+          <filter id="torn-paper-2">
+            <feTurbulence type="fractalNoise" baseFrequency="0.012 0.045" numOctaves="4" seed="89" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="14" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+        </defs>
+      </svg>
+
+      {/* 1. INTRO LOADER ANIMATION */}
       <AnimatePresence>
         {loading && <LogoLoader onComplete={() => setLoading(false)} />}
       </AnimatePresence>
-      
-      {/* 24/7 Scrollable Site Background Image with Overlay */}
-      <div 
-        className="absolute inset-0 pointer-events-none -z-10 bg-repeat-y bg-top"
-        style={{ 
-          backgroundImage: "linear-gradient(to bottom, rgba(4, 4, 6, 0.25), rgba(4, 4, 6, 0.35)), url('/images/site_background.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center top",
-        }}
-      />
-      
-      {/* 1. HEADER (Navbar) */}
-      <nav className={cn(
-        "fixed top-0 left-0 w-full z-50 px-6 py-4 transition-all duration-300 flex items-center justify-between",
-        scrolled ? "bg-black/90 backdrop-blur-md border-b border-white/5 py-3" : "bg-transparent"
-      )}>
-        {/* Logo */}
-        <div className="cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-          <RageLogo className="scale-95 md:scale-100 hover:scale-[1.03] transition-transform" />
+
+      {/* Cyber ambient glow backgrounds */}
+      <div className="absolute top-0 inset-x-0 h-[800px] bg-gradient-to-b from-rage-pink/5 via-rage-brand/5 to-transparent pointer-events-none -z-10" />
+      <div className="absolute top-[1200px] left-[-300px] w-[600px] h-[600px] bg-rage-brand/3 blur-[120px] rounded-full pointer-events-none -z-10" />
+      <div className="absolute top-[2800px] right-[-300px] w-[600px] h-[600px] bg-rage-pink/3 blur-[120px] rounded-full pointer-events-none -z-10" />
+
+      {/* 2. HEADER (Navbar) */}
+      <nav className="fixed top-0 left-0 w-full z-50 px-6 py-4 bg-black/85 backdrop-blur-md border-b border-white/5 transition-all">
+        <div className="container mx-auto flex items-center justify-between">
+          {/* Logo with click to top */}
+          <div className="cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+            <RageLogo className="scale-95 md:scale-100 hover:scale-[1.03] transition-transform" />
+          </div>
+
+          {/* Right menu triggers / widgets - Designed like Photo 2 */}
+          <div className="flex items-center gap-4 sm:gap-6 ml-auto">
+
+
+            {/* Lang dropdown switcher pill */}
+            <button
+              onClick={() => setLang(l => l === 'RU' ? 'EN' : 'RU')}
+              className="flex items-center gap-1 px-3 py-1.5 bg-[#121212] border border-white/10 rounded-md text-[11px] font-black uppercase tracking-wider text-white hover:text-rage-brand hover:border-rage-brand/30 transition-all cursor-pointer shadow-sm"
+            >
+              {lang}
+              <ChevronDown size={11} className="opacity-60" />
+            </button>
+
+            {/* Hamburger menu button (Always visible on all screen sizes to match Photo 2) */}
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white hover:text-rage-brand transition-all cursor-pointer bg-white/5 shadow-sm"
+            >
+              {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
+            </button>
+          </div>
         </div>
 
-        {/* Right HUD Interactive Items */}
-        <div className="flex items-center gap-3 sm:gap-4 md:gap-5">
-          {/* Блогер / Рекламодатель pills */}
-          <div className="hidden md:flex items-center gap-3">
-            <button 
-              onClick={() => openDiscussWithRole('blogger')}
-              className="px-6 py-2 rounded-full text-xs font-black uppercase tracking-wider transition-all duration-300 bg-rage-brand text-black hover:scale-105 cursor-pointer"
-            >
-              {lang === 'RU' ? 'Блогер' : 'Blogger'}
-            </button>
-            <button 
-              onClick={() => openDiscussWithRole('advertiser')}
-              className="px-6 py-2 rounded-full text-xs font-black uppercase tracking-wider transition-all duration-300 bg-transparent border border-white text-white hover:bg-white/10 hover:scale-105 cursor-pointer"
-            >
-              {lang === 'RU' ? 'Рекламодатель' : 'Advertiser'}
-            </button>
-          </div>
-
-          {/* SEARCH TRIGGER */}
-          <div className="relative">
-            <button 
-              onClick={() => setSearchOpen(!searchOpen)}
-              className="w-10 h-10 rounded-full border border-white/10 hover:border-rage-brand hover:text-rage-brand flex items-center justify-center transition-all bg-[#121212]/20"
-              title="Поиск"
-            >
-              <Search size={16} />
-            </button>
-            <AnimatePresence>
-              {searchOpen && (
-                <motion.div 
-                  initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                  className="absolute right-0 top-12 bg-black border border-rage-brand p-3 w-64 shadow-[4px_4px_0px_#FF00FF] flex gap-2 z-50 rounded-sm"
-                >
-                  <input 
-                    type="text" 
-                    placeholder={lang === 'RU' ? 'Искать кейсы...' : 'Search cases...'}
-                    value={searchQuery}
-                    onChange={e => setSearchQuery(e.target.value)}
-                    className="bg-white/5 border border-white/10 p-2 text-xs text-white placeholder-white/40 outline-none w-full focus:border-rage-brand"
-                  />
-                  {searchQuery && (
-                    <button onClick={() => setSearchQuery('')} className="text-white/50 hover:text-white text-xs">Clear</button>
-                  )}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-          {/* THEME TOGGLE: солнце/луна */}
-          
-
-          {/* LANG DROPDOWN: RU/EN */}
-          <div className="relative group">
-            <button className="h-10 px-4 rounded-full border border-white/15 hover:border-white flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-tight transition-all bg-black/40 hover:bg-white/[0.04]">
-              <span>{lang}</span>
-              <span className="text-[8px] opacity-60">▼</span>
-            </button>
-            <div className="absolute right-0 top-11 bg-[#0a0a0a] border border-white/10 py-1 w-24 hidden group-hover:block rounded-md shadow-xl z-50">
-              <button 
-                onClick={() => setLang('RU')}
-                className={cn("w-full py-2 px-4 text-xs font-bold text-left hover:bg-rage-brand hover:text-black transition-colors rounded-sm", lang === 'RU' ? "text-rage-brand" : "text-white")}
-              >
-                Русский
-              </button>
-              <button 
-                onClick={() => setLang('EN')}
-                className={cn("w-full py-2 px-4 text-xs font-bold text-left hover:bg-rage-brand hover:text-black transition-colors rounded-sm", lang === 'EN' ? "text-rage-brand" : "text-white")}
-              >
-                English
-              </button>
-            </div>
-          </div>
-
-          {/* HAMBURGER TRIGGER */}
-          <button 
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="w-10 h-10 rounded-full border border-white/10 hover:border-rage-brand hover:text-rage-brand flex items-center justify-center transition-all bg-[#121212]/20 relative z-50"
-          >
-            {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
-        </div>
-
-        {/* Dynamic Mobile Menu Overlay */}
+        {/* Universal Navigation overlay (opens when hamburger is clicked) */}
         <AnimatePresence>
           {isMenuOpen && (
-            <motion.div 
-              initial={{ opacity: 0, scale: 1.1 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 1.1 }}
-              className="fixed inset-0 bg-black/98 z-40 flex flex-col items-center justify-center gap-8 min-h-screen px-6"
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="absolute top-full left-0 w-full bg-black/95 backdrop-blur-md border-b border-white/10 flex flex-col p-6 gap-6 z-40 select-none overflow-hidden"
             >
-              <div className="absolute top-1/4 -left-1/4 w-80 h-80 bg-rage-pink/10 blur-[100px] pointer-events-none" />
-              <div className="absolute bottom-1/4 -right-1/4 w-80 h-80 bg-rage-brand/10 blur-[100px] pointer-events-none" />
+            
 
-              <div className="text-center space-y-2">
-                <span className="text-rage-pink text-xs uppercase tracking-widest font-black">Menu</span>
-                <div className="w-10 h-1.5 bg-rage-brand mx-auto mb-10" />
+              <div className="flex flex-col items-center gap-4 font-display font-black text-2xl sm:text-3xl uppercase tracking-tighter text-center">
+                <a href="#cases" onClick={() => setIsMenuOpen(false)} className="hover:text-rage-brand transition-colors">{lang === 'RU' ? 'Кейсы' : 'Cases'}</a>
+                <a href="#services" onClick={() => setIsMenuOpen(false)} className="hover:text-rage-pink transition-colors">{lang === 'RU' ? 'Услуги' : 'Services'}</a>
+                <a href="#bloggers" onClick={() => setIsMenuOpen(false)} className="hover:text-rage-brand transition-colors">{lang === 'RU' ? 'Блогеры' : 'Bloggers'}</a>
+                <a href="/career" onClick={() => setIsMenuOpen(false)} className="hover:text-rage-pink transition-colors">{lang === 'RU' ? 'Карьера' : 'Career'}</a>
+                <a href="#contacts" onClick={() => setIsMenuOpen(false)} className="hover:text-rage-brand transition-colors">{lang === 'RU' ? 'Контакты' : 'Contacts'}</a>
               </div>
-
-              {[
-                 { title: lang === 'RU' ? 'ГЛАВНАЯ' : 'MAIN', href: '#' },
-                 { title: lang === 'RU' ? 'КЕЙСЫ' : 'CASES', href: '#cases' },
-                 { title: lang === 'RU' ? 'УСЛУГИ' : 'SERVICES', href: '#services' },
-                 { title: lang === 'RU' ? 'БЛОГЕРЫ' : 'BLOGGERS', href: '#bloggers' },
-                 { title: lang === 'RU' ? 'КАРЬЕРА' : 'CAREER', href: '/career' },
-                 { title: lang === 'RU' ? 'КОНТАКТЫ' : 'CONTACTS', href: '#contacts' }
-               ].map((item, index) => (
-                <motion.a
-                  key={index}
-                  href={item.href}
-                  onClick={() => setIsMenuOpen(false)}
-                  className="font-display text-4xl sm:text-5xl font-black text-white hover:text-rage-brand uppercase tracking-tighter transition-colors select-none"
-                  whileHover={{ scale: 1.05, x: 5 }}
-                >
-                  {item.title}
-                </motion.a>
-              ))}
-
-              <div className="mt-12 flex gap-6">
-                <a href="#contacts" onClick={() => setIsMenuOpen(false)} className="btn-primary">
-                  {lang === 'RU' ? 'ОБСУДИТЬ ПРОЕКТ' : 'DISCUSS PROJECT'}
-                </a>
-              </div>
+              <a
+                href="#contacts"
+                onClick={() => setIsMenuOpen(false)}
+                className="btn-primary w-full justify-center max-w-sm mx-auto"
+              >
+                {lang === 'RU' ? 'ОБСУДИТЬ ПРОЕКТ' : 'DISCUSS PROJECT'}
+              </a>
             </motion.div>
           )}
         </AnimatePresence>
       </nav>
 
-      {/* 2. HERO / MAIN CONTENT SECTION */}
-       <section className="relative min-h-screen pt-32 pb-48 md:pb-64 lg:pb-80 xl:pb-[340px] px-6 overflow-hidden flex flex-col justify-center">
-         {/* Abstract spray splatter and cyber web wireframe behind megaphone and title */}
-         <div className="absolute inset-0 z-0 pointer-events-none select-none overflow-hidden">
-           {/* Neon glows */}
-           <div className="absolute top-1/3 right-1/4 w-[550px] h-[550px] bg-rage-brand/12 blur-[130px] rounded-full mix-blend-screen" />
-           <div className="absolute top-1/4 right-1/3 w-80 h-80 bg-rage-pink/12 blur-[100px] rounded-full mix-blend-screen" />
-           
-           {/* SVG Spiderweb Geo Net */}
-           <svg className="absolute inset-0 w-full h-full opacity-35" xmlns="http://www.w3.org/2000/svg">
-             {/* Green lines & coordinates */}
-             <path d="M 50,-10 L 150,120 L 80,280 L -10,180 Z M 150,120 L -10,180 M 50,-10 L 80,280" stroke="#CCFF00" strokeWidth="0.5" fill="none" opacity="0.12" />
-             <path d="M 450,100 L 620,180 L 510,360 L 380,290 Z M 620,180 L 380,290 M 450,100 L 510,360" stroke="#CCFF00" strokeWidth="0.5" fill="none" opacity="0.1" />
-             
-             {/* Pink spiderweb grid behind content */}
-             <path d="M 850,220 L 1050,140 L 1180,310 L 980,420 Z L 850,220 L 1180,310 M 1050,140 L 980,420" stroke="#FF007A" strokeWidth="0.6" fill="none" opacity="0.15" />
-             <path d="M 900,180 L 1120,270 L 1020,490 Z" stroke="#FF007A" strokeWidth="0.5" fill="none" opacity="0.08" />
-             
-             {/* Nodes */}
-             <circle cx="150" cy="120" r="1.5" fill="#CCFF00" opacity="0.3" />
-             <circle cx="80" cy="280" r="1.5" fill="#CCFF00" opacity="0.3" />
-             <circle cx="620" cy="180" r="1.5" fill="#CCFF00" opacity="0.25" />
-             <circle cx="380" cy="290" r="1.5" fill="#CCFF00" opacity="0.25" />
-             <circle cx="850" cy="220" r="2" fill="#FF007A" opacity="0.4" />
-             <circle cx="1050" cy="140" r="2" fill="#FF007A" opacity="0.4" />
-             <circle cx="1180" cy="310" r="2" fill="#FF007A" opacity="0.4" />
-             <circle cx="980" cy="420" r="2" fill="#FF007A" opacity="0.4" />
-           </svg>
+      {/* 3. BLOCK 1. HERO — Megaphone as full-bleed background element on the right */}
+      <section className="relative min-h-screen pt-36 pb-20 px-6 flex flex-col justify-center items-center overflow-hidden border-b border-white/5">
+
+        {/* === Megaphone artwork — absolute positioned background element === */}
+        <div className="absolute right-0 top-1/2 -translate-y-[28%] lg:top-0 lg:bottom-0 lg:translate-y-0 w-[95%] sm:w-[70%] md:w-[55%] lg:w-[60%] xl:w-[55%] flex items-center justify-end pointer-events-none select-none z-0 opacity-30 lg:opacity-90 overflow-hidden">
+          <div className="relative h-auto w-full lg:h-[85%] max-h-[420px] sm:max-h-[520px] lg:max-h-[750px] aspect-[2146/1336] flex items-center justify-end mr-[-10%] lg:mr-[-2%]">
+            {/* 1. Megaphone Base (lightnings static, RAGE text erased) */}
+            <img
+              src="/images/hero_megaphone_no_rage.png"
+              alt="Rage Media Megaphone Artwork"
+              className="w-full h-full object-contain opacity-95 drop-shadow-[0_25px_80px_rgba(0,0,0,0.7)]"
+            />
+            {/* 2. Base static RAGE text */}
+            <img
+              src="/images/hero_rage_text_only.png"
+              alt="Rage Text Base"
+              className="absolute inset-0 w-full h-full object-contain pointer-events-none"
+            />
+            {/* 3. Glitching overlay 1 (Pink/Red shift) */}
+            <img
+              src="/images/hero_rage_text_only.png"
+              alt="Rage Text Glitch 1"
+              className="absolute inset-0 w-full h-full object-contain animate-rage-glitch-1 mix-blend-screen pointer-events-none"
+            />
+            {/* 4. Glitching overlay 2 (Cyan/Blue shift) */}
+            <img
+              src="/images/hero_rage_text_only.png"
+              alt="Rage Text Glitch 2"
+              className="absolute inset-0 w-full h-full object-contain animate-rage-glitch-2 mix-blend-screen pointer-events-none"
+            />
           </div>
+        </div>
 
-          <div className="container mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+        {/* === Text content overlaid on top === */}
+        <div className="container mx-auto max-w-7xl z-10 w-full relative">
+          <div className="max-w-2xl xl:max-w-3xl">
             
-            {/* Left Text / CTAs */}
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="lg:col-span-5 max-w-2xl relative z-20 pb-12 lg:pb-0"
-            >
-              {/* Main heading exactly as ref image */}
-              <h1 className="section-title mb-6 text-white text-5xl sm:text-6xl md:text-7.5xl leading-[0.9] tracking-tighter uppercase font-black">
-                МЫ ДЕЛАЕМ <br />
-                <span className="text-rage-brand block text-6xl sm:text-7xl md:text-8.5xl mt-1 tracking-tighter">
-                  РАЗНИЦУ
-                </span>
-              </h1>
-              
-              <p className="text-base sm:text-lg md:text-xl text-white/70 mb-8 leading-relaxed font-sans max-w-lg">
-                Rage Media — это не просто реклама. <br />
-                Это влияние. Это культура. Это результат.
-              </p>
+            {/* Huge typography */}
+            <h1 className="font-display font-black text-5xl sm:text-7xl lg:text-[5.5rem] xl:text-[7rem] leading-[0.85] uppercase tracking-tighter text-white select-none flex flex-col gap-4 relative">
+              {lang === 'RU'
+                ? 'Жду какой Ваня придумает слоган'
+                : 'Waiting for Vanya to come up with a slogan'}
+            </h1>
 
-              {/* Interactive Custom Styled CTA Buttons */}
-              <div className="flex flex-wrap gap-4">
-                <button 
-                  onClick={() => openDiscussWithRole('advertiser')}
-                  className="btn-primary group font-extrabold cursor-pointer"
-                >
-                  {lang === 'RU' ? 'Хочу рекламу' : 'I want ads'}
-                  <ArrowUpRight size={16} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </button>
-                
-                <button 
-                  onClick={() => openDiscussWithRole('blogger')}
-                  className="px-7 py-3 bg-transparent border-2 border-rage-pink text-white font-extrabold rounded-full uppercase tracking-tight text-xs sm:text-sm transition-all hover:bg-rage-pink/10 active:scale-95 flex items-center gap-2 group cursor-pointer"
-                >
-                  {lang === 'RU' ? 'Я блогер' : 'Become blogger'}
-                  <ArrowUpRight size={16} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </button>
-                
-                <a 
-                  href="/career"
-                  className="px-7 py-3 bg-transparent border-2 border-rage-brand text-white font-extrabold rounded-full uppercase tracking-tight text-xs sm:text-sm transition-all hover:bg-rage-brand/10 active:scale-95 flex items-center gap-2 group cursor-pointer"
-                >
-                  {lang === 'RU' ? 'Карьера' : 'Career'}
-                  <ArrowUpRight size={16} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </a>
-              </div>
-            </motion.div>
-
-            {/* Right Centered Artwork: Combined Megaphone and Slogan Artwork (Image 1) */}
-            <div className="lg:col-span-7 relative flex items-center justify-center min-h-[0px] sm:min-h-[0px] lg:min-h-[720px] xl:min-h-[850px] pb-0 lg:pb-0">
-              
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.94, y: 40 }}
-                whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.85, type: "spring", stiffness: 45 }}
-                className="absolute bottom-[-110px] sm:bottom-[-150px] md:bottom-[-180px] lg:bottom-[-200px] xl:bottom-[-240px] left-1/2 -translate-x-1/2 lg:left-auto lg:translate-x-0 lg:-right-[80px] xl:-right-[140px] 2xl:-right-[180px] w-[130vw] sm:w-[110vw] lg:w-[160vw] xl:w-[180vw] 2xl:w-[200vw] max-w-[620px] sm:max-w-[750px] lg:max-w-[1250px] xl:max-w-[1500px] 2xl:max-w-[1700px] origin-bottom select-none z-10 hidden lg:block"
-              >
-                
-                {/* Combined Hero Artwork (Megaphone & Slogan) */}
-                <div className="relative group overflow-visible">
-                  <img 
-                    src="/images/hero_megaphone_photoroom.png" 
-                    alt="Rage Media Slogan and Megaphone"
-                    className="w-full h-auto object-contain transition-transform duration-750 group-hover:scale-[1.01]"
-                    referrerPolicy="no-referrer"
-                  />
-                </div>
-
-              </motion.div>
-             </div>
-
-          </div>
-
-       </section>
-
-      {/* 4. CASES / ГРОМКИЕ ПРОЕКТЫ SECTION */}
-      <section id="cases" className="py-24 px-6 relative mt-12 bg-black/15 backdrop-blur-xs border-t border-b border-white/5">
-        <div className="container mx-auto">
-          {/* Header Row */}
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6 relative z-10">
-            <div>
-              <h2 className="section-title text-white">
-                {lang === 'RU' ? 'КЕЙСЫ' : 'CASE STUDIES'}
-              </h2>
-              <span className="text-rage-pink font-sans text-sm sm:text-base font-black uppercase tracking-widest block mt-2">
-                {lang === 'RU' ? 'громкие проекты' : 'loud projects'}
-              </span>
-            </div>
-            
-            <p className="text-white/60 max-w-sm text-sm leading-relaxed self-end py-1">
-              {lang === 'RU' 
-                ? 'Мы работаем с топовыми брендами и делаем из рекламы — искусство.' 
-                : 'We collaborate with the absolute top tier brands and shape commercials into contemporary art.'}
+            {/* Subtext description below */}
+            <p className="text-white/75 max-w-xl text-base sm:text-lg md:text-xl leading-relaxed font-sans font-medium text-left mt-8">
+              {lang === 'RU' ? (
+                <>
+                  Rage Media — это не просто реклама.<br />
+                  Это влияние. Это культура. Это результат.
+                </>
+              ) : (
+                <>
+                  Rage Media is not just advertising.<br />
+                  It is influence. It is culture. It is the result.
+                </>
+              )}
             </p>
 
-            {/* Slider triggers */}
-            <div className="flex gap-3">
-              <button 
-                onClick={handlePrevCase}
-                className="w-12 h-12 border border-white/10 flex items-center justify-center hover:bg-white/5 text-white transition-all bg-[#121212]/30 rounded-xs cursor-pointer active:scale-90"
+            {/* Action triggers */}
+            <div className="flex flex-wrap gap-4 mt-8">
+              <a 
+                href="#contacts" 
+                className="px-8 py-3.5 bg-rage-brand text-black font-extrabold rounded-full uppercase tracking-wider text-xs sm:text-sm transition-all duration-300 hover:scale-105 hover:shadow-[0_0_25px_rgba(172,255,42,0.6)] active:scale-95 flex items-center gap-2 border border-black cursor-pointer"
               >
-                <ChevronLeft size={20} />
-              </button>
-              <button 
-                onClick={handleNextCase}
-                className="w-12 h-12 border border-rage-brand text-rage-brand bg-rage-brand/5 flex items-center justify-center hover:bg-rage-brand hover:text-black transition-all rounded-xs cursor-pointer active:scale-90 shadow-[0_0_10px_rgba(204,255,0,0.15)]"
+                {lang === 'RU' ? 'Хочу рекламу' : 'I want ads'}
+                <ArrowUpRight size={16} className="text-black" />
+              </a>
+              <a
+                href="#contacts"
+                onClick={() => setFormData(p => ({ ...p, role: 'blogger' }))}
+                className="px-8 py-3.5 bg-transparent border border-rage-pink text-rage-pink font-extrabold rounded-full uppercase tracking-wider text-xs sm:text-sm transition-all duration-300 hover:scale-105 hover:bg-rage-pink/5 hover:shadow-[0_0_25px_rgba(255,0,255,0.3)] active:scale-95 flex items-center gap-2 cursor-pointer"
               >
-                <ChevronRight size={20} />
-              </button>
+                {lang === 'RU' ? 'Я блогер' : 'I am a blogger'}
+                <ArrowUpRight size={16} className="text-rage-pink" />
+              </a>
+              <a
+                href="/career"
+                className="px-8 py-3.5 bg-transparent border border-white/20 text-white font-extrabold rounded-full uppercase tracking-wider text-xs sm:text-sm transition-all duration-300 hover:scale-105 hover:bg-white/5 hover:border-white/40 active:scale-95 flex items-center gap-2 cursor-pointer"
+              >
+                {lang === 'RU' ? 'Вакансии' : 'Careers'}
+                <ArrowUpRight size={16} className="text-white/60" />
+              </a>
+            </div>
+
+            {/* Partners / Trusted by logo bar */}
+            <div className="pt-8 border-t border-white/10 w-full max-w-xl mt-10">
+              <span className="text-[10px] font-mono uppercase text-white/30 tracking-wider block mb-4">
+                {lang === 'RU' ? 'НАМ ДОВЕРЯЮТ ЛИДЕРЫ ИНДУСТРИИ' : 'TRUSTED BY INDUSTRY LEADERS'}
+              </span>
+              <div className="flex flex-wrap items-center gap-x-8 gap-y-4 grayscale opacity-35 hover:opacity-75 transition-all duration-300">
+                <img src="/images/warthunder_logo.jpg" alt="War Thunder" className="h-9 w-auto object-contain rounded-sm border border-white/5" />
+                <img src="/images/zone51_logo.jpg" alt="Zona51" className="h-9 w-auto object-contain rounded-sm border border-white/5" />
+                <img src="/images/yandexmarket_logo.png" alt="Яндекс Маркет" className="h-9 w-auto object-contain rounded-sm" />
+                <img src="/images/Playerok.png" alt="Playerok" className="h-9 w-auto object-contain rounded-sm" />
+                <img src="/images/Arizona RP.png" alt="Arizona RP" className="h-9 w-auto object-contain rounded-sm" />
+                <img src="/images/Radmir RP.jpg" alt="Radmir RP" className="h-9 w-auto object-contain rounded-sm border border-white/5" />
+              </div>
             </div>
           </div>
+        </div>
 
-          {/* Cards Display */}
-          <div className="relative min-h-[380px]">
-            <AnimatePresence mode="wait">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {(filteredCases.length > 0 ? filteredCases : CASES)
-                  .slice(caseIndex, caseIndex + 3)
-                  .concat(
-                    (filteredCases.length > 0 ? filteredCases : CASES).slice(
-                      0,
-                      Math.max(0, 3 - (filteredCases.length > 0 ? filteredCases : CASES).slice(caseIndex, caseIndex + 3).length)
-                    )
-                  )
-                  .slice(0, Math.min(3, (filteredCases.length > 0 ? filteredCases : CASES).length))
-                  .map((project, i) => (
-                    <motion.div 
-                      key={project.name + i}
-                      initial={{ opacity: 0, y: 15 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -15 }}
-                      transition={{ duration: 0.3, delay: i * 0.08 }}
-                      whileHover={{ 
-                        y: -8,
-                        boxShadow: project.name.includes("Дед") || project.name.includes("ZONA") || project.name.includes("Яндекс")
-                          ? "0 15px 35px -10px rgba(172,255,42,0.18)"
-                          : "0 15px 35px -10px rgba(255,0,127,0.22)"
-                      }}
-                      className="group relative bg-[#09090b]/85 border border-white/5 hover:border-white/15 hover:bg-[#050505] rounded-xl overflow-hidden flex flex-col justify-between transition-all duration-500 h-[340px] sm:h-[370px] md:h-[400px] cursor-pointer select-none"
-                    >
-                      {/* Top interactive immersive visual section */}
-                      <div className="flex-1 w-full relative flex items-center justify-center bg-gradient-to-b from-black/20 to-black/60 overflow-hidden">
-                        {renderCaseGraphic(project.name)}
-                      </div>
 
-                      {/* Bottom Sleek Integrated Title & Metrics */}
-                      <div className="p-5 bg-black/65 border-t border-white/5 flex items-center justify-between backdrop-blur-md relative z-10">
-                        <div className="flex flex-col gap-1">
-                          <h3 className="text-lg md:text-xl font-display font-black text-white uppercase tracking-tighter group-hover:text-rage-brand transition-colors duration-300">
-                            {project.name}
-                          </h3>
-                          <span className="text-[10px] sm:text-[11px] font-mono uppercase text-rage-pink font-extrabold tracking-widest flex items-center gap-1.5 opacity-95">
-                            <Zap size={11} className="text-rage-pink animate-pulse shrink-0" />
-                            {project.results}
-                          </span>
-                        </div>
 
-                        <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/40 group-hover:text-black group-hover:bg-rage-brand group-hover:border-rage-brand transition-all duration-300 group-hover:scale-105 shrink-0">
-                          <ArrowUpRight size={18} className="transform group-hover:rotate-45 transition-transform duration-300" />
-                        </div>
-                      </div>
-                    </motion.div>
-                ))}
-              </div>
-            </AnimatePresence>
-          </div>
-          
-          {/* Pagination Indicators */}
-          <div className="flex justify-center gap-2 mt-12">
-            {CASES.map((_, i) => (
-              <button 
-                key={i} 
-                onClick={() => setCaseIndex(i)}
-                className={cn(
-                  "h-1.5 transition-all outline-none rounded-full cursor-pointer",
-                  caseIndex === i ? "bg-rage-brand w-8" : "bg-white/10 hover:bg-white/20 w-1.5"
-                )} 
-              />
-            ))}
+        {/* Floating background decorative coordinates */}
+        <div className="absolute bottom-10 left-10 font-mono text-[9px] text-white/20 hidden md:block z-10">
+          SYS_LOC: [55.7558° N, 37.6173° E] // ACTIVE_AGENCY_PORTAL
+        </div>
+        <div className="absolute bottom-10 right-10 font-mono text-[9px] text-white/20 hidden md:block z-10">
+          STATUS: INFLUENCE_LEVEL_99 // GAMING_SECTOR_ONLINE
+        </div>
+      </section>
+
+      {/* 4. BLOCK 2. CASES (Reference Photo #1 styling & infinite automatic marquee) */}
+      <section id="cases" className="py-28 px-6 bg-transparent border-b border-white/5 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,0,255,0.015)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
+
+        <div className="container mx-auto mb-16 relative z-10">
+          <span className="text-rage-brand font-mono text-xs font-black uppercase tracking-widest block mb-2">
+            PROJECTS SHOWCASE
+          </span>
+          <h2 className="section-title text-white">
+            {lang === 'RU' ? 'ГРОМКИЕ КЕЙСЫ' : 'LOUD CASES'}
+          </h2>
+        </div>
+
+        {/* Automatic infinite horizontal scroll (custom animation) */}
+        <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden select-none">
+
+          {/* Duplicate cases array 3 times for continuous loops */}
+          <div className="animate-marquee-ltr flex gap-6 px-6 py-4">
+            {[...CASES, ...CASES, ...CASES].map((item, i) => {
+              const originalIndex = CASES.findIndex(c => c.name === item.name);
+              return (
+                <CaseCard
+                  key={item.name + '-' + i}
+                  item={item}
+                  paper={getCasePaper(originalIndex)}
+                  lang={lang}
+                  onSelect={setSelectedCase}
+                />
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* 5. STATS / ЦИФРЫ ГОВОРЯТ ЗА НАС SECTION */}
-      <section className="py-24 px-6 border-y border-white/5 bg-transparent relative overflow-hidden">
-        {/* Constellation background grid behind stats */}
-        <div className="absolute inset-0 pointer-events-none opacity-25 select-none z-0">
-          <svg className="w-full h-full text-rage-brand" xmlns="http://www.w3.org/2000/svg">
-            <path d="M 120,50 L 250,150 L 50,220 Z M 50,220 L 320,310 L 450,180 M 250,150 L 450,180" stroke="currentColor" strokeWidth="0.5" fill="none" />
-            <path d="M 750,120 L 980,60 L 1100,240 L 850,290 Z M 980,60 L 850,290" stroke="currentColor" strokeWidth="0.5" fill="none" />
-            <circle cx="120" cy="50" r="1.5" fill="currentColor" />
-            <circle cx="250" cy="150" r="1.5" fill="currentColor" />
-            <circle cx="50" cy="220" r="1.5" fill="currentColor" />
-            <circle cx="320" cy="310" r="1.5" fill="currentColor" />
-            <circle cx="450" cy="180" r="1.5" fill="currentColor" />
-            <circle cx="750" cy="120" r="1.5" fill="currentColor" />
-            <circle cx="980" cy="60" r="1.5" fill="currentColor" />
-            <circle cx="1100" cy="240" r="1.5" fill="currentColor" />
-            <circle cx="850" cy="290" r="1.5" fill="currentColor" />
+      {/* 5. BLOCK 3. STATS (Reference Photo #2 sticker/poster aesthetic & counting animation) */}
+      <section className="py-28 px-6 bg-transparent relative overflow-hidden border-b border-white/5">
+        <div className="absolute inset-0 pointer-events-none opacity-20 select-none z-0">
+          {/* Tech graph coordinate vector lines */}
+          <svg className="w-full h-full text-rage-brand" viewBox="0 0 1440 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M -100 200 L 400 400 L 800 200 L 1200 500 L 1600 300" stroke="currentColor" strokeWidth="0.8" strokeDasharray="4 4" />
+            <circle cx="400" cy="400" r="4" fill="currentColor" />
+            <circle cx="800" cy="200" r="4" fill="currentColor" />
+            <circle cx="1200" cy="500" r="4" fill="currentColor" />
           </svg>
         </div>
 
         <div className="container mx-auto relative z-10">
-          <div className="mb-16">
-            <h2 className="section-title text-white">
-              {lang === 'RU' ? 'ЦИФРЫ' : 'STATISTICS'}
-            </h2>
-            <span className="text-rage-pink font-sans text-sm sm:text-base font-black uppercase tracking-widest block mt-2">
-              {lang === 'RU' ? 'говорят за нас' : 'speak for us'}
+          <div className="mb-20">
+            <span className="text-rage-pink font-mono text-xs font-black uppercase tracking-widest block mb-2">
+              METRICS & DATA
             </span>
+            <h2 className="section-title text-white">
+              {lang === 'RU' ? 'ЦИФРЫ, КОТОРЫЕ ИМЕЮТ ВЕС' : 'NUMBERS THAT MATTER'}
+            </h2>
           </div>
-          
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
-            {[
-              { label: lang === 'RU' ? "успешных кампаний" : "active campaigns", value: "50+", detail: "Каждый кейс в плюс" },
-                            { label: lang === 'RU' ? "охват аудитории" : "audience reach", value: "5M+", detail: "Рекордная виральность" },
-                            { label: lang === 'RU' ? "топовых блогеров" : "exclusive creators", value: "50+", detail: "Все таланты" },
-              { label: lang === 'RU' ? "довольных клиентов" : "customer retention", value: "98%", detail: "Возвращаются за добавкой" },
-            ].map((stat, i) => (
-              <motion.div 
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.12, duration: 0.6 }}
-                className="lg:border-l border-white/10 lg:pl-8 first:border-none first:pl-0"
+
+          {/* Sticker layout from Reference Photo #2 Option 2 */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+
+            {/* Sticker 1: Lime Green card */}
+            <div className="relative group/card flex flex-col">
+              <motion.div
+                onMouseEnter={() => setHoveredStat(0)}
+                onMouseLeave={() => setHoveredStat(null)}
+                whileHover={{ rotate: 1, scale: 1.02 }}
+                className="sticker-card text-black rotate-[-1.5deg] min-h-[240px] sm:min-h-[260px] md:min-h-[280px] p-4 sm:p-6 flex flex-col justify-center items-center text-center border-none shadow-none overflow-visible relative"
               >
-                <div className="text-5xl md:text-6.5xl font-display font-black text-rage-brand mb-2 tracking-tighter drop-shadow-[0_0_15px_rgba(172,255,42,0.4)]">
-                  {stat.value}
-                </div>
-                <div className="text-white font-bold text-xs uppercase tracking-widest mb-1">
-                  {stat.label}
-                </div>
-                <div className="text-white/40 text-xs font-mono">
-                  {stat.detail}
+                {/* Background image container that changes to crumpled version on hover */}
+                <div
+                  className="absolute inset-0 z-0 transition-all duration-300 pointer-events-none"
+                  style={{
+                    backgroundImage: `url('${hoveredStat === 0 ? "/images/lime_torn_paper_hover.png" : "/images/lime_torn_paper.png"}')`,
+                    backgroundSize: "100% 100%",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                    backgroundColor: "transparent"
+                  }}
+                />
+                <div className="flex flex-col items-center justify-center max-w-[85%] z-10 relative pointer-events-none">
+                  <span className="font-mono text-[9px] font-black uppercase tracking-widest block mb-0.5 opacity-70">
+                    {lang === 'RU' ? 'МЫ РЕАЛИЗОВАЛИ' : 'WE HAVE COMPLETED'}
+                  </span>
+                  <div className="font-display font-black text-5xl sm:text-6xl leading-none tracking-tighter mb-1.5 text-black">
+                    <Counter value="100+" />
+                  </div>
+                  <p className="font-sans font-black uppercase text-[10px] sm:text-xs tracking-tight leading-tight text-black/95">
+                    {lang === 'RU' ? 'Успешных рекламных кампаний под ключ' : 'Successful turnkey ad campaigns'}
+                  </p>
                 </div>
               </motion.div>
-            ))}
+            </div>
+
+            {/* Sticker 2: Neon Pink card */}
+            <div className="relative group/card flex flex-col">
+              <motion.div
+                onMouseEnter={() => setHoveredStat(1)}
+                onMouseLeave={() => setHoveredStat(null)}
+                whileHover={{ rotate: -1, scale: 1.02 }}
+                className="sticker-card text-black rotate-[1deg] min-h-[240px] sm:min-h-[260px] md:min-h-[280px] p-4 sm:p-6 flex flex-col justify-center items-center text-center border-none shadow-none overflow-visible relative"
+              >
+                {/* Background image container that changes to crumpled version on hover */}
+                <div
+                  className="absolute inset-0 z-0 transition-all duration-300 pointer-events-none"
+                  style={{
+                    backgroundImage: `url('${hoveredStat === 1 ? "/images/pink_torn_paper_hover.png" : "/images/pink_torn_paper.png"}')`,
+                    backgroundSize: "100% 100%",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                    backgroundColor: "transparent"
+                  }}
+                />
+                <div className="flex flex-col items-center justify-center max-w-[85%] z-10 relative pointer-events-none -translate-y-4 sm:-translate-y-6">
+                  <span className="font-mono text-[9px] font-black uppercase tracking-widest block mb-0.5 opacity-70">
+                    {lang === 'RU' ? 'ЕЖЕМЕСЯЧНЫЙ ОХВАТ' : 'MONTHLY REACH'}
+                  </span>
+                  <div className="font-display font-black text-5xl sm:text-6xl leading-none tracking-tighter mb-1.5 text-black whitespace-nowrap flex items-baseline justify-center">
+                    <Counter value="50+" />
+                    <span className="text-xl sm:text-2xl ml-1 font-display font-black">{lang === 'RU' ? 'МЛН' : 'M'}</span>
+                  </div>
+                  <p className="font-sans font-black uppercase text-[10px] sm:text-xs tracking-tight leading-tight text-black/95">
+                    {lang === 'RU' ? 'Охвета аудитории на YouTube ежемесячно' : 'Audience reach on YouTube monthly'}
+                  </p>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Sticker 3: Industrial Dark gray / paper sticker card */}
+            <div className="relative group/card flex flex-col">
+              <motion.div
+                onMouseEnter={() => setHoveredStat(2)}
+                onMouseLeave={() => setHoveredStat(null)}
+                whileHover={{ rotate: 2, scale: 1.02 }}
+                className="sticker-card text-black rotate-[-2deg] min-h-[240px] sm:min-h-[260px] md:min-h-[280px] p-4 sm:p-6 flex flex-col justify-center items-center text-center border-none shadow-none overflow-visible relative"
+              >
+                {/* Background image container that changes to crumpled version on hover */}
+                <div
+                  className="absolute inset-0 z-0 transition-all duration-300 pointer-events-none"
+                  style={{
+                    backgroundImage: `url('${hoveredStat === 2 ? "/images/white_torn_paper_hover.png" : "/images/white_torn_paper.png"}')`,
+                    backgroundSize: "100% 100%",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                    backgroundColor: "transparent"
+                  }}
+                />
+                <div className="flex flex-col items-center justify-center max-w-[85%] z-10 relative pointer-events-none">
+                  <span className="font-mono text-[9px] font-black uppercase tracking-widest block mb-0.5 opacity-70">
+                    {lang === 'RU' ? 'ЭКСКЛЮЗИВНЫЕ ЛИЦА' : 'EXCLUSIVE TALENTS'}
+                  </span>
+                  <div className="font-display font-black text-5xl sm:text-6xl leading-none tracking-tighter mb-1.5 text-black">
+                    <Counter value="60+" />
+                  </div>
+                  <p className="font-sans font-black uppercase text-[10px] sm:text-xs tracking-tight leading-tight text-black/95">
+                    {lang === 'RU' ? 'Блогеров в нашей эксклюзивной сети' : 'Bloggers in our exclusive network'}
+                  </p>
+                </div>
+              </motion.div>
+            </div>
+
           </div>
         </div>
       </section>
 
-      {/* 6. SERVICES / УСЛУГИ SECTION */}
-      <section id="services" className="py-24 px-6 relative overflow-hidden bg-transparent flex items-center min-h-[720px] lg:min-h-[850px] border-b border-white/5">
-        {/* Pink network geometric mesh backing */}
-        <div className="absolute inset-0 pointer-events-none opacity-20 select-none z-0">
-          <svg className="w-full h-full text-rage-pink" xmlns="http://www.w3.org/2000/svg">
-            <path d="M 680,220 L 800,100 L 920,280 L 780,350 Z M 800,100 L 780,350" stroke="currentColor" strokeWidth="0.5" fill="none" />
-            <path d="M 150,420 L 300,560 L 50,490 Z" stroke="currentColor" strokeWidth="0.5" fill="none" />
-            <circle cx="680" cy="220" r="1.5" fill="currentColor" />
-            <circle cx="800" cy="100" r="1.5" fill="currentColor" />
-            <circle cx="920" cy="280" r="1.5" fill="currentColor" />
-            <circle cx="780" cy="350" r="1.5" fill="currentColor" />
-            <circle cx="150" cy="420" r="1.5" fill="currentColor" />
-            <circle cx="300" cy="560" r="1.5" fill="currentColor" />
-            <circle cx="50" cy="490" r="1.5" fill="currentColor" />
-          </svg>
-        </div>
+      {/* 6. BLOCK 4. SERVICES (Reference Photo #3 vertical cards & doodles) */}
+      <section id="services" className="py-28 px-6 relative overflow-hidden bg-transparent border-b border-white/5">
 
-        {/* Massive full-height retro TV background block spanning exactly the top and bottom of the section */}
-        <div className="absolute right-0 top-0 bottom-0 h-full z-0 select-none pointer-events-none flex items-center justify-end overflow-hidden w-full lg:w-auto opacity-45 sm:opacity-60 lg:opacity-100">
-          <motion.div
-            initial={{ opacity: 0, scale: 1 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="h-full w-auto"
-          >
-            <img 
-              src="/images/tv_photoroom_new.png" 
-              alt="Authentic cyberpunk-grunge retro CRT television" 
-              className="h-full w-auto object-contain object-right pointer-events-none filter brightness-[1.08] contrast-[1.08] saturate-[1.02]"
+        {/* TV backdrop graphic layout from Reference 3 */}
+        <div className="absolute right-[-100px] top-1/2 -translate-y-1/2 h-[90%] z-0 select-none pointer-events-none hidden md:block">
+          <div className="relative h-full w-auto flex items-center justify-center">
+            {/* TV Casing */}
+            <img
+              src="/images/tv_casing_only.png"
+              alt="Cyberpunk CRT TV monitor casing"
+              className="h-full w-auto object-contain filter brightness-[1.1] contrast-[1.1] saturate-[1.05]"
               referrerPolicy="no-referrer"
             />
-          </motion.div>
+            {/* Animated Green RAGE Graffiti overlay */}
+            <img
+              src="/images/tv_rage_text.png"
+              alt="Rage Media animated screen text"
+              className="absolute inset-0 w-full h-full object-contain animate-tv-glitch"
+              referrerPolicy="no-referrer"
+            />
+          </div>
         </div>
 
         <div className="container mx-auto relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center w-full">
-            
-            {/* Left Col: Lists */}
-            <div className="lg:col-span-6 relative z-10">
-              <div className="mb-12">
-                <h2 className="section-title text-white">
-                  {lang === 'RU' ? 'УСЛУГИ' : 'SERVICES'}
-                </h2>
-                <span className="text-rage-pink font-sans text-sm sm:text-base font-black uppercase tracking-widest block mt-2">
-                  {lang === 'RU' ? 'что мы делаем' : 'what we do'}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+
+            {/* Left Col: Text & Accordion style Card Lists */}
+            <div className="lg:col-span-7">
+              <div className="mb-14">
+                <span className="text-rage-brand font-mono text-xs font-black uppercase tracking-widest block mb-2">
+                  OUR ARSENAL OF INFLUENCE
                 </span>
+                <h2 className="section-title text-white">
+                  {lang === 'RU' ? 'Наш арсенал влияния' : 'Our Arsenal of Influence'}
+                </h2>
               </div>
 
-              <div className="space-y-3 mb-12">
-                {SERVICES.map((s, i) => (
-                  <motion.div 
-                    key={i}
-                    onClick={() => setSelectedService(selectedService === i ? null : i)}
-                    className={cn(
-                      "p-5 transition-all duration-300 border cursor-pointer rounded-xs relative group flex flex-col justify-center backdrop-blur-xs",
-                      selectedService === i 
-                        ? "bg-[#0c0c0c]/95 border-rage-brand shadow-[0_0_15px_rgba(172,255,42,0.15)]"
-                        : "bg-black/85 md:bg-black/75 border-white/10 hover:border-rage-pink/40 hover:bg-[#0f0f0f]/95"
-                    )}
+              {/* Service Cards from Reference Photo #3 layout */}
+              <div className="space-y-4 max-w-xl">
+                {SERVICES.map((srv, idx) => (
+                  <motion.a
+                    href="#contacts"
+                    onClick={() => {
+                      setFormData(p => ({
+                        ...p,
+                        role: 'advertiser',
+                        desc: lang === 'RU'
+                          ? `Меня интересует услуга: ${srv.titleRU}. `
+                          : `I am interested in the service: ${srv.titleEN}. `
+                      }));
+                    }}
+                    onMouseEnter={() => setHoveredService(idx)}
+                    onMouseLeave={() => setHoveredService(null)}
+                    key={srv.titleRU}
+                    whileHover={{ x: 8 }}
+                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 min-h-[110px] sm:min-h-[132px] p-5 sm:p-6 relative select-none text-black cursor-pointer bg-transparent border-none shadow-none overflow-visible group"
+                    style={{
+                      backgroundImage: `url('${hoveredService === idx ? getServicePaperImages(idx).hover : getServicePaperImages(idx).normal}')`,
+                      backgroundSize: "100% 100%",
+                      backgroundPosition: "center",
+                      backgroundRepeat: "no-repeat"
+                    }}
                   >
-                    <div className="flex items-center justify-between pointer-events-none">
-                      <div className="flex items-center gap-4">
-                        <span className="text-rage-brand transition-colors">
-                          {s.icon}
-                        </span>
-                        <span className="font-display font-black uppercase tracking-tight text-sm sm:text-base text-white">
-                          {s.title}
-                        </span>
+                    <div className="flex items-center gap-4 relative z-10">
+                      <div className={cn("w-12 h-12 rounded-lg flex items-center justify-center border transition-all duration-300", getServicePaperImages(idx).iconBg, getServicePaperImages(idx).textColor)}>
+                        {srv.icon}
                       </div>
-                      <ArrowUpRight 
-                        size={18} 
-                        className={cn(
-                          "text-rage-brand transition-transform duration-300",
-                          selectedService === i ? "rotate-45 scale-110" : "rotate-0"
-                        )} 
-                        id={`arrow-icon-${i}`}
-                      />
+
+                      <div>
+                        <h3 className="font-display font-black text-base sm:text-lg uppercase tracking-tight text-black leading-tight">
+                          {lang === 'RU' ? srv.titleRU : srv.titleEN}
+                        </h3>
+                        <p className="text-black/75 text-xs sm:text-sm font-sans mt-0.5 max-w-[420px] font-medium leading-tight">
+                          {lang === 'RU' ? srv.detailRU : srv.detailEN}
+                        </p>
+                      </div>
                     </div>
 
-                    <AnimatePresence>
-                      {selectedService === i && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0, marginTop: 0 }}
-                          animate={{ height: 'auto', opacity: 1, marginTop: 16 }}
-                          exit={{ height: 0, opacity: 0, marginTop: 0 }}
-                          className="overflow-hidden"
-                        >
-                          <p className="text-white/70 text-sm leading-relaxed font-sans pr-6">
-                            {s.detail}
-                          </p>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.div>
+                    {/* Doodle graphic overlay matching photo #3 */}
+                    <div className="flex items-center gap-3 relative z-10 self-end sm:self-auto">
+                      <div className={cn("w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-300", getServicePaperImages(idx).arrowBg)}>
+                        <ArrowUpRight size={16} className={cn("transition-transform duration-300", hoveredService === idx && "rotate-45")} />
+                      </div>
+                    </div>
+                  </motion.a>
                 ))}
               </div>
-
-              <button 
-                onClick={() => setIsDiscussOpen(true)}
-                className="btn-primary group"
-              >
-                {lang === 'RU' ? 'Все услуги' : 'All services'}
-                <ArrowUpRight size={16} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </button>
             </div>
 
-            {/* Right Col: Reserves space on desktop */}
-            <div className="lg:col-span-6 relative z-10 w-full">
-              {/* Desktop spacer to ensure lists are spaced cleanly on the left column */}
-              <div className="hidden lg:block h-[500px]" />
-            </div>
+            {/* Right space spacer */}
+            <div className="lg:col-span-5 hidden lg:block" />
 
           </div>
         </div>
       </section>
 
-      {/* 7. BLOGGERS / НАШИ БЛОГЕРЫ SECTION */}
-      <section id="bloggers" className="py-24 px-6 bg-transparent relative overflow-hidden border-b border-white/5">
-        {/* Network geometric mesh backing */}
-        <div className="absolute inset-0 pointer-events-none opacity-20 select-none z-0">
-          <svg className="w-full h-full text-rage-brand" xmlns="http://www.w3.org/2000/svg">
-            <path d="M 120,500 L 250,600 L 50,670 Z M 250,600 L 450,580" stroke="currentColor" strokeWidth="0.5" fill="none" />
-            <path d="M 850,420 L 1000,560 L 750,490 Z" stroke="currentColor" strokeWidth="0.5" fill="none" />
-            <circle cx="120" cy="500" r="1.5" fill="currentColor" />
-            <circle cx="250" cy="600" r="1.5" fill="currentColor" />
-            <circle cx="50" cy="670" r="1.5" fill="currentColor" />
-            <circle cx="450" cy="580" r="1.5" fill="currentColor" />
-            <circle cx="850" cy="420" r="1.5" fill="currentColor" />
-            <circle cx="1000" cy="560" r="1.5" fill="currentColor" />
-            <circle cx="750" cy="490" r="1.5" fill="currentColor" />
-          </svg>
+      {/* 7. BLOCK 5. BLOGGERS (Double row infinite marquees & custom media kit banner) */}
+      <section id="bloggers" className="py-28 px-6 bg-transparent relative overflow-hidden border-b border-white/5 select-none">
+
+        <div className="container mx-auto mb-16">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+            <div>
+              <span className="text-rage-pink font-mono text-xs font-black uppercase tracking-widest block mb-2">
+                INFLUENCE NETWORK
+              </span>
+              <h2 className="section-title text-white">
+                {lang === 'RU' ? 'Голоса, которые слышит рынок' : 'Voices the Market Hears'}
+              </h2>
+            </div>
+            <p className="text-white/50 text-sm max-w-sm leading-relaxed font-sans">
+              {lang === 'RU'
+                ? 'Наша собственная эксклюзивная сеть топ-креаторов, геймеров и летсплееров. Полный доступ к целевой аудитории.'
+                : 'Our own exclusive network of top creators, gamers, and letsplayers. Complete access to your target audience.'}
+            </p>
+          </div>
         </div>
 
-        <div className="container mx-auto relative z-10">
-          {/* Section banner row */}
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6 relative z-10">
-            <div>
-              <h2 className="section-title text-white">
-                {lang === 'RU' ? 'НАШИ' : 'EXCLUSIVES'}
-              </h2>
-              <span className="text-rage-pink font-sans text-sm sm:text-base font-black uppercase tracking-widest block mt-2">
-                {lang === 'RU' ? 'блогеры' : 'creators'}
-              </span>
-            </div>
-            
-            <p className="text-white/60 max-w-sm text-sm leading-relaxed self-end py-1">
-              {lang === 'RU' 
-                ? 'Только проверенные лица. Только жёсткий результат.' 
-                : 'Only proven faces with highly authenticated metrics. Hard outcomes guaranteed.'}
-            </p>
-
-            {/* Slider control buttons */}
-            <div className="flex gap-3">
-              <button 
-                onClick={handlePrevBlogger}
-                className="w-12 h-12 border border-white/10 flex items-center justify-center hover:bg-white/5 text-white transition-all bg-[#121212]/30 rounded-xs cursor-pointer active:scale-90"
-              >
-                <ChevronLeft size={20} />
-              </button>
-              <button 
-                onClick={handleNextBlogger}
-                className="w-12 h-12 border border-rage-pink text-rage-pink bg-rage-pink/5 flex items-center justify-center hover:bg-rage-pink hover:text-black transition-all rounded-xs cursor-pointer active:scale-90 shadow-[0_0_10px_rgba(255,0,122,0.15)]"
-              >
-                <ChevronRight size={20} />
-              </button>
-            </div>
-          </div>
-
-          {/* Cards slider Grid */}
-          <div className="relative min-h-[460px]">
-            <AnimatePresence mode="wait">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {TOP_BLOGGERS
-                  .slice(bloggerIndex, bloggerIndex + 3)
-                  .concat(
-                    TOP_BLOGGERS.slice(
-                      0,
-                      Math.max(0, 3 - TOP_BLOGGERS.slice(bloggerIndex, bloggerIndex + 3).length)
-                    )
-                  )
-                  .slice(0, Math.min(3, TOP_BLOGGERS.length))
-                  .map((blogger, i) => (
-                    <motion.div 
-                      key={blogger.name + i}
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.95 }}
-                      transition={{ duration: 0.3, delay: i * 0.1 }}
-                      className="group relative h-full flex flex-col justify-between bg-[#0b0b0b] border border-white/5 overflow-hidden rounded-xs"
-                    >
-                      {/* Image Frame */}
-                      <div className="aspect-[4/5] relative overflow-hidden bg-black flex items-center justify-center">
-                        <img 
-                          src={blogger.image} 
-                          alt={blogger.name}
-                          className="w-full h-full object-cover filter contrast-[1.05] grayscale group-hover:grayscale-0 group-hover:scale-[1.03] transition-all duration-700"
-                          referrerPolicy="no-referrer"
-                        />
-
-                        {/* Top corner category tags */}
-                        <div className="absolute top-16 left-4 flex gap-2 z-20">
-                          <span className="text-[9px] font-mono tracking-wider font-extrabold bg-black/85 backdrop-blur-md text-white border border-white/10 px-2.5 py-1 rounded-xs uppercase tracking-widest">
-                            {blogger.tag}
-                          </span>
-                        </div>
-
-                        {/* Status Brand Badge overlay */}
-                        <div className="absolute top-16 right-4 z-20">
-                          <span className={cn(
-                            "text-[9px] font-mono tracking-widest font-black px-2.5 py-1 rounded-xs uppercase border shadow-md",
-                                                        blogger.engagement === "exclusive"
-                                                          ? "bg-rage-pink text-white border-rage-pink/30 shadow-rage-pink/20"
-                                                          : "bg-[#ACFF2A] text-black border-black shadow-[#ACFF2A]/20"
-                                                      )}>
-                                                        {blogger.engagement === "exclusive"
-                                                          ? (lang === 'RU' ? 'ЭКСКЛЮЗИВ' : 'ALL TALENTS')
-                                                          : blogger.engagement === "partner"
-                                                          ? (lang === 'RU' ? 'ПАРТНЁР' : 'PARTNER')
-                              : blogger.engagement}
-                          </span>
-                        </div>
-
-                        {/* Green tag positioned над (above) the photo */}
-                        <div className="absolute top-4 left-4 bg-rage-brand text-black px-4 py-1.5 font-display font-black text-xl rotate-[-2deg] z-30 transform uppercase tracking-tighter shadow-[0_0_15px_#ACFF2A] border border-black rounded-xs">
-                          {blogger.name}
-                        </div>
-
-                        {/* Floating visual decorations */}
-                        {blogger.name === "GENSYXA" && (
-                          <motion.div
-                            animate={{ y: [0, -6, 0] }}
-                            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-                            className="absolute right-4 top-28 z-30"
-                          >
-                            <Zap size={32} className="text-rage-pink fill-rage-pink drop-shadow-[0_0_12px_#FF00FF]" />
-                          </motion.div>
-                        )}
-
-                        {blogger.name === "DEEPINS" && (
-                          <motion.div
-                            animate={{ scale: [1, 1.15, 1] }}
-                            transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-                            className="absolute right-4 top-28 z-30"
-                          >
-                            <Sparkles size={28} className="text-rage-pink drop-shadow-[0_0_10px_#FF00FF]" />
-                          </motion.div>
-                        )}
-
-                        {blogger.name === "EXILE" && (
-                          <div className="absolute right-5 top-28 z-30">
-                            <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center">
-                              <div className="w-2.5 h-2.5 rounded-full bg-rage-pink drop-shadow-[0_0_8px_#FF00FF] animate-pulse" />
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Stretched bottom gradient */}
-                        <div className="absolute inset-x-0 bottom-0 py-20 bg-gradient-to-t from-black via-black/60 to-transparent pointer-events-none z-10" />
-
-                        {/* Social overlays / details on absolute placement */}
-                        <div className="absolute inset-x-0 bottom-0 p-6 z-20">
-                          <p className="text-[#ACFF2A] font-display font-black text-lg mb-2 leading-none uppercase tracking-tight">
-                            {blogger.followers}
-                          </p>
-
-                          <div className="flex flex-wrap gap-x-4 gap-y-2 pt-3 border-t border-white/10">
-                            <a href="https://youtube.com" target="_blank" rel="noreferrer" className="text-white/50 hover:text-rage-brand transition-colors flex items-center gap-1 text-xs font-mono">
-                                                          <Youtube size={14} /> YouTube
-                                                        </a>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Hot glow accent */}
-                      <div className="absolute inset-0 border border-transparent group-hover:border-rage-pink/20 transition-all duration-300 pointer-events-none" />
-                    </motion.div>
-                ))}
-              </div>
-            </AnimatePresence>
-          </div>
-          
-          {/* Pagination control dots */}
-          <div className="flex justify-center gap-2 mt-12">
-            {TOP_BLOGGERS.map((_, i) => (
-              <button 
-                key={i}
-                onClick={() => setBloggerIndex(i)}
-                className={cn(
-                  "h-1.5 transition-all outline-none rounded-full cursor-pointer",
-                  bloggerIndex === i ? "bg-rage-pink w-8" : "bg-white/10 hover:bg-white/20 w-1.5"
-                )}
+        {/* Marquee Row 1 (Left-to-Right scrolling) */}
+        <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden mb-6">
+          <div className="animate-marquee-ltr flex gap-5 px-4 py-2">
+            {[...bloggersRow1, ...bloggersRow1, ...bloggersRow1].map((blg, i) => (
+              <BloggerCard
+                key={blg.name + '-r1-' + i}
+                blg={blg}
+                paper={getBloggerPaper(i)}
+                lang={lang}
               />
             ))}
           </div>
         </div>
+
+        {/* Marquee Row 2 (Right-to-Left scrolling) */}
+        <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden mb-6">
+          <div className="animate-marquee-rtl flex gap-5 px-4 py-2">
+            {[...bloggersRow2, ...bloggersRow2, ...bloggersRow2].map((blg, i) => (
+              <BloggerCard
+                key={blg.name + '-r2-' + i}
+                blg={blg}
+                paper={getBloggerPaper(i + 1)}
+                lang={lang}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Marquee Row 3 (Left-to-Right scrolling) */}
+        <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden mb-16">
+          <div className="animate-marquee-ltr flex gap-5 px-4 py-2">
+            {[...bloggersRow3, ...bloggersRow3, ...bloggersRow3].map((blg, i) => (
+              <BloggerCard
+                key={blg.name + '-r3-' + i}
+                blg={blg}
+                paper={getBloggerPaper(i + 2)}
+                lang={lang}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Premium Additional Banner */}
+        <div className="container mx-auto max-w-5xl">
+          <div className="relative bg-gradient-to-r from-rage-pink/10 to-rage-brand/10 border-2 border-white/10 rounded-3xl p-8 sm:p-12 overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl">
+
+            {/* Ambient vector spray inside banner */}
+            <div className="absolute top-[-50px] right-[-50px] w-64 h-64 bg-rage-brand/10 blur-[80px] pointer-events-none rounded-full" />
+            <div className="absolute bottom-[-50px] left-[-50px] w-64 h-64 bg-rage-pink/10 blur-[80px] pointer-events-none rounded-full" />
+
+            <div className="max-w-2xl relative z-10 text-center md:text-left">
+              <h3 className="font-display font-black text-2xl sm:text-3xl uppercase tracking-tight text-white mb-4 leading-tight">
+                {lang === 'RU' ? 'Доступ к влиянию не ограничивается этим списком' : 'Access to influence is not limited to this list'}
+              </h3>
+              <p className="text-white/60 text-sm sm:text-base leading-relaxed font-sans max-w-lg">
+                {lang === 'RU'
+                  ? 'Получите полный медиакит и персональную подборку блогеров под ваш бренд прямо сейчас.'
+                  : 'Get the complete media kit and a customized selection of bloggers for your brand right now.'}
+              </p>
+            </div>
+
+            <a
+              href="#contacts"
+              onClick={() => setFormData(p => ({
+                ...p,
+                role: 'advertiser',
+                desc: lang === 'RU'
+                  ? 'Заявка на получение полного медиакита и подборки блогеров.'
+                  : 'Request for the complete media kit and blogger selection.'
+              }))}
+              className="btn-primary shrink-0 relative z-10 py-4 px-8"
+            >
+              <span>{lang === 'RU' ? 'Получить медиакит' : 'Get Media Kit'}</span>
+              <ArrowUpRight size={16} />
+            </a>
+
+          </div>
+        </div>
       </section>
 
-      {/* 8. FOOTER / CONTACTS SECTION */}
-      <footer id="contacts" className="pt-32 pb-12 px-6 relative bg-black/20 backdrop-blur-xs overflow-hidden border-t border-white/5">
-        {/* Giant visual logo in background with slight opacity */}
-        <div className="absolute -bottom-32 -right-32 pointer-events-none opacity-[0.04] select-none z-0">
-          <div className="font-display font-black text-[220px] md:text-[340px] leading-none uppercase tracking-tighter text-white">
+      {/* 8. BLOCK 6. CAREER IN RAGE MEDIA (Reference Photo #4 style, underground flyer) */}
+      <section className="py-28 px-6 bg-transparent relative overflow-hidden border-b border-white/5">
+        <div className="absolute inset-0 bg-transparent pointer-events-none z-10" />
+
+        {/* Graphic elements */}
+        <div className="absolute top-1/2 left-10 -translate-y-1/2 opacity-5 pointer-events-none select-none font-display font-black text-[22vw] text-white">
+          CULTURE
+        </div>
+
+        <div className="container mx-auto max-w-5xl relative z-20">
+
+          {/* Music label flyer graphic card */}
+          <motion.a
+            href="/career"
+            onMouseEnter={() => setHoveredCareer(true)}
+            onMouseLeave={() => setHoveredCareer(false)}
+            whileHover={{ y: -6, rotate: 0.5 }}
+            className="block relative p-8 sm:p-14 rounded-3xl overflow-visible shadow-3xl group cursor-pointer"
+          >
+            {/* Background image container for crumpled torn paper */}
+            <div
+              className="absolute inset-0 z-0 transition-all duration-300 pointer-events-none"
+              style={{
+                backgroundImage: `url('${hoveredCareer ? "/images/white_torn_paper_hover.png" : "/images/white_torn_paper.png"}')`,
+                backgroundSize: "100% 100%",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                backgroundColor: "transparent"
+              }}
+            />
+
+            {/* Diagonal tape corner markings for underground look */}
+            <div className="absolute top-4 left-[-35px] w-32 bg-rage-brand text-black text-[8px] font-mono font-black uppercase tracking-widest text-center py-1.5 rotate-[-45deg] border-y border-black/10 z-10">
+              CLOSED CLUB
+            </div>
+            <div className="absolute bottom-4 right-[-35px] w-32 bg-rage-pink text-white text-[8px] font-mono font-black uppercase tracking-widest text-center py-1.5 rotate-[-45deg] border-y border-white/10 z-10">
+              RAGE UNIT
+            </div>
+
+            {/* Simulated tape pins */}
+            <div className="absolute top-[-8px] right-24 w-12 h-6 bg-black/15 border border-black/5 shadow-md z-20 backdrop-blur-xs rotate-[4deg] pointer-events-none" />
+            <div className="absolute bottom-[-8px] left-24 w-12 h-6 bg-black/15 border border-black/5 shadow-md z-20 backdrop-blur-xs rotate-[-6deg] pointer-events-none" />
+
+            <div className="flex flex-col md:flex-row items-center justify-between gap-10 relative z-10">
+              <div className="max-w-2xl text-center md:text-left">
+                <span className="font-hand font-bold text-lg text-rage-pink block mb-2 rotate-[-1deg]">
+                  // JOIN THE MOVEMENT
+                </span>
+
+                <h2 className="font-display font-black text-3.5xl sm:text-5xl md:text-6xl leading-[0.85] uppercase tracking-tighter text-black mb-6">
+                  {lang === 'RU' ? (
+                    <>
+                      СТРОИМ НЕ АГЕНТСТВО. <br />
+                      <span className="text-rage-pink drop-shadow-[0_0_15px_rgba(255,0,255,0.15)]">СТРОИМ КУЛЬТУРУ.</span>
+                    </>
+                  ) : (
+                    <>
+                      NOT BUILDING AN AGENCY. <br />
+                      <span className="text-rage-pink drop-shadow-[0_0_15px_rgba(255,0,255,0.15)]">BUILDING A CULTURE.</span>
+                    </>
+                  )}
+                </h2>
+
+                <p className="text-black/80 text-sm sm:text-base leading-relaxed font-sans font-medium max-w-lg">
+                  {lang === 'RU'
+                    ? 'Если тебе близок наш подход — нам есть о чем поговорить. Мы ищем тех, кто готов гореть проектами и выходить за рамки.'
+                    : 'If you share our approach, we should talk. We are looking for those ready to burn for projects and push boundaries.'}
+                </p>
+              </div>
+
+              {/* Action Button flyer style */}
+              <div className="shrink-0 flex flex-col items-center gap-2">
+                <div className="px-8 py-4 bg-black text-white font-display font-black text-xs sm:text-sm uppercase tracking-wider rounded-md border-2 border-black shadow-[6px_6px_0px_#ACFF2A] group-hover:translate-y-[-2px] group-hover:shadow-[8px_8px_0px_#FF00FF] transition-all">
+                  {lang === 'RU' ? 'Карьера в Rage Media' : 'Career at Rage Media'}
+                </div>
+
+                {/* Hand-drawn graffiti element */}
+                <div className="flex flex-col items-center mt-1 select-none pointer-events-none">
+                  {/* Sketchy hand-drawn arrows pointing up towards the button */}
+                  <svg className="w-16 h-8 text-rage-pink fill-none stroke-current animate-pulse" viewBox="0 0 60 20">
+                    <path d="M15,16 Q12,8 18,3 M18,3 L12,2 M18,3 L20,9" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M45,16 Q48,8 42,3 M42,3 L48,2 M42,3 L40,9" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+
+                  {/* Graffiti-style text: "вступай к нам" / "join us" */}
+                  <span className="font-hand font-black text-[22px] sm:text-2xl text-rage-pink rotate-[-3.5deg] tracking-wide leading-none mt-1">
+                    {lang === 'RU' ? 'вступай к нам' : 'join us'}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </motion.a>
+        </div>
+      </section>
+
+      {/* 9. BLOCK 7. FINAL FORM & FOOTER (Reference Photo #5 layout & state logic) */}
+      <footer id="contacts" className="pt-28 pb-12 px-6 relative bg-gradient-to-t from-black via-black/80 to-transparent overflow-hidden border-t border-white/5">
+
+        {/* Giant footer watermark logo */}
+        <div className="absolute bottom-[-100px] right-[-100px] pointer-events-none opacity-[0.03] select-none z-0">
+          <div className="font-display font-black text-[220px] md:text-[380px] leading-none uppercase tracking-tighter text-white">
             RAGE
           </div>
         </div>
 
         <div className="container mx-auto relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-16 items-start mb-20">
-            
-            {/* Left Column: Action Call Text */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="lg:col-span-4"
-            >
-              <h3 className="section-title mb-6 max-w-sm text-white font-display text-4xl leading-[0.9] tracking-tighter uppercase">
-                {lang === 'RU' ? 'Готовы сделать что-то' : 'Ready to make something'} <br />
-                <span className="text-rage-brand block my-2">по-настоящему</span> 
-                <span className="underline decoration-[#FF00FF] decoration-6 underline-offset-8">громкое?</span>
-              </h3>
-              <p className="text-white/50 text-xs max-w-sm leading-relaxed mt-4 font-sans">
-                {lang === 'RU' 
-                  ? 'Оставьте заявку или свяжитесь с нами напрямую. Наша команда перезвонит вам в течение 10-15 минут.' 
-                  : 'Submit a feedback ticket or reach out using channels below. We are on hold 24/7.'}
-              </p>
-            </motion.div>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start mb-24">
 
-            {/* Center Column: Practical contact handles */}
-            <div className="lg:col-span-4 space-y-8">
-              <div className="space-y-4">
-                <a 
-                  href="tel:+79991234567" 
-                  className="flex items-center gap-4 text-lg font-bold font-display hover:text-rage-brand transition-colors group w-fit"
+            {/* Left Col: Contact info and Heading */}
+            <div className="lg:col-span-5 space-y-8">
+              <div>
+                <span className="text-rage-brand font-mono text-xs font-black uppercase tracking-widest block mb-2">
+                  GET IN TOUCH
+                </span>
+                <h3 className="font-display font-black text-4xl sm:text-5xl leading-[0.9] uppercase tracking-tighter text-white">
+                  {lang === 'RU' ? (
+                    <>
+                      ГОТОВЫ СДЕЛАТЬ <br />
+                      ЧТО-ТО ПО-НАСТОЯЩЕМУ <br />
+                      <span className="text-rage-pink underline decoration-[#ACFF2A] decoration-4 underline-offset-6">ГРОМКИЕ?</span>
+                    </>
+                  ) : (
+                    <>
+                      READY TO CREATE <br />
+                      SOMETHING TRULY <br />
+                      <span className="text-rage-pink underline decoration-[#ACFF2A] decoration-4 underline-offset-6">LOUD?</span>
+                    </>
+                  )}
+                </h3>
+                <p className="text-white/50 text-sm max-w-sm leading-relaxed mt-6 font-sans">
+                  {lang === 'RU'
+                    ? 'Обсудим вашу задачу и покажем, как превратить внимание в конкретный результат.'
+                    : "Let's discuss your task and show you how to turn attention into concrete results."}
+                </p>
+              </div>
+
+              {/* Direct channels links */}
+              <div className="space-y-4 font-display">
+                <a
+                  href="tel:+79991234567"
+                  className="flex items-center gap-4 text-sm sm:text-base font-bold hover:text-rage-brand transition-all group w-fit"
                 >
-                  <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center bg-[#121212]/30 group-hover:border-rage-brand group-hover:text-rage-brand transition-all">
-                    <Phone size={16} className="text-rage-brand" />
+                  <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center bg-white/5 group-hover:border-rage-brand group-hover:text-rage-brand transition-all">
+                    <Phone size={14} />
                   </div>
-                  <span className="text-white group-hover:text-white transition-colors">+7 (999) 123-45-67</span>
+                  <span>+7 (999) 123-45-67</span>
                 </a>
 
-                <a 
-                  href="mailto:hello@ragemedia.ru" 
-                  className="flex items-center gap-4 text-lg font-bold font-display hover:text-rage-brand transition-colors group w-fit"
+                <a
+                  href="mailto:hello@ragemedia.ru"
+                  className="flex items-center gap-4 text-sm sm:text-base font-bold hover:text-rage-pink transition-all group w-fit"
                 >
-                  <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center bg-[#121212]/30 group-hover:border-rage-brand group-hover:text-rage-brand transition-all">
-                    <Mail size={16} className="text-rage-brand" />
+                  <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center bg-white/5 group-hover:border-rage-pink group-hover:text-rage-pink transition-all">
+                    <Mail size={14} />
                   </div>
-                  <span className="text-white group-hover:text-white transition-colors">hello@ragemedia.ru</span>
+                  <span>hello@ragemedia.ru</span>
                 </a>
 
-                <a 
-                  href="https://t.me/ragemedia" 
+                {/* Direct Telegram link */}
+                <a
+                  href="https://t.me/RageAds"
                   target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center gap-4 text-lg font-bold font-display hover:text-rage-brand transition-colors group w-fit"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-4 text-sm sm:text-base font-bold text-sky-400 hover:text-sky-300 transition-all group w-fit cursor-pointer"
                 >
-                  <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center bg-[#121212]/30 group-hover:border-rage-brand group-hover:text-rage-brand transition-all">
-                    <Send size={16} className="text-rage-brand" />
+                  <div className="w-10 h-10 rounded-full border border-sky-500/20 flex items-center justify-center bg-sky-500/5 group-hover:bg-sky-500/10 group-hover:border-sky-400 transition-all">
+                    <Send size={14} />
                   </div>
-                  <span className="text-white group-hover:text-white transition-colors">t.me/ragemedia</span>
+                  <div className="flex flex-col">
+                    <span className="font-mono text-[9px] uppercase tracking-wider text-sky-500 font-extrabold leading-none mb-1">
+                      TELEGRAM
+                    </span>
+                    <span>t.me/RageAds</span>
+                  </div>
                 </a>
               </div>
-
-              {/* Submit CTA trigger opens contact popup */}
-              <button 
-                onClick={() => openDiscussWithRole('advertiser')}
-                className="btn-primary group relative overflow-hidden cursor-pointer"
-              >
-                {lang === 'RU' ? 'Обсудить проект' : 'Discuss project'}
-                <ArrowUpRight size={16} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </button>
             </div>
 
-            {/* Right Column: Multi-layered graffiti logo with neon indicator arrow */}
-            <div className="lg:col-span-4 flex flex-col items-center lg:items-end justify-center relative select-none pt-12 lg:pt-0">
-              {/* Logo from uploaded asset with floating/glow animation */}
-              <div className="pt-8 flex justify-center lg:justify-end">
-                <motion.img 
-                  src="/images/rage_logo_uploaded.png"
-                  alt="Rage Media Logo"
-                  className="h-24 md:h-32 w-auto object-contain cursor-pointer filter drop-shadow-[0_0_12px_rgba(172,255,42,0.15)] hover:drop-shadow-[0_0_25px_rgba(172,255,42,0.45)] transition-shadow"
-                  referrerPolicy="no-referrer"
-                  animate={{
-                    y: [0, -8, 0],
-                    rotate: [0, -1, 1, 0],
-                  }}
-                  transition={{
-                    duration: 5,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                  whileHover={{ 
-                    scale: 1.1,
-                    rotate: 2,
-                  }}
-                  whileTap={{ scale: 0.95 }}
-                />
-              </div>
-            </div>
+            {/* Right Col: Interactive dynamic form matching Photo #5 */}
+            <div className="lg:col-span-7 bg-[#0b0b0d] border border-white/10 rounded-2xl p-6 sm:p-10 shadow-2xl relative">
 
+              {/* Form submit response state */}
+              {submitStatus === 'success' ? (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="text-center py-10"
+                >
+                  <div className="w-16 h-16 bg-rage-brand/10 text-rage-brand border border-rage-brand rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
+                    <CheckCircle size={32} />
+                  </div>
+                  <h4 className="font-display font-black text-2xl uppercase tracking-tight text-white mb-2">
+                    {lang === 'RU' ? 'ЗАЯВКА ОТПРАВЛЕНА!' : 'REQUEST SENT!'}
+                  </h4>
+                  <p className="text-white/60 text-sm max-w-sm mx-auto mb-8 font-sans">
+                    {lang === 'RU'
+                      ? 'Спасибо! Наш менеджер уже связывается с вами. Мы вернемся с аналитикой в течение 15 минут.'
+                      : "Thank you! Our manager is already reaching out to you. We'll get back to you with analytics within 15 minutes."}
+                  </p>
+                  <button
+                    onClick={() => setSubmitStatus('idle')}
+                    className="btn-secondary mx-auto text-xs"
+                  >
+                    {lang === 'RU' ? 'Отправить еще раз' : 'Send again'}
+                  </button>
+                </motion.div>
+              ) : (
+                <form onSubmit={handleFormSubmit} className="space-y-6">
+
+                  {/* Selector role toggles */}
+                  <div className="flex bg-[#121215] border border-white/10 rounded-xl p-1">
+                    <button
+                      type="button"
+                      onClick={() => setFormData(prev => ({ ...prev, role: 'advertiser' }))}
+                      className={cn(
+                        "flex-1 py-3 text-xs font-black uppercase tracking-wider transition-all rounded-lg cursor-pointer",
+                        formData.role === 'advertiser' ? "bg-rage-brand text-black" : "text-white/60 hover:text-white"
+                      )}
+                    >
+                      {lang === 'RU' ? 'Я Рекламодатель' : 'I am Advertiser'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setFormData(prev => ({ ...prev, role: 'blogger' }))}
+                      className={cn(
+                        "flex-1 py-3 text-xs font-black uppercase tracking-wider transition-all rounded-lg cursor-pointer",
+                        formData.role === 'blogger' ? "bg-rage-pink text-white" : "text-white/60 hover:text-white"
+                      )}
+                    >
+                      {lang === 'RU' ? 'Я Блогер' : 'I am Blogger'}
+                    </button>
+                  </div>
+
+                  {/* Input fields */}
+                  <div className="space-y-4">
+                    <div>
+                      <label className="text-[10px] font-mono font-black uppercase tracking-widest text-white/50 block mb-1">
+                        {lang === 'RU' ? 'ИМЯ / ФИО' : 'FULL NAME'}
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder={lang === 'RU' ? 'Алексей' : 'Alex'}
+                        value={formData.name}
+                        onChange={e => setFormData(p => ({ ...p, name: e.target.value }))}
+                        className="w-full bg-white/[0.03] border border-white/10 px-4 py-3.5 text-white text-sm focus:border-rage-brand outline-none transition-colors rounded-xl font-sans"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-[10px] font-mono font-black uppercase tracking-widest text-white/50 block mb-1">
+                        TELEGRAM / VK
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder={lang === 'RU' ? '@username или ссылка...' : '@username or link...'}
+                        value={formData.contact}
+                        onChange={e => setFormData(p => ({ ...p, contact: e.target.value }))}
+                        className="w-full bg-white/[0.03] border border-white/10 px-4 py-3.5 text-white text-sm focus:border-rage-brand outline-none transition-colors rounded-xl font-sans"
+                      />
+                    </div>
+
+                    {/* Conditional Fields based on role */}
+                    {formData.role === 'advertiser' ? (
+                      <>
+                        <div>
+                          <label className="text-[10px] font-mono font-black uppercase tracking-widest text-white/50 block mb-1">
+                            {lang === 'RU' ? 'КРАТКОЕ ОПИСАНИЕ ПРОЕКТА' : 'SHORT PROJECT DESCRIPTION'}
+                          </label>
+                          <textarea
+                            rows={3}
+                            placeholder={lang === 'RU' ? 'Опишите продукт, цели рекламной кампании...' : 'Describe your product, campaign goals...'}
+                            value={formData.desc}
+                            onChange={e => setFormData(p => ({ ...p, desc: e.target.value }))}
+                            className="w-full bg-white/[0.03] border border-white/10 px-4 py-3.5 text-white text-sm focus:border-rage-brand outline-none transition-colors rounded-xl resize-none font-sans"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] font-mono font-black uppercase tracking-widest text-white/50 block mb-1">
+                            {lang === 'RU' ? 'ПЛАНИРУЕМЫЙ БЮДЖЕТ' : 'PLANNED BUDGET'}
+                          </label>
+                          <select
+                            value={formData.budget}
+                            onChange={e => setFormData(p => ({ ...p, budget: e.target.value }))}
+                            className="w-full bg-[#121215] border border-white/10 px-4 py-3.5 text-white text-sm focus:border-rage-brand outline-none transition-colors rounded-xl font-sans"
+                          >
+                            <option value="100k-500k">{lang === 'RU' ? '100,000 ₽ — 500,000 ₽' : '100,000 ₽ — 500,000 ₽'}</option>
+                            <option value="500k-1m">{lang === 'RU' ? '500,000 ₽ — 1,000,000 ₽' : '500,000 ₽ — 1,000,000 ₽'}</option>
+                            <option value="1m-3m">{lang === 'RU' ? '1,000,000 ₽ — 3,000,000 ₽' : '1,000,000 ₽ — 3,000,000 ₽'}</option>
+                            <option value="3m+">{lang === 'RU' ? 'Более 3,000,000 ₽' : 'More than 3,000,000 ₽'}</option>
+                            <option value="other">{lang === 'RU' ? 'Другое...' : 'Other...'}</option>
+                          </select>
+                        </div>
+
+                        <AnimatePresence>
+                          {formData.budget === 'other' && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              className="overflow-hidden"
+                              transition={{ duration: 0.25 }}
+                            >
+                              <div className="pt-2">
+                                <label className="text-[10px] font-mono font-black uppercase tracking-widest text-white/50 block mb-1">
+                                  {lang === 'RU' ? 'УКАЖИТЕ СВОЙ БЮДЖЕТ' : 'SPECIFY YOUR BUDGET'}
+                                </label>
+                                <input
+                                  type="text"
+                                  required
+                                  placeholder={lang === 'RU' ? 'Например, 250,000 ₽...' : 'E.g., 250,000 ₽...'}
+                                  value={formData.customBudget}
+                                  onChange={e => setFormData(p => ({ ...p, customBudget: e.target.value }))}
+                                  className="w-full bg-white/[0.03] border border-white/10 px-4 py-3.5 text-white text-sm focus:border-rage-brand outline-none transition-colors rounded-xl font-sans"
+                                />
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </>
+                    ) : (
+                      <>
+                        <div>
+                          <label className="text-[10px] font-mono font-black uppercase tracking-widest text-white/50 block mb-1">
+                            {lang === 'RU' ? 'ТЕМА / НИША КАНАЛА' : 'CHANNEL THEME / NICHE'}
+                          </label>
+                          <input
+                            type="text"
+                            placeholder={lang === 'RU' ? 'Летсплеи, обзоры модов, стримы...' : 'Letsplays, mod reviews, streams...'}
+                            value={formData.niche}
+                            onChange={e => setFormData(p => ({ ...p, niche: e.target.value }))}
+                            className="w-full bg-white/[0.03] border border-white/10 px-4 py-3.5 text-white text-sm focus:border-rage-brand outline-none transition-colors rounded-xl font-sans"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] font-mono font-black uppercase tracking-widest text-white/50 block mb-1">
+                            {lang === 'RU' ? 'ПОДПИСЧИКИ & ССЫЛКА НА КАНАЛ' : 'SUBSCRIBERS & CHANNEL LINK'}
+                          </label>
+                          <input
+                            type="text"
+                            placeholder={lang === 'RU' ? 'YouTube (450k+ подписчиков), ссылка...' : 'YouTube (450k+ subscribers), link...'}
+                            value={formData.metrics}
+                            onChange={e => setFormData(p => ({ ...p, metrics: e.target.value }))}
+                            className="w-full bg-white/[0.03] border border-white/10 px-4 py-3.5 text-white text-sm focus:border-rage-brand outline-none transition-colors rounded-xl font-sans"
+                          />
+                        </div>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Submit buttons row */}
+                  <div className="pt-2 flex flex-col sm:flex-row gap-4">
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className={cn(
+                        "flex-1 py-4 justify-center text-xs font-black uppercase tracking-wider flex items-center gap-2",
+                        formData.role === 'blogger' ? "btn-pink" : "btn-primary"
+                      )}
+                    >
+                      {isSubmitting ? (
+                        <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                      ) : (
+                        <>
+                          <span>{lang === 'RU' ? 'Отправить заявку' : 'Submit request'}</span>
+                          <Send size={14} />
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                </form>
+              )}
+
+            </div>
           </div>
 
-          {/* Legal references row */}
+          {/* Footer bottom legal references row matching Photo #5 */}
           <div className="pt-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6 text-white/40 text-xs font-mono">
-            <div>© 2026 Rage Media. {lang === 'RU' ? 'Все права защищены.' : 'All rights reserved.'}</div>
-            <div className="flex gap-6 sm:gap-8">
-               <a href="/career" className="hover:text-rage-brand transition-colors">Карьера в RageMedia</a>
-               <a href="#privacy" className="hover:text-white transition-colors">Политика конфиденциальности</a>
-               <a href="#terms" className="hover:text-white transition-colors">Публичная оферта</a>
-             </div>
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-rage-brand animate-ping" />
+              <span>{lang === 'RU' ? '© 2026 RAGE MEDIA. Все права защищены.' : '© 2026 RAGE MEDIA. All rights reserved.'}</span>
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-6">
+              <a href="/career" className="hover:text-rage-brand transition-all">{lang === 'RU' ? 'Карьера у нас' : 'Careers'}</a>
+              <a href="#privacy" className="hover:text-white transition-all">{lang === 'RU' ? 'Политика конфиденциальности' : 'Privacy Policy'}</a>
+              <a href="#terms" className="hover:text-white transition-all">{lang === 'RU' ? 'Публичная оферта' : 'Terms of Service'}</a>
+            </div>
           </div>
         </div>
       </footer>
 
-      {/* 9. CONTACT MODAL OVERLAY */}
-      <DiscussModal 
-        isOpen={isDiscussOpen} 
-        onClose={() => setIsDiscussOpen(false)} 
-        lang={lang}
-      />
-
+      {/* Case Details Modal */}
+      <AnimatePresence>
+        {selectedCase && (
+          <CaseModal
+            item={selectedCase}
+            lang={lang}
+            onClose={() => setSelectedCase(null)}
+            onAction={() => {
+              setFormData(p => ({
+                ...p,
+                role: 'advertiser',
+                desc: lang === 'RU'
+                  ? `Меня интересует кейс: ${selectedCase.name}. Хочу похожее продвижение!`
+                  : `I am interested in the case: ${selectedCase.name}. I want similar promotion!`
+              }));
+            }}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 
-export default function TornStrip() {
+export default function TornStrip({ lang }: { lang: 'RU' | 'EN' }) {
   return (
     <div className="relative w-full overflow-hidden py-16 md:py-20 select-none bg-rage-brand my-12 transform rotate-1 flex items-center justify-center">
       
@@ -43,12 +43,12 @@ export default function TornStrip() {
       <div className="container mx-auto px-6 py-2 flex items-center justify-center relative">
         <div className="text-center font-display text-lg sm:text-2xl md:text-3xl lg:text-4xl font-black text-black uppercase tracking-tight leading-none select-none relative max-w-[90%] flex flex-wrap items-center justify-center gap-2">
           
-          <span className="opacity-90">ПОКА ДРУГИЕ ПРОСТО СУЩЕСТВУЮТ</span>
-          <span className="opacity-90">МЫ ДЕЛАЕМ</span>
+          <span className="opacity-90">{lang === 'RU' ? 'ПОКА ДРУГИЕ ПРОСТО СУЩЕСТВУЮТ' : 'WHILE OTHERS SIMPLY EXIST'}</span>
+          <span className="opacity-90">{lang === 'RU' ? 'МЫ ДЕЛАЕМ' : 'WE MAKE'}</span>
           
           {/* Highlighted text "РАЗНИЦУ" wrapped in custom pen circle SVG */}
           <span className="relative inline-block px-4 py-1.5 font-sans font-black text-black">
-            РАЗНИЦУ
+            {lang === 'RU' ? 'РАЗНИЦУ' : 'A DIFFERENCE'}
             <svg
               className="absolute inset-0 w-full h-full text-rage-pink pointer-events-none"
               viewBox="0 0 160 54"

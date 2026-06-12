@@ -10,7 +10,7 @@ export default function RageLogo({ className = "" }: RageLogoProps) {
       <img 
         src="/images/rage_logo_uploaded.png" 
         alt="Rage Media Logo" 
-        className="h-9 sm:h-11 w-auto object-contain"
+        className="h-12 sm:h-15 w-auto object-contain"
         referrerPolicy="no-referrer"
       />
     </div>
