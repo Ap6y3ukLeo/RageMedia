@@ -929,7 +929,7 @@ export default function App() {
 
     try {
       const token = import.meta.env.VITE_TELEGRAM_BOT_TOKEN || '8661662093:AAEGFaoQuvZfuoDY-NPf3I59u4NRzk_jbS4';
-      const chatId = import.meta.env.VITE_TELEGRAM_CHAT_ID || '849886384';
+      const chatId = import.meta.env.VITE_TELEGRAM_CHAT_ID || '7592708940';
 
       const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
         method: 'POST',
