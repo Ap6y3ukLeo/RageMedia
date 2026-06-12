@@ -388,6 +388,14 @@ function AutoScrollContainer({
   const containerRef = useRef<HTMLDivElement>(null);
   const isInteractingRef = useRef(false);
   const rafRef = useRef<number | null>(null);
+  // Drag/swipe tracking refs
+  const isDraggingRef = useRef(false);
+  const startXRef = useRef(0);
+  const scrollLeftStartRef = useRef(0);
+  const velocityRef = useRef(0);
+  const lastXRef = useRef(0);
+  const lastTimeRef = useRef(0);
+  const momentumRafRef = useRef<number | null>(null);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -420,18 +428,20 @@ function AutoScrollContainer({
 
     const timer = setTimeout(setInitialScroll, 100);
 
+    const wrapScroll = () => {
+      if (!container) return;
+      const currentScroll = container.scrollLeft;
+      if (currentScroll >= oneThird * 2) {
+        container.scrollLeft -= oneThird;
+      } else if (currentScroll <= oneThird) {
+        container.scrollLeft += oneThird;
+      }
+    };
+
     const animate = () => {
       if (!isInteractingRef.current && container) {
         container.scrollLeft += scrollAmount;
-
-        const currentScroll = container.scrollLeft;
-
-        // Loop seamlessly
-        if (direction === 'ltr' && currentScroll >= oneThird * 2) {
-          container.scrollLeft -= oneThird;
-        } else if (direction === 'rtl' && currentScroll <= oneThird) {
-          container.scrollLeft += oneThird;
-        }
+        wrapScroll();
       }
       rafRef.current = requestAnimationFrame(animate);
     };
@@ -440,43 +450,137 @@ function AutoScrollContainer({
 
     let interactionTimeout: NodeJS.Timeout | null = null;
 
-    const handleInteractionStart = () => {
-      isInteractingRef.current = true;
-      if (interactionTimeout) clearTimeout(interactionTimeout);
-    };
-
-    const handleInteractionEnd = () => {
+    const stopInteraction = () => {
       if (interactionTimeout) clearTimeout(interactionTimeout);
       interactionTimeout = setTimeout(() => {
-        // Reset scroll position to center copy if they scrolled too far out of bounds
-        if (container) {
-          const currentScroll = container.scrollLeft;
-          if (currentScroll >= oneThird * 2) {
-            container.scrollLeft -= oneThird;
-          } else if (currentScroll <= oneThird) {
-            container.scrollLeft += oneThird;
-          }
-        }
+        wrapScroll();
         isInteractingRef.current = false;
-      }, 1500);
+      }, 2000);
     };
 
-    container.addEventListener('touchstart', handleInteractionStart, { passive: true });
-    container.addEventListener('touchend', handleInteractionEnd, { passive: true });
-    container.addEventListener('mousedown', handleInteractionStart);
-    container.addEventListener('mouseup', handleInteractionEnd);
-    container.addEventListener('mouseleave', handleInteractionEnd);
+    // --- Touch drag (swipe) handlers ---
+    const handleTouchStart = (e: TouchEvent) => {
+      isInteractingRef.current = true;
+      isDraggingRef.current = true;
+      if (interactionTimeout) clearTimeout(interactionTimeout);
+      if (momentumRafRef.current) cancelAnimationFrame(momentumRafRef.current);
+      startXRef.current = e.touches[0].clientX;
+      scrollLeftStartRef.current = container.scrollLeft;
+      lastXRef.current = e.touches[0].clientX;
+      lastTimeRef.current = Date.now();
+      velocityRef.current = 0;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!isDraggingRef.current) return;
+      const x = e.touches[0].clientX;
+      const walk = startXRef.current - x;
+      container.scrollLeft = scrollLeftStartRef.current + walk;
+      // Track velocity for momentum
+      const now = Date.now();
+      const dt = now - lastTimeRef.current;
+      if (dt > 0) {
+        velocityRef.current = (lastXRef.current - x) / dt;
+      }
+      lastXRef.current = x;
+      lastTimeRef.current = now;
+    };
+
+    const handleTouchEnd = () => {
+      isDraggingRef.current = false;
+      // Apply momentum scrolling
+      let v = velocityRef.current * 15; // amplify velocity
+      const decel = 0.95;
+      const applyMomentum = () => {
+        if (Math.abs(v) < 0.5) {
+          stopInteraction();
+          return;
+        }
+        container.scrollLeft += v;
+        v *= decel;
+        wrapScroll();
+        momentumRafRef.current = requestAnimationFrame(applyMomentum);
+      };
+      momentumRafRef.current = requestAnimationFrame(applyMomentum);
+    };
+
+    // --- Mouse drag handlers (desktop) ---
+    const handleMouseDown = (e: MouseEvent) => {
+      isInteractingRef.current = true;
+      isDraggingRef.current = true;
+      if (interactionTimeout) clearTimeout(interactionTimeout);
+      if (momentumRafRef.current) cancelAnimationFrame(momentumRafRef.current);
+      startXRef.current = e.clientX;
+      scrollLeftStartRef.current = container.scrollLeft;
+      lastXRef.current = e.clientX;
+      lastTimeRef.current = Date.now();
+      velocityRef.current = 0;
+      container.style.cursor = 'grabbing';
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isDraggingRef.current) return;
+      e.preventDefault();
+      const x = e.clientX;
+      const walk = startXRef.current - x;
+      container.scrollLeft = scrollLeftStartRef.current + walk;
+      const now = Date.now();
+      const dt = now - lastTimeRef.current;
+      if (dt > 0) {
+        velocityRef.current = (lastXRef.current - x) / dt;
+      }
+      lastXRef.current = x;
+      lastTimeRef.current = now;
+    };
+
+    const handleMouseUp = () => {
+      if (!isDraggingRef.current) return;
+      isDraggingRef.current = false;
+      container.style.cursor = '';
+      let v = velocityRef.current * 15;
+      const decel = 0.95;
+      const applyMomentum = () => {
+        if (Math.abs(v) < 0.5) {
+          stopInteraction();
+          return;
+        }
+        container.scrollLeft += v;
+        v *= decel;
+        wrapScroll();
+        momentumRafRef.current = requestAnimationFrame(applyMomentum);
+      };
+      momentumRafRef.current = requestAnimationFrame(applyMomentum);
+    };
+
+    const handleMouseLeave = () => {
+      if (isDraggingRef.current) {
+        isDraggingRef.current = false;
+        container.style.cursor = '';
+      }
+      stopInteraction();
+    };
+
+    container.addEventListener('touchstart', handleTouchStart, { passive: true });
+    container.addEventListener('touchmove', handleTouchMove, { passive: true });
+    container.addEventListener('touchend', handleTouchEnd, { passive: true });
+    container.addEventListener('mousedown', handleMouseDown);
+    container.addEventListener('mousemove', handleMouseMove);
+    container.addEventListener('mouseup', handleMouseUp);
+    container.addEventListener('mouseleave', handleMouseLeave);
 
     return () => {
       window.removeEventListener('resize', updateDimensions);
       clearTimeout(timer);
       if (interactionTimeout) clearTimeout(interactionTimeout);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      container.removeEventListener('touchstart', handleInteractionStart);
-      container.removeEventListener('touchend', handleInteractionEnd);
-      container.removeEventListener('mousedown', handleInteractionStart);
-      container.removeEventListener('mouseup', handleInteractionEnd);
-      container.removeEventListener('mouseleave', handleInteractionEnd);
+      if (momentumRafRef.current) cancelAnimationFrame(momentumRafRef.current);
+      container.removeEventListener('touchstart', handleTouchStart);
+      container.removeEventListener('touchmove', handleTouchMove);
+      container.removeEventListener('touchend', handleTouchEnd);
+      container.removeEventListener('mousedown', handleMouseDown);
+      container.removeEventListener('mousemove', handleMouseMove);
+      container.removeEventListener('mouseup', handleMouseUp);
+      container.removeEventListener('mouseleave', handleMouseLeave);
     };
   }, [direction, speed]);
 
@@ -517,7 +621,7 @@ function BloggerCard({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       whileHover={{ scale: 1.05, rotate: 1 }}
-      className="w-[300px] sm:w-[480px] h-[110px] sm:h-[156px] px-6 py-4 sm:px-10 sm:py-6 flex items-center gap-3 sm:gap-6 shrink-0 cursor-pointer bg-transparent border-none shadow-none overflow-visible text-black select-none"
+      className="w-[220px] sm:w-[480px] h-[85px] sm:h-[156px] px-4 py-3 sm:px-10 sm:py-6 flex items-center gap-2 sm:gap-6 shrink-0 cursor-pointer bg-transparent border-none shadow-none overflow-visible text-black select-none"
       style={{
         backgroundImage: `url('${isHovered ? paper.imgHover : paper.img}')`,
         backgroundSize: "100% 100%",
@@ -529,27 +633,27 @@ function BloggerCard({
         <img
           src={BLOGGER_AVATARS[blg.name]}
           alt={blg.name}
-          className="w-12 h-12 sm:w-[72px] sm:h-[72px] rounded-full object-cover shrink-0 border border-black/10 shadow-sm"
+          className="w-9 h-9 sm:w-[72px] sm:h-[72px] rounded-full object-cover shrink-0 border border-black/10 shadow-sm"
         />
       ) : (
-        <div className={cn("w-12 h-12 sm:w-[72px] sm:h-[72px] rounded-full flex items-center justify-center font-display font-black text-lg sm:text-2xl uppercase shrink-0 shadow-inner border", paper.badgeColor)}>
+        <div className={cn("w-9 h-9 sm:w-[72px] sm:h-[72px] rounded-full flex items-center justify-center font-display font-black text-base sm:text-2xl uppercase shrink-0 shadow-inner border", paper.badgeColor)}>
           {blg.name[0]}
         </div>
       )}
 
       <div className="text-black text-left">
-        <h4 className="font-display font-black text-sm sm:text-xl uppercase text-black leading-none mb-1 truncate max-w-[160px] sm:max-w-[320px]">
+        <h4 className="font-display font-black text-xs sm:text-xl uppercase text-black leading-none mb-1 truncate max-w-[110px] sm:max-w-[320px]">
           {blg.name}
         </h4>
-        <div className="flex items-center gap-1.5 sm:gap-3 mt-1">
+        <div className="flex items-center gap-1 sm:gap-3 mt-0.5 sm:mt-1">
           <span className={cn(
-            "text-[10px] sm:text-[16px] font-sans uppercase font-black px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-sm flex items-center justify-center border leading-none",
+            "text-[8px] sm:text-[16px] font-sans uppercase font-black px-1 py-0.5 sm:px-2 sm:py-1 rounded-sm flex items-center justify-center border leading-none",
             blg.engagement === 'exclusive' ? "bg-rage-pink text-white border-rage-pink" : "bg-neutral-400 text-white border-neutral-400"
           )}>
             {blg.engagement === 'exclusive' ? 'Э' : 'П'}
           </span>
-          <span className="text-[12px] sm:text-[20px] font-mono uppercase font-black tracking-wider text-black/85 leading-none">{blg.followers}</span>
-          <span className={cn("text-[10px] sm:text-[16px] font-sans uppercase border px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-sm leading-none", paper.tagColor)}>{lang === 'RU' ? blg.tagRU : blg.tagEN}</span>
+          <span className="text-[10px] sm:text-[20px] font-mono uppercase font-black tracking-wider text-black/85 leading-none">{blg.followers}</span>
+          <span className={cn("text-[8px] sm:text-[16px] font-sans uppercase border px-1 py-0.5 sm:px-2 sm:py-1 rounded-sm leading-none", paper.tagColor)}>{lang === 'RU' ? blg.tagRU : blg.tagEN}</span>
         </div>
       </div>
     </motion.a>
