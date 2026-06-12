@@ -1301,7 +1301,7 @@ export default function App() {
                     onMouseLeave={() => setHoveredService(null)}
                     key={srv.titleRU}
                     whileHover={{ x: 8 }}
-                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 min-h-[110px] sm:min-h-[132px] p-5 sm:p-6 relative select-none text-black cursor-pointer bg-transparent border-none shadow-none overflow-visible group"
+                    className="flex flex-row items-center justify-between gap-4 min-h-[110px] sm:min-h-[132px] p-5 sm:p-6 relative select-none text-black cursor-pointer bg-transparent border-none shadow-none overflow-visible group"
                     style={{
                       backgroundImage: `url('${hoveredService === idx ? getServicePaperImages(idx).hover : getServicePaperImages(idx).normal}')`,
                       backgroundSize: "100% 100%",
@@ -1325,7 +1325,7 @@ export default function App() {
                     </div>
 
                     {/* Doodle graphic overlay matching photo #3 */}
-                    <div className="flex items-center gap-3 relative z-10 self-end sm:self-auto">
+                    <div className="flex items-center gap-3 relative z-10 self-center sm:self-auto">
                       <div className={cn("w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-300", getServicePaperImages(idx).arrowBg)}>
                         <ArrowUpRight size={16} className={cn("transition-transform duration-300", hoveredService === idx && "rotate-45")} />
                       </div>
