@@ -77,6 +77,7 @@ export default function Career() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
 
   React.useEffect(() => {
     localStorage.setItem('rage_lang', lang);
@@ -90,21 +91,50 @@ export default function Career() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.contact) return;
     setIsSubmitting(true);
+    setSubmitError(false);
     
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setSubmitSuccess(true);
-      setFormData({
-        name: '',
-        contact: '',
-        vacancy: 'Influencer Manager',
-        portfolio: ''
+    // Format message
+    const message = lang === 'RU'
+      ? `💼 Отклик на вакансию RAGE MEDIA!\n👤 Имя: ${formData.name}\n📋 Вакансия: ${formData.vacancy}\n📞 Контакты: ${formData.contact}\n🔗 Резюме/Портфолио: ${formData.portfolio || 'Не указано'}`
+      : `💼 RAGE MEDIA Job Application!\n👤 Name: ${formData.name}\n📋 Vacancy: ${formData.vacancy}\n📞 Contacts: ${formData.contact}\n🔗 CV/Portfolio: ${formData.portfolio || 'Not specified'}`;
+
+    try {
+      const token = import.meta.env.VITE_TELEGRAM_BOT_TOKEN || '8661662093:AAEGFaoQuvZfuoDY-NPf3I59u4NRzk_jbS4';
+      const chatId = import.meta.env.VITE_TELEGRAM_CHAT_ID || '7592708940';
+
+      const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: message,
+        }),
       });
-    }, 1500);
+
+      if (response.ok) {
+        setSubmitSuccess(true);
+        setFormData({
+          name: '',
+          contact: '',
+          vacancy: 'Influencer Manager',
+          portfolio: ''
+        });
+      } else {
+        console.error('Telegram API error:', await response.text());
+        setSubmitError(true);
+      }
+    } catch (err) {
+      console.error('Submit error:', err);
+      setSubmitError(true);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -305,6 +335,13 @@ export default function Career() {
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
+                {submitError && (
+                  <div className="bg-red-500/10 border border-red-500/30 text-red-500 px-4 py-3.5 rounded-xl text-xs font-bold font-sans">
+                    {lang === 'RU' 
+                      ? 'Произошла ошибка при отправке отклика в Telegram. Пожалуйста, попробуйте еще раз.' 
+                      : 'An error occurred while sending your application to Telegram. Please try again.'}
+                  </div>
+                )}
                 <div>
                   <span className="text-rage-pink font-mono text-[9px] font-black uppercase tracking-widest block mb-1">
                     CULTURE IS THE BASE
