@@ -860,6 +860,39 @@ export default function App() {
   }, [lang]);
 
   useEffect(() => {
+    const imagesToPreload = [
+      "/images/lime_torn_paper.png",
+      "/images/lime_torn_paper_hover.png",
+      "/images/pink_torn_paper.png",
+      "/images/pink_torn_paper_hover.png",
+      "/images/white_torn_paper.png",
+      "/images/white_torn_paper_hover.png",
+      "/images/case_paper_lime.png",
+      "/images/case_paper_lime_hover.png",
+      "/images/case_paper_pink.png",
+      "/images/case_paper_pink_hover.png",
+      "/images/case_paper_white.png",
+      "/images/case_paper_white_hover.png",
+      "/images/blogger_paper_lime.png",
+      "/images/blogger_paper_lime_hover.png",
+      "/images/blogger_paper_pink.png",
+      "/images/blogger_paper_pink_hover.png",
+      "/images/blogger_paper_white.png",
+      "/images/blogger_paper_white_hover.png",
+      "/images/service_paper_lime.png",
+      "/images/service_paper_lime_hover.png",
+      "/images/service_paper_pink.png",
+      "/images/service_paper_pink_hover.png",
+      "/images/service_paper_white.png",
+      "/images/service_paper_white_hover.png"
+    ];
+    imagesToPreload.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
+
+  useEffect(() => {
     if (loading) {
       document.body.style.overflow = 'hidden';
     } else {
