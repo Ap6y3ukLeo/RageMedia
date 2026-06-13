@@ -1742,12 +1742,12 @@ export default function App() {
 
             <div className="max-w-2xl relative z-10 text-center md:text-left">
               <h3 className="font-display font-black text-2xl sm:text-3xl uppercase tracking-tight text-white mb-4 leading-tight">
-                {lang === 'RU' ? 'Доступ к влиянию не ограничивается этим списком' : 'Access to influence is not limited to this list'}
+                {lang === 'RU' ? 'Список носит ознакомительный характер' : 'This list is for reference only'}
               </h3>
               <p className="text-white/60 text-sm sm:text-base leading-relaxed font-sans max-w-lg">
                 {lang === 'RU'
-                  ? 'Список носит ознакомительный характер. Запросите медиакит и персональную подборку блогеров под ваш бренд и портрет ЦА прямо сейчас.'
-                  : 'This list is for reference only. Request our media kit and a personalized blogger selection for your brand and target audience right now.'}
+                  ? 'Запросите медиакит и персональную подборку блогеров под ваш бренд и портрет ЦА прямо сейчас.'
+                  : 'Request our media kit and a personalized blogger selection for your brand and target audience right now.'}
               </p>
             </div>
 
