@@ -190,7 +190,7 @@
 }
 
 .animate-tv-glitch {
-  animation: tv-smooth-glitch 4s ease-in-out infinite;
+  animation: tv-smooth-glitch 4s steps(120) infinite;
 }
 
 .perspective-1000 {
@@ -483,10 +483,23 @@
 }
 
 .animate-rage-glitch-1 {
-  animation: glitch-anim-1 3s linear infinite;
+  animation: glitch-anim-1 3s steps(90) infinite;
 }
 
 .animate-rage-glitch-2 {
-  animation: glitch-anim-2 3.2s linear infinite;
+  animation: glitch-anim-2 3.2s steps(96) infinite;
+}
+
+@keyframes megaphone-float {
+  0%, 100% {
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.008) rotate(0.5deg);
+  }
+}
+
+.animate-megaphone-float {
+  animation: megaphone-float 6s steps(180) ease-in-out infinite;
 }
 

@@ -15,6 +15,8 @@ interface Vacancy {
   responsibilitiesEN: string[];
   requirementsRU: string[];
   requirementsEN: string[];
+  offersRU?: string[];
+  offersEN?: string[];
   tagsRU: string[];
   tagsEN: string[];
   accent: 'lime' | 'pink' | 'white';
@@ -22,79 +24,133 @@ interface Vacancy {
 
 const OPEN_VACANCIES: Vacancy[] = [
   {
-    title: "Influencer Manager",
-    typeRU: "Москва / Гибрид • Полный день",
-    typeEN: "Moscow / Hybrid • Full-time",
-    salaryRU: "от 120,000 ₽",
-    salaryEN: "from 120,000 ₽",
-    descRU: "Поиск новых талантов, ведение переговоров, интеграция рекламодателей в гейминг блоги.",
-    descEN: "Searching for new talent, negotiating, integrating advertisers into gaming blogs.",
+    title: "Influence Manager",
+    typeRU: "Удаленно • Гибкий график",
+    typeEN: "Remote • Flexible schedule",
+    salaryRU: "",
+    salaryEN: "",
+    descRU: "Мы ищем специалиста, который будет отвечать за коммуникацию с блогерами и организацию рекламных размещений. Основная задача — находить релевантных авторов, договариваться о сотрудничестве и контролировать реализацию рекламных кампаний от начала до конца.",
+    descEN: "We are looking for a specialist who will be responsible for communication with influencers and organizing ad placements. The main task is to find relevant creators, negotiate cooperation, and control the execution of advertising campaigns from start to finish.",
     responsibilitiesRU: [
-      "Поиск и привлечение игровых блогеров (YouTube, Twitch, Telegram)",
-      "Ведение переговоров и согласование условий сотрудничества",
-      "Контроль соблюдения дедлайнов и ТЗ блогерами",
-      "Анализ эффективности рекламных кампаний (CPM, CTR, CPA)",
-      "Выстраивание долгосрочных отношений с креаторами"
+      "Поиск и анализ блогеров под задачи клиентов.",
+      "Коммуникация с авторами и их менеджерами.",
+      "Подготовка подборок блогеров для клиентов.",
+      "Контроль выхода рекламных размещений.",
+      "Ведение отчетности по размещениям.",
+      "Формирование и актуализация базы блогеров."
     ],
     responsibilitiesEN: [
-      "Finding and recruiting gaming influencers (YouTube, Twitch, Telegram)",
-      "Negotiating terms and finalizing cooperation agreements",
-      "Monitoring deadlines and ad brief compliance by creators",
-      "Analyzing campaign effectiveness (CPM, CTR, CPA)",
-      "Building long-term relationships with talent"
+      "Searching for and analyzing influencers based on client objectives.",
+      "Communicating with creators and their managers.",
+      "Preparing influencer selections for clients.",
+      "Monitoring the release of advertising placements.",
+      "Maintaining reporting on placements.",
+      "Building and updating the influencer database."
     ],
     requirementsRU: [
-      "Опыт работы в Influencer Marketing от 1 года (желательно в гейминг-сфере)",
-      "Понимание специфики платформ (YouTube, Twitch, TG, TikTok)",
-      "Отличные коммуникативные навыки, грамотность и стрессоустойчивость",
-      "Знание базовой игровой терминологии и трендов гейминга"
+      "Опыт работы в influencer-маркетинге, digital-маркетинге или продажах будет преимуществом.",
+      "Умение вести деловую переписку и переговоры.",
+      "Внимательность к деталям и ответственность за результат.",
+      "Хорошие навыки работы с Google Sheets / Drive / Documents.",
+      "Понимание основных метрик блогеров.",
+      "Умение работать с большим объемом информации.",
+      "Грамотная письменная речь.",
+      "(Будет плюсом) Опыт работы с YouTube, Telegram или Twitch.",
+      "(Будет плюсом) Наличие собственной базы блогеров и контактов.",
+      "(Будет плюсом) Опыт работы в агентстве."
     ],
     requirementsEN: [
-      "1+ years of experience in Influencer Marketing (gaming industry preferred)",
-      "Strong understanding of social platforms (YouTube, Twitch, TG, TikTok)",
-      "Excellent communication skills, responsiveness, and stress-tolerance",
-      "Knowledge of gaming terminology and latest trends"
+      "Experience in influencer marketing, digital marketing, or sales is an advantage.",
+      "Ability to conduct business correspondence and negotiations.",
+      "Attention to detail and responsibility for results.",
+      "Good skills working with Google Sheets / Drive / Documents.",
+      "Understanding of key influencer metrics.",
+      "Ability to work with large amounts of information.",
+      "Fluent and grammatically correct written language.",
+      "(Preferred) Experience working with YouTube, Telegram, or Twitch.",
+      "(Preferred) Possession of an active database of influencers and contacts.",
+      "(Preferred) Experience working in an agency."
     ],
-    tagsRU: ["Майнкрафт", "Стримы", "YouTube"],
-    tagsEN: ["Minecraft", "Streams", "YouTube"],
+    offersRU: [
+      "Удаленный формат работы.",
+      "Гибкий график.",
+      "Работа по договору.",
+      "Конкурентная оплата труда.",
+      "Возможность работать с крупными брендами и интересными проектами.",
+      "Профессиональный рост в сфере influencer-маркетинга."
+    ],
+    offersEN: [
+      "Remote work format.",
+      "Flexible schedule.",
+      "Work under a contract.",
+      "Competitive remuneration.",
+      "Opportunity to work with major brands and exciting projects.",
+      "Professional growth in the field of influencer marketing."
+    ],
+    tagsRU: ["Удаленно", "Блогеры", "Переговоры"],
+    tagsEN: ["Remote", "Influencers", "Negotiations"],
     accent: "lime"
   },
   {
-    title: "Creative Producer",
-    typeRU: "Москва / Гибрид • Полный день",
-    typeEN: "Moscow / Hybrid • Full-time",
-    salaryRU: "от 150,000 ₽",
-    salaryEN: "from 150,000 ₽",
-    descRU: "Создание концепций для спецпроектов, написание сценариев интеграций, контроль продакшена.",
-    descEN: "Creating concepts for special projects, writing integration scripts, production control.",
+    title: "Creative Manager",
+    typeRU: "Удаленно • Гибкий график",
+    typeEN: "Remote • Flexible schedule",
+    salaryRU: "",
+    salaryEN: "",
+    descRU: "Мы ищем человека, который поможет развивать присутствие агентства в социальных сетях, создавать контент и участвовать в разработке креативных идей для продвижения. Нам нужен специалист, который следит за трендами, понимает специфику digital-среды и умеет превращать идеи в понятный и интересный контент.",
+    descEN: "We are looking for a person who will help develop the agency's presence in social media, create content, and participate in developing creative ideas for promotion. We need a specialist who follows trends, understands the specifics of the digital environment, and knows how to turn ideas into clear and engaging content.",
     responsibilitiesRU: [
-      "Разработка креативных идей и концепций под брифы крупных брендов",
-      "Написание детальных сценариев интеграций и спецпроектов",
-      "Участие в съемках, контроль продакшена и монтажа роликов",
-      "Взаимодействие с блогерами по реализации сложных творческих ТЗ",
-      "Защита креативных концепций перед клиентами"
+      "Ведение социальных сетей агентства.",
+      "Разработка креативных концепций для контента и рекламных активностей.",
+      "Поиск инфоповодов, трендов и актуальных форматов.",
+      "Участие в создании контента совместно с дизайнерами и видеомонтажерами.",
+      "Анализ эффективности контента и поиск точек роста."
     ],
     responsibilitiesEN: [
-      "Developing creative concepts and ideas based on brand briefs",
-      "Writing detailed integration scripts and special project scenarios",
-      "Overseeing shoots, production, and video editing processes",
-      "Collaborating with influencers on complex creative tasks",
-      "Pitching and presenting creative concepts to clients"
+      "Managing the agency's social media channels.",
+      "Developing creative concepts for content and advertising campaigns.",
+      "Identifying news hooks, trends, and relevant formats.",
+      "Participating in content creation in collaboration with designers and video editors.",
+      "Analyzing content performance and identifying growth points."
     ],
     requirementsRU: [
-      "Опыт работы креатором / сценаристом / продюсером от 2 лет",
-      "Портфолио успешных рекламных или контентных кейсов",
-      "Понимание психологии аудитории геймеров и гиков",
-      "Умение работать в сжатые сроки и структурировать хаос"
+      "Опыт работы в SMM или ведении блога.",
+      "Понимание современных социальных сетей и контентных трендов.",
+      "Грамотная устная и письменная речь.",
+      "Умение генерировать идеи и креативы.",
+      "Базовые навыки работы с графическими редакторами будут преимуществом.",
+      "(Будет плюсом) Опыт ведения Telegram, TikTok, Instagram, YouTube.",
+      "(Будет плюсом) Понимание influencer-маркетинга и рынка блогеров.",
+      "(Будет плюсом) Навыки монтажа видео или создания визуального контента."
     ],
     requirementsEN: [
-      "2+ years of experience as a Creator / Scriptwriter / Producer",
-      "Portfolio of successful advertising or content cases",
-      "Deep understanding of gaming/geek culture and audience psychology",
-      "Ability to work under tight deadlines and organize chaotic projects"
+      "Experience in SMM or blogging.",
+      "Understanding of modern social media networks and content trends.",
+      "Fluent and grammatically correct oral and written language.",
+      "Ability to generate ideas and creatives.",
+      "Basic skills with graphic editors is an advantage.",
+      "(Preferred) Experience managing Telegram, TikTok, Instagram, YouTube channels.",
+      "(Preferred) Understanding of influencer marketing and the influencer market.",
+      "(Preferred) Skills in video editing or visual content creation."
     ],
-    tagsRU: ["Креатив", "Сценарии", "Шоу"],
-    tagsEN: ["Creative", "Scripts", "Show"],
+    offersRU: [
+      "Удаленный формат работы.",
+      "Гибкий график.",
+      "Конкурентная оплата труда.",
+      "Возможность реализовывать собственные идеи и тестировать новые форматы свободно.",
+      "Работа в дружной команде.",
+      "Возможность профессионального роста внутри агентства."
+    ],
+    offersEN: [
+      "Remote work format.",
+      "Flexible schedule.",
+      "Competitive remuneration.",
+      "Opportunity to realize your own ideas and test new formats freely.",
+      "Work in a friendly team.",
+      "Opportunity for professional growth within the agency."
+    ],
+    tagsRU: ["Удаленно", "SMM", "Контент"],
+    tagsEN: ["Remote", "SMM", "Content"],
     accent: "pink"
   }
 ];
@@ -105,7 +161,7 @@ export default function Career() {
   const [formData, setFormData] = useState({
     name: '',
     contact: '',
-    vacancy: 'Influencer Manager',
+    vacancy: 'Influence Manager',
     portfolio: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -155,7 +211,7 @@ export default function Career() {
         setFormData({
           name: '',
           contact: '',
-          vacancy: 'Influencer Manager',
+          vacancy: 'Influence Manager',
           portfolio: ''
         });
       } else {
@@ -267,7 +323,7 @@ export default function Career() {
           </div>
 
           {/* Vacancy cards list */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
             {OPEN_VACANCIES.map((vac, i) => {
               const isExpanded = expandedVacancy === vac.title;
               return (
@@ -275,7 +331,7 @@ export default function Career() {
                   whileHover={{ y: -4 }}
                   key={vac.title}
                   onClick={() => setExpandedVacancy(prev => prev === vac.title ? null : vac.title)}
-                  className={`p-6 sm:p-8 bg-[#09090b] border-2 rounded-2xl flex flex-col justify-between transition-all duration-300 relative overflow-hidden group cursor-pointer ${
+                  className={`p-6 sm:p-8 bg-[#09090b] border-2 rounded-2xl flex flex-col justify-between transition-all duration-300 relative overflow-hidden group cursor-pointer h-fit self-start ${
                     vac.accent === 'lime' 
                       ? 'border-rage-brand/20 hover:border-rage-brand hover:shadow-[0_0_20px_rgba(172,255,42,0.15)]' 
                       : vac.accent === 'pink'
@@ -291,11 +347,13 @@ export default function Career() {
                       <span className="text-[10px] font-mono font-black uppercase text-white/40 tracking-wider">
                         {lang === 'RU' ? vac.typeRU : vac.typeEN}
                       </span>
-                      <span className={`text-[10px] font-mono font-bold uppercase tracking-wider ${
-                        vac.accent === 'lime' ? 'text-rage-brand' : vac.accent === 'pink' ? 'text-rage-pink' : 'text-white'
-                      }`}>
-                        {lang === 'RU' ? vac.salaryRU : vac.salaryEN}
-                      </span>
+                      {(lang === 'RU' ? vac.salaryRU : vac.salaryEN) && (
+                        <span className={`text-[10px] font-mono font-bold uppercase tracking-wider ${
+                          vac.accent === 'lime' ? 'text-rage-brand' : vac.accent === 'pink' ? 'text-rage-pink' : 'text-white'
+                        }`}>
+                          {lang === 'RU' ? vac.salaryRU : vac.salaryEN}
+                        </span>
+                      )}
                     </div>
 
                     <div className="flex items-center justify-between gap-2 mb-3">
@@ -345,6 +403,18 @@ export default function Career() {
                                 ))}
                               </ul>
                             </div>
+                            {vac.offersRU && vac.offersEN && (
+                              <div>
+                                <h4 className="font-bold uppercase tracking-wider text-[10px] text-rage-brand mb-1.5">
+                                  {lang === 'RU' ? 'Что предлагаем:' : 'What we offer:'}
+                                </h4>
+                                <ul className="list-disc list-inside space-y-1 pl-1 text-white/60">
+                                  {(lang === 'RU' ? vac.offersRU : vac.offersEN).map((item, idx) => (
+                                    <li key={idx}>{item}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
                           </div>
                         </motion.div>
                       )}

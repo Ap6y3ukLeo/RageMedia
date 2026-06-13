@@ -70,8 +70,8 @@ const CASES: CaseItem[] = [
     name: "War Thunder",
     categoryRU: "Медиа-кампания",
     categoryEN: "Media Campaign",
-    descRU: "Масштабный запуск и танковое шоу у топовых СНГ стримеров с интеграциями в геймплей.",
-    descEN: "Large-scale launch and tank show with top CIS streamers featuring gameplay integrations.",
+    descRU: "На регулярной основе реализуем рекламный бюджет через размещения у тематических авторов, тестируя новые форматы и связки с инфлюенсерами.",
+    descEN: "We regularly run advertising campaigns with gaming creators, testing new formats and influencer combinations.",
     resultsRU: "12M+ Охватов",
     resultsEN: "12M+ Reach",
     link: "#contacts",
@@ -83,8 +83,8 @@ const CASES: CaseItem[] = [
     name: "Zona51",
     categoryRU: "Спецпроект",
     categoryEN: "Special Project",
-    descRU: "Промо-кампания геймерских кресел и периферии с нативными интеграциями в стримы.",
-    descEN: "Promo campaign for gaming chairs and peripherals with native stream integrations.",
+    descRU: "Ежемесячно организуем размещения на бартерной основе более чем у 15 авторов, обеспечивая стабильное присутствие бренда в инфлюенс-маркетинге.",
+    descEN: "Monthly organize barter-based integrations with over 15 creators, ensuring a stable brand presence in influencer marketing.",
     resultsRU: "15k+ Продаж",
     resultsEN: "15k+ Sales",
     link: "#contacts",
@@ -96,8 +96,8 @@ const CASES: CaseItem[] = [
     name: "Playerok",
     categoryRU: "Инфлюенс-кампания",
     categoryEN: "Influence Campaign",
-    descRU: "Масштабный закуп рекламы на игровом маркетплейсе у молодых ютуберов и стримеров.",
-    descEN: "Large-scale ad buying on a gaming marketplace with young YouTubers and streamers.",
+    descRU: "Регулярно запускаем интеграции у релевантных авторов, тестируя различные рекламные форматы и подходы к подаче.",
+    descEN: "Regularly launch integrations with relevant creators, testing various ad formats and messaging angles.",
     resultsRU: "+180% Лидов",
     resultsEN: "+180% Leads",
     link: "#contacts",
@@ -109,8 +109,8 @@ const CASES: CaseItem[] = [
     name: "Block Blast",
     categoryRU: "Запуск",
     categoryEN: "Launch",
-    descRU: "Вирусный челлендж среди мобильных геймеров на прохождение рекордных уровней.",
-    descEN: "Viral challenge among mobile gamers to beat record levels.",
+    descRU: "Запустили кампанию с размещением рекламных роликов в коротком видеоконтенте (Shorts / TikTok).",
+    descEN: "Launched a campaign with video placements in short-form content (Shorts / TikTok).",
     resultsRU: "500k+ Установок",
     resultsEN: "500k+ Installs",
     link: "#contacts",
@@ -122,8 +122,8 @@ const CASES: CaseItem[] = [
     name: "Radmir RP",
     categoryRU: "Интеграция",
     categoryEN: "Integration",
-    descRU: "Массовое внедрение игровых кодов у популярных GTA-криэйторов с лайв-стримами.",
-    descEN: "Mass integration of game codes with popular GTA creators during live streams.",
+    descRU: "Запустили кампанию с полноценными рекламными роликами у релевантных авторов для целевой аудитории проекта.",
+    descEN: "Launched a campaign with full-length video integrations with creators relevant to the project's target audience.",
     resultsRU: "50k+ Игроков",
     resultsEN: "50k+ Players",
     link: "#contacts",
@@ -135,8 +135,8 @@ const CASES: CaseItem[] = [
     name: "100 Балльный Репетитор",
     categoryRU: "Продвижение",
     categoryEN: "Promotion",
-    descRU: "Креативная интеграция образовательной платформы в подростковые развлекательные блоги.",
-    descEN: "Creative integration of an educational platform into teen entertainment blogs.",
+    descRU: "Протестировали формат баннерных интеграций в коротких видео (Shorts / TikTok).",
+    descEN: "Tested banner integrations format in short-form videos (Shorts / TikTok).",
     resultsRU: "+250% Конверсия",
     resultsEN: "+250% Conversion",
     link: "#contacts",
@@ -148,8 +148,8 @@ const CASES: CaseItem[] = [
     name: "Ded VPN",
     categoryRU: "Коллаборация",
     categoryEN: "Collaboration",
-    descRU: "Инфлюенс-волна в поддержку свободного интернета с нативной рекламой безопасности.",
-    descEN: "Influence wave supporting free internet with native safety ads.",
+    descRU: "Привлекли аудиторию через интеграции на YouTube с акцентом на релевантные тематические площадки.",
+    descEN: "Acquired audience through YouTube integrations focusing on relevant niche channels.",
     resultsRU: "300k+ Лидов",
     resultsEN: "300k+ Leads",
     link: "#contacts",
@@ -161,8 +161,8 @@ const CASES: CaseItem[] = [
     name: "Arizona RP",
     categoryRU: "Медиа-кампания",
     categoryEN: "Media Campaign",
-    descRU: "Рекламный марафон у крупнейших летсплееров с уникальным промо-сервером.",
-    descEN: "Advertising marathon with top letsplayers featuring a unique promo server.",
+    descRU: "Реализовали размещение прероллов в контенте игровых нарезчиков стримеров.",
+    descEN: "Implemented pre-roll placements within gaming streamer highlight channels.",
     resultsRU: "80k+ Активаций",
     resultsEN: "80k+ Activations",
     link: "#contacts",
@@ -174,8 +174,8 @@ const CASES: CaseItem[] = [
     name: "Arknights Endfield",
     categoryRU: "Запуск",
     categoryEN: "Launch",
-    descRU: "Вирусная инфлюенс-кампания предстоящей 3D RPG игры с привлечением топовых аниме и гейминг блогеров.",
-    descEN: "Viral influencer campaign for the upcoming 3D RPG game, partnering with top anime and gaming creators.",
+    descRU: "Организовали размещения у профильных авторов в игровой тематике, обеспечив конкурентную стоимость размещений.",
+    descEN: "Organized placements with dedicated gaming creators, securing competitive ad rates.",
     resultsRU: "2.5M+ Предрегистраций",
     resultsEN: "2.5M+ Pre-registrations",
     link: "#contacts",
@@ -187,8 +187,8 @@ const CASES: CaseItem[] = [
     name: "NTE",
     categoryRU: "Спецпроект",
     categoryEN: "Special Project",
-    descRU: "Громкий анонс нового урбанистического экшена с интеграциями у крупнейших гейминг каналов.",
-    descEN: "High-profile announcement of the new urban action RPG game with integrations across major gaming channels.",
+    descRU: "Провели рекламную кампанию в ограниченные сроки на релизе проекта, пробив KPI, разместившись по 0,1 CPV",
+    descEN: "Conducted a time-restricted ad campaign at launch, beating KPIs with a 0.1 CPV rate.",
     resultsRU: "5M+ Просмотров",
     resultsEN: "5M+ Views",
     link: "#contacts",
@@ -233,18 +233,6 @@ const SERVICES = [
     color: "border-rage-brand",
     glowColor: "group-hover:shadow-[0_0_30px_rgba(172,255,42,0.25)]",
     tag: "blogger"
-  },
-  {
-    titleRU: "Продакшен",
-    titleEN: "Production",
-    detailRU: "Создаем контент, который цепляет.",
-    detailEN: "We create content that hooks viewers.",
-    icon: <Video size={28} />,
-    doodle: "🎬",
-    doodleText: "PROD",
-    color: "border-rage-pink",
-    glowColor: "group-hover:shadow-[0_0_30px_rgba(247,38,137,0.25)]",
-    tag: "production"
   },
   {
     titleRU: "Медиабаинг",
@@ -378,13 +366,15 @@ interface AutoScrollContainerProps {
   direction?: 'ltr' | 'rtl';
   speed?: number;
   className?: string;
+  showArrows?: boolean;
 }
 
 function AutoScrollContainer({
   children,
   direction = 'ltr',
   speed = 0.6,
-  className
+  className,
+  showArrows = false
 }: AutoScrollContainerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const isInteractingRef = useRef(false);
@@ -399,6 +389,39 @@ function AutoScrollContainer({
   const lastXRef = useRef(0);
   const lastTimeRef = useRef(0);
   const momentumRafRef = useRef<number | null>(null);
+  const interactionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const stopInteraction = () => {
+    if (interactionTimeoutRef.current) clearTimeout(interactionTimeoutRef.current);
+    interactionTimeoutRef.current = setTimeout(() => {
+      const container = containerRef.current;
+      if (container) {
+        let totalWidth = container.scrollWidth;
+        let visibleWidth = container.clientWidth;
+        let oneThird = totalWidth / 3;
+        const currentScroll = container.scrollLeft;
+        if (currentScroll >= oneThird * 2) {
+          container.scrollLeft -= oneThird;
+        } else if (currentScroll <= oneThird) {
+          container.scrollLeft += oneThird;
+        }
+      }
+      isInteractingRef.current = false;
+    }, 2000);
+  };
+
+  const handleManualScroll = (dir: 'left' | 'right') => {
+    const container = containerRef.current;
+    if (container) {
+      isInteractingRef.current = true;
+      if (interactionTimeoutRef.current) clearTimeout(interactionTimeoutRef.current);
+      if (momentumRafRef.current) cancelAnimationFrame(momentumRafRef.current);
+
+      const scrollOffset = dir === 'left' ? -380 : 380;
+      container.scrollBy({ left: scrollOffset, behavior: 'smooth' });
+      stopInteraction();
+    }
+  };
 
   useEffect(() => {
     const container = containerRef.current;
@@ -451,90 +474,26 @@ function AutoScrollContainer({
 
     rafRef.current = requestAnimationFrame(animate);
 
-    let interactionTimeout: NodeJS.Timeout | null = null;
-
-    const stopInteraction = () => {
-      if (interactionTimeout) clearTimeout(interactionTimeout);
-      interactionTimeout = setTimeout(() => {
-        wrapScroll();
-        isInteractingRef.current = false;
-      }, 2000);
-    };
-
-    // --- Touch drag (swipe) handlers ---
-    const handleTouchStart = (e: TouchEvent) => {
+    // --- Touch handlers (we let the browser handle native scrolling on mobile) ---
+    const handleTouchStart = () => {
       isInteractingRef.current = true;
-      isDraggingRef.current = true;
-      isHorizontalSwipeRef.current = null; // undecided
-      if (interactionTimeout) clearTimeout(interactionTimeout);
+      if (interactionTimeoutRef.current) clearTimeout(interactionTimeoutRef.current);
       if (momentumRafRef.current) cancelAnimationFrame(momentumRafRef.current);
-      startXRef.current = e.touches[0].clientX;
-      startYRef.current = e.touches[0].clientY;
-      scrollLeftStartRef.current = container.scrollLeft;
-      lastXRef.current = e.touches[0].clientX;
-      lastTimeRef.current = Date.now();
-      velocityRef.current = 0;
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (!isDraggingRef.current) return;
-      const x = e.touches[0].clientX;
-      const y = e.touches[0].clientY;
-
-      // On first significant move, decide direction
-      if (isHorizontalSwipeRef.current === null) {
-        const dx = Math.abs(x - startXRef.current);
-        const dy = Math.abs(y - startYRef.current);
-        if (dx + dy > 10) { // threshold
-          isHorizontalSwipeRef.current = dx > dy;
-          if (!isHorizontalSwipeRef.current) {
-            // Vertical scroll — abort drag, let browser handle
-            isDraggingRef.current = false;
-            stopInteraction();
-            return;
-          }
-        } else {
-          return; // wait for more movement
-        }
-      }
-
-      if (!isHorizontalSwipeRef.current) return;
-
-      const walk = startXRef.current - x;
-      container.scrollLeft = scrollLeftStartRef.current + walk;
-      // Track velocity for momentum
-      const now = Date.now();
-      const dt = now - lastTimeRef.current;
-      if (dt > 0) {
-        velocityRef.current = (lastXRef.current - x) / dt;
-      }
-      lastXRef.current = x;
-      lastTimeRef.current = now;
     };
 
     const handleTouchEnd = () => {
-      isDraggingRef.current = false;
-      // Apply momentum scrolling
-      let v = velocityRef.current * 15; // amplify velocity
-      const decel = 0.95;
-      const applyMomentum = () => {
-        if (Math.abs(v) < 0.5) {
-          stopInteraction();
-          return;
-        }
-        container.scrollLeft += v;
-        v *= decel;
-        wrapScroll();
-        momentumRafRef.current = requestAnimationFrame(applyMomentum);
-      };
-      momentumRafRef.current = requestAnimationFrame(applyMomentum);
+      stopInteraction();
+    };
+
+    const handleScroll = () => {
+      wrapScroll();
     };
 
     // --- Mouse drag handlers (desktop) ---
     const handleMouseDown = (e: MouseEvent) => {
       isInteractingRef.current = true;
       isDraggingRef.current = true;
-      if (interactionTimeout) clearTimeout(interactionTimeout);
+      if (interactionTimeoutRef.current) clearTimeout(interactionTimeoutRef.current);
       if (momentumRafRef.current) cancelAnimationFrame(momentumRafRef.current);
       startXRef.current = e.clientX;
       scrollLeftStartRef.current = container.scrollLeft;
@@ -587,8 +546,9 @@ function AutoScrollContainer({
     };
 
     container.addEventListener('touchstart', handleTouchStart, { passive: true });
-    container.addEventListener('touchmove', handleTouchMove, { passive: true });
     container.addEventListener('touchend', handleTouchEnd, { passive: true });
+    container.addEventListener('touchcancel', handleTouchEnd, { passive: true });
+    container.addEventListener('scroll', handleScroll, { passive: true });
     container.addEventListener('mousedown', handleMouseDown);
     container.addEventListener('mousemove', handleMouseMove);
     container.addEventListener('mouseup', handleMouseUp);
@@ -597,12 +557,13 @@ function AutoScrollContainer({
     return () => {
       window.removeEventListener('resize', updateDimensions);
       clearTimeout(timer);
-      if (interactionTimeout) clearTimeout(interactionTimeout);
+      if (interactionTimeoutRef.current) clearTimeout(interactionTimeoutRef.current);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       if (momentumRafRef.current) cancelAnimationFrame(momentumRafRef.current);
       container.removeEventListener('touchstart', handleTouchStart);
-      container.removeEventListener('touchmove', handleTouchMove);
       container.removeEventListener('touchend', handleTouchEnd);
+      container.removeEventListener('touchcancel', handleTouchEnd);
+      container.removeEventListener('scroll', handleScroll);
       container.removeEventListener('mousedown', handleMouseDown);
       container.removeEventListener('mousemove', handleMouseMove);
       container.removeEventListener('mouseup', handleMouseUp);
@@ -610,13 +571,55 @@ function AutoScrollContainer({
     };
   }, [direction, speed]);
 
+  const classes = className ? className.split(' ') : [];
+  const outerClasses = ['relative', 'group/scroll-container', 'w-screen', 'left-1/2', 'right-1/2', '-ml-[50vw]', '-mr-[50vw]', 'overflow-visible'];
+  const innerClasses = ['overflow-x-auto', 'scrollbar-none', 'flex', 'select-none', 'cursor-grab', 'active:cursor-grabbing', 'w-full'];
+
+  classes.forEach(c => {
+    if (c.startsWith('mb-') || c.startsWith('mt-') || c.startsWith('my-') || c.startsWith('m-')) {
+      outerClasses.push(c);
+    } else if (c.startsWith('p-') || c.startsWith('px-') || c.startsWith('py-') || c.startsWith('gap-')) {
+      innerClasses.push(c);
+    }
+  });
+
   return (
-    <div
-      ref={containerRef}
-      className={cn("overflow-x-auto scrollbar-none flex select-none cursor-grab active:cursor-grabbing", className)}
-      style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-y' }}
-    >
-      {children}
+    <div className={cn(outerClasses)}>
+      {/* Left Navigation Arrow (shown only on desktop on container hover) */}
+      {showArrows && (
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleManualScroll('left');
+          }}
+          className="absolute left-6 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-black/85 hover:bg-rage-brand text-white hover:text-black border border-white/10 hover:border-rage-brand flex items-center justify-center cursor-pointer shadow-[0_0_15px_rgba(0,0,0,0.5)] opacity-0 group-hover/scroll-container:opacity-100 transition-all duration-300 hidden md:flex active:scale-95 animate-fade-in"
+        >
+          <ChevronLeft size={20} />
+        </button>
+      )}
+
+      {/* Right Navigation Arrow (shown only on desktop on container hover) */}
+      {showArrows && (
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleManualScroll('right');
+          }}
+          className="absolute right-6 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-black/85 hover:bg-rage-brand text-white hover:text-black border border-white/10 hover:border-rage-brand flex items-center justify-center cursor-pointer shadow-[0_0_15px_rgba(0,0,0,0.5)] opacity-0 group-hover/scroll-container:opacity-100 transition-all duration-300 hidden md:flex active:scale-95 animate-fade-in"
+        >
+          <ChevronRight size={20} />
+        </button>
+      )}
+
+      <div
+        ref={containerRef}
+        className={cn(innerClasses)}
+        style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-y' }}
+      >
+        {children}
+      </div>
     </div>
   );
 }
@@ -1314,7 +1317,7 @@ export default function App() {
             <img
               src="/images/hero_megaphone_no_rage.png"
               alt="Rage Media Megaphone Artwork"
-              className="w-full h-full object-contain opacity-95 drop-shadow-[0_25px_80px_rgba(0,0,0,0.7)]"
+              className="w-full h-full object-contain opacity-95 drop-shadow-[0_25px_80px_rgba(0,0,0,0.7)] animate-megaphone-float"
             />
             {/* 2. Base static RAGE text */}
             <img
@@ -1422,6 +1425,7 @@ export default function App() {
           direction="ltr"
           speed={0.6}
           className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] py-4 px-6 gap-6"
+          showArrows={true}
         >
           {[...CASES, ...CASES, ...CASES].map((item, i) => {
             const originalIndex = CASES.findIndex(c => c.name === item.name);
@@ -1483,7 +1487,7 @@ export default function App() {
                   }}
                 />
                 <div className="flex flex-col items-center justify-center max-w-[85%] z-10 relative pointer-events-none">
-                  <span className="font-mono text-[9px] font-black uppercase tracking-widest block mb-0.5 opacity-70">
+                  <span className="font-mono text-base sm:text-lg md:text-xl font-black uppercase tracking-wider block mb-1 opacity-90">
                     {lang === 'RU' ? 'МЫ РЕАЛИЗОВАЛИ' : 'WE HAVE COMPLETED'}
                   </span>
                   <div className="font-display font-black text-5xl sm:text-6xl leading-none tracking-tighter mb-1.5 text-black">
@@ -1512,11 +1516,12 @@ export default function App() {
                     backgroundSize: "100% 100%",
                     backgroundPosition: "center",
                     backgroundRepeat: "no-repeat",
-                    backgroundColor: "transparent"
+                    backgroundColor: "transparent",
+                    filter: "hue-rotate(15deg) saturate(1.1) brightness(0.98)"
                   }}
                 />
-                <div className="flex flex-col items-center justify-center max-w-[85%] z-10 relative pointer-events-none -translate-y-4 sm:-translate-y-6">
-                  <span className="font-mono text-[9px] font-black uppercase tracking-widest block mb-0.5 opacity-70">
+                <div className="flex flex-col items-center justify-center max-w-[85%] z-10 relative pointer-events-none -translate-y-7 sm:-translate-y-9">
+                  <span className="font-mono text-base sm:text-lg md:text-xl font-black uppercase tracking-wider block mb-1 opacity-90">
                     {lang === 'RU' ? 'ЕЖЕМЕСЯЧНЫЙ ОХВАТ' : 'MONTHLY REACH'}
                   </span>
                   <div className="font-display font-black text-5xl sm:text-6xl leading-none tracking-tighter mb-1.5 text-black whitespace-nowrap flex items-baseline justify-center">
@@ -1524,7 +1529,7 @@ export default function App() {
                     <span className="text-xl sm:text-2xl ml-1 font-display font-black">{lang === 'RU' ? 'МЛН' : 'M'}</span>
                   </div>
                   <p className="font-sans font-black uppercase text-[10px] sm:text-xs tracking-tight leading-tight text-black/95">
-                    {lang === 'RU' ? 'Охвета аудитории на YouTube ежемесячно' : 'Audience reach on YouTube monthly'}
+                    {lang === 'RU' ? 'Охвата аудитории на YouTube ежемесячно' : 'Audience reach on YouTube monthly'}
                   </p>
                 </div>
               </motion.div>
@@ -1550,7 +1555,7 @@ export default function App() {
                   }}
                 />
                 <div className="flex flex-col items-center justify-center max-w-[85%] z-10 relative pointer-events-none">
-                  <span className="font-mono text-[9px] font-black uppercase tracking-widest block mb-0.5 opacity-70">
+                  <span className="font-mono text-base sm:text-lg md:text-xl font-black uppercase tracking-wider block mb-1 opacity-90">
                     {lang === 'RU' ? 'ЭКСКЛЮЗИВНЫЕ ЛИЦА' : 'EXCLUSIVE TALENTS'}
                   </span>
                   <div className="font-display font-black text-5xl sm:text-6xl leading-none tracking-tighter mb-1.5 text-black">
@@ -1605,7 +1610,7 @@ export default function App() {
               </div>
 
               {/* Service Cards from Reference Photo #3 layout */}
-              <div className="space-y-4 max-w-xl">
+              <div className="space-y-4 w-full max-w-3xl">
                 {SERVICES.map((srv, idx) => (
                   <motion.a
                     href="#contacts"
@@ -1622,7 +1627,7 @@ export default function App() {
                     onMouseLeave={() => setHoveredService(null)}
                     key={srv.titleRU}
                     whileHover={{ x: 8 }}
-                    className="flex flex-row items-center justify-between gap-4 min-h-[110px] sm:min-h-[132px] p-5 sm:p-6 relative select-none text-black cursor-pointer bg-transparent border-none shadow-none overflow-visible group"
+                    className="flex flex-row items-center justify-between gap-4 min-h-[135px] sm:min-h-[160px] p-6 sm:p-8 relative select-none text-black cursor-pointer bg-transparent border-none shadow-none overflow-visible group"
                     style={{
                       backgroundImage: `url('${hoveredService === idx ? getServicePaperImages(idx).hover : getServicePaperImages(idx).normal}')`,
                       backgroundSize: "100% 100%",
@@ -1639,7 +1644,7 @@ export default function App() {
                         <h3 className="font-display font-black text-base sm:text-lg uppercase tracking-tight text-black leading-tight">
                           {lang === 'RU' ? srv.titleRU : srv.titleEN}
                         </h3>
-                        <p className="text-black/75 text-xs sm:text-sm font-sans mt-0.5 max-w-[420px] font-medium leading-tight">
+                        <p className="text-black/75 text-xs sm:text-sm font-sans mt-0.5 max-w-[580px] font-medium leading-tight">
                           {lang === 'RU' ? srv.detailRU : srv.detailEN}
                         </p>
                       </div>
@@ -1800,7 +1805,7 @@ export default function App() {
             <div className="absolute top-4 left-[-35px] w-32 bg-rage-brand text-black text-[8px] font-mono font-black uppercase tracking-widest text-center py-1.5 rotate-[-45deg] border-y border-black/10 z-10">
               JOIN US
             </div>
-            <div className="absolute bottom-4 right-[-35px] w-32 bg-rage-pink text-white text-[8px] font-mono font-black uppercase tracking-widest text-center py-1.5 rotate-[-45deg] border-y border-white/10 z-10">
+            <div className="absolute bottom-4 right-[-35px] w-32 text-white text-[8px] font-mono font-black uppercase tracking-widest text-center py-1.5 rotate-[-45deg] border-y border-white/10 z-10" style={{ backgroundColor: '#FF00FF' }}>
               RAGE UNIT
             </div>
 
@@ -1810,7 +1815,7 @@ export default function App() {
 
             <div className="flex flex-col md:flex-row items-center justify-between gap-10 relative z-10">
               <div className="max-w-2xl text-center md:text-left">
-                <span className="font-hand font-bold text-lg text-rage-pink block mb-2 rotate-[-1deg]">
+                <span className="font-hand font-bold text-lg block mb-2 rotate-[-1deg]" style={{ color: '#FF00FF' }}>
                   // JOIN THE MOVEMENT
                 </span>
 
@@ -1818,12 +1823,12 @@ export default function App() {
                   {lang === 'RU' ? (
                     <>
                       СТРОИМ НЕ АГЕНТСТВО. <br />
-                      <span className="text-rage-pink" style={{ WebkitTextStroke: '1.5px black', paintOrder: 'stroke fill' }}>СТРОИМ КУЛЬТУРУ.</span>
+                      <span style={{ color: '#FF00FF', WebkitTextStroke: '1.5px black', paintOrder: 'stroke fill' }}>СТРОИМ КУЛЬТУРУ.</span>
                     </>
                   ) : (
                     <>
                       NOT BUILDING AN AGENCY. <br />
-                      <span className="text-rage-pink" style={{ WebkitTextStroke: '1.5px black', paintOrder: 'stroke fill' }}>BUILDING A CULTURE.</span>
+                      <span style={{ color: '#FF00FF', WebkitTextStroke: '1.5px black', paintOrder: 'stroke fill' }}>BUILDING A CULTURE.</span>
                     </>
                   )}
                 </h2>
@@ -1837,20 +1842,20 @@ export default function App() {
 
               {/* Action Button flyer style */}
               <div className="shrink-0 flex flex-col items-center gap-2">
-                <div className="px-8 py-4 bg-black text-white font-display font-black text-xs sm:text-sm uppercase tracking-wider rounded-md border-2 border-black shadow-[6px_6px_0px_#ACFF2A] group-hover:translate-y-[-2px] group-hover:shadow-[8px_8px_0px_#f72689] transition-all">
+                <div className="px-8 py-4 bg-black text-white font-display font-black text-xs sm:text-sm uppercase tracking-wider rounded-md border-2 border-black shadow-[6px_6px_0px_#ACFF2A] group-hover:translate-y-[-2px] group-hover:shadow-[8px_8px_0px_#FF00FF] transition-all">
                   {lang === 'RU' ? 'Карьера в Rage Media' : 'Career at Rage Media'}
                 </div>
 
                 {/* Hand-drawn graffiti element */}
                 <div className="flex flex-col items-center mt-1 select-none pointer-events-none">
                   {/* Sketchy hand-drawn arrows pointing up towards the button */}
-                  <svg className="w-16 h-8 text-rage-pink fill-none stroke-current animate-pulse" viewBox="0 0 60 20">
+                  <svg className="w-16 h-8 fill-none stroke-current animate-pulse" style={{ color: '#FF00FF' }} viewBox="0 0 60 20">
                     <path d="M15,16 Q12,8 18,3 M18,3 L12,2 M18,3 L20,9" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
                     <path d="M45,16 Q48,8 42,3 M42,3 L48,2 M42,3 L40,9" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
 
                   {/* Graffiti-style text: "вступай к нам" / "join us" */}
-                  <span className="font-hand font-black text-[22px] sm:text-2xl text-rage-pink rotate-[-3.5deg] tracking-wide leading-none mt-1">
+                  <span className="font-hand font-black text-[22px] sm:text-2xl rotate-[-3.5deg] tracking-wide leading-none mt-1" style={{ color: '#FF00FF' }}>
                     {lang === 'RU' ? 'вступай к нам' : 'join us'}
                   </span>
                 </div>
@@ -1884,7 +1889,7 @@ export default function App() {
                     <>
                       ГОТОВЫ СДЕЛАТЬ <br />
                       ЧТО-ТО ПО-НАСТОЯЩЕМУ <br />
-                      <span className="text-rage-pink underline decoration-[#ACFF2A] decoration-4 underline-offset-6">ГРОМКИЕ?</span>
+                      <span className="text-rage-pink underline decoration-[#ACFF2A] decoration-4 underline-offset-6">ГРОМКОЕ?</span>
                     </>
                   ) : (
                     <>
