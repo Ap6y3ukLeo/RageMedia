@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowUpRight, ArrowLeft, Send, CheckCircle, Briefcase, Zap, Sparkles } from 'lucide-react';
+import { ArrowUpRight, ArrowLeft, Send, CheckCircle, Briefcase, Zap, Sparkles, ChevronDown } from 'lucide-react';
 import RageLogo from '../components/RageLogo';
 
 interface Vacancy {
@@ -11,6 +11,10 @@ interface Vacancy {
   salaryEN: string;
   descRU: string;
   descEN: string;
+  responsibilitiesRU: string[];
+  responsibilitiesEN: string[];
+  requirementsRU: string[];
+  requirementsEN: string[];
   tagsRU: string[];
   tagsEN: string[];
   accent: 'lime' | 'pink' | 'white';
@@ -25,6 +29,32 @@ const OPEN_VACANCIES: Vacancy[] = [
     salaryEN: "from 120,000 ₽",
     descRU: "Поиск новых талантов, ведение переговоров, интеграция рекламодателей в гейминг блоги.",
     descEN: "Searching for new talent, negotiating, integrating advertisers into gaming blogs.",
+    responsibilitiesRU: [
+      "Поиск и привлечение игровых блогеров (YouTube, Twitch, Telegram)",
+      "Ведение переговоров и согласование условий сотрудничества",
+      "Контроль соблюдения дедлайнов и ТЗ блогерами",
+      "Анализ эффективности рекламных кампаний (CPM, CTR, CPA)",
+      "Выстраивание долгосрочных отношений с креаторами"
+    ],
+    responsibilitiesEN: [
+      "Finding and recruiting gaming influencers (YouTube, Twitch, Telegram)",
+      "Negotiating terms and finalizing cooperation agreements",
+      "Monitoring deadlines and ad brief compliance by creators",
+      "Analyzing campaign effectiveness (CPM, CTR, CPA)",
+      "Building long-term relationships with talent"
+    ],
+    requirementsRU: [
+      "Опыт работы в Influencer Marketing от 1 года (желательно в гейминг-сфере)",
+      "Понимание специфики платформ (YouTube, Twitch, TG, TikTok)",
+      "Отличные коммуникативные навыки, грамотность и стрессоустойчивость",
+      "Знание базовой игровой терминологии и трендов гейминга"
+    ],
+    requirementsEN: [
+      "1+ years of experience in Influencer Marketing (gaming industry preferred)",
+      "Strong understanding of social platforms (YouTube, Twitch, TG, TikTok)",
+      "Excellent communication skills, responsiveness, and stress-tolerance",
+      "Knowledge of gaming terminology and latest trends"
+    ],
     tagsRU: ["Майнкрафт", "Стримы", "YouTube"],
     tagsEN: ["Minecraft", "Streams", "YouTube"],
     accent: "lime"
@@ -37,38 +67,41 @@ const OPEN_VACANCIES: Vacancy[] = [
     salaryEN: "from 150,000 ₽",
     descRU: "Создание концепций для спецпроектов, написание сценариев интеграций, контроль продакшена.",
     descEN: "Creating concepts for special projects, writing integration scripts, production control.",
+    responsibilitiesRU: [
+      "Разработка креативных идей и концепций под брифы крупных брендов",
+      "Написание детальных сценариев интеграций и спецпроектов",
+      "Участие в съемках, контроль продакшена и монтажа роликов",
+      "Взаимодействие с блогерами по реализации сложных творческих ТЗ",
+      "Защита креативных концепций перед клиентами"
+    ],
+    responsibilitiesEN: [
+      "Developing creative concepts and ideas based on brand briefs",
+      "Writing detailed integration scripts and special project scenarios",
+      "Overseeing shoots, production, and video editing processes",
+      "Collaborating with influencers on complex creative tasks",
+      "Pitching and presenting creative concepts to clients"
+    ],
+    requirementsRU: [
+      "Опыт работы креатором / сценаристом / продюсером от 2 лет",
+      "Портфолио успешных рекламных или контентных кейсов",
+      "Понимание психологии аудитории геймеров и гиков",
+      "Умение работать в сжатые сроки и структурировать хаос"
+    ],
+    requirementsEN: [
+      "2+ years of experience as a Creator / Scriptwriter / Producer",
+      "Portfolio of successful advertising or content cases",
+      "Deep understanding of gaming/geek culture and audience psychology",
+      "Ability to work under tight deadlines and organize chaotic projects"
+    ],
     tagsRU: ["Креатив", "Сценарии", "Шоу"],
     tagsEN: ["Creative", "Scripts", "Show"],
     accent: "pink"
-  },
-  {
-    title: "Media Buyer (Gaming)",
-    typeRU: "Удалённо / Полный день",
-    typeEN: "Remote / Full-time",
-    salaryRU: "По результатам собеседования",
-    salaryEN: "Based on interview results",
-    descRU: "Закупка рекламного трафика, оптимизация KPI, работа с СНГ и зарубежным гейминг сегментом.",
-    descEN: "Purchasing ad traffic, optimizing KPIs, working with CIS and international gaming segment.",
-    tagsRU: ["Медиабаинг", "KPI", "Аналитика"],
-    tagsEN: ["Media Buying", "KPI", "Analytics"],
-    accent: "white"
-  },
-  {
-    title: "SMM / Content Lead",
-    typeRU: "Москва • Полный день",
-    typeEN: "Moscow • Full-time",
-    salaryRU: "от 100,000 ₽",
-    salaryEN: "from 100,000 ₽",
-    descRU: "Развитие собственного бренда RAGE MEDIA, создание вирусного контента для Telegram и соцсетей.",
-    descEN: "Developing RAGE MEDIA's own brand, creating viral content for Telegram and social networks.",
-    tagsRU: ["SMM", "Дизайн", "Копирайтинг"],
-    tagsEN: ["SMM", "Design", "Copywriting"],
-    accent: "lime"
   }
 ];
 
 export default function Career() {
   const [lang, setLang] = useState<'RU' | 'EN'>(() => (localStorage.getItem('rage_lang') as 'RU' | 'EN') || 'RU');
+  const [expandedVacancy, setExpandedVacancy] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     contact: '',
@@ -235,67 +268,118 @@ export default function Career() {
 
           {/* Vacancy cards list */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {OPEN_VACANCIES.map((vac, i) => (
-              <motion.div 
-                whileHover={{ y: -4 }}
-                key={vac.title}
-                className={`p-6 sm:p-8 bg-[#09090b] border-2 rounded-2xl flex flex-col justify-between transition-all duration-300 relative overflow-hidden group ${
-                  vac.accent === 'lime' 
-                    ? 'border-rage-brand/20 hover:border-rage-brand hover:shadow-[0_0_20px_rgba(172,255,42,0.15)]' 
-                    : vac.accent === 'pink'
-                    ? 'border-rage-pink/20 hover:border-rage-pink hover:shadow-[0_0_20px_rgba(255,0,255,0.15)]'
-                    : 'border-white/10 hover:border-white hover:shadow-[0_0_20px_rgba(255,255,255,0.1)]'
-                }`}
-              >
-                {/* Visual sticker tape look */}
-                <div className="absolute top-[-5px] right-6 w-12 h-4 bg-white/5 border border-white/5 backdrop-blur-xs select-none pointer-events-none rotate-[-4deg]" />
+            {OPEN_VACANCIES.map((vac, i) => {
+              const isExpanded = expandedVacancy === vac.title;
+              return (
+                <motion.div 
+                  whileHover={{ y: -4 }}
+                  key={vac.title}
+                  onClick={() => setExpandedVacancy(prev => prev === vac.title ? null : vac.title)}
+                  className={`p-6 sm:p-8 bg-[#09090b] border-2 rounded-2xl flex flex-col justify-between transition-all duration-300 relative overflow-hidden group cursor-pointer ${
+                    vac.accent === 'lime' 
+                      ? 'border-rage-brand/20 hover:border-rage-brand hover:shadow-[0_0_20px_rgba(172,255,42,0.15)]' 
+                      : vac.accent === 'pink'
+                      ? 'border-rage-pink/20 hover:border-rage-pink hover:shadow-[0_0_20px_rgba(247,38,137,0.15)]'
+                      : 'border-white/10 hover:border-white hover:shadow-[0_0_20px_rgba(255,255,255,0.1)]'
+                  }`}
+                >
+                  {/* Visual sticker tape look */}
+                  <div className="absolute top-[-5px] right-6 w-12 h-4 bg-white/5 border border-white/5 backdrop-blur-xs select-none pointer-events-none rotate-[-4deg]" />
 
-                <div>
-                  <div className="flex justify-between items-start mb-4">
-                    <span className="text-[10px] font-mono font-black uppercase text-white/40 tracking-wider">
-                      {lang === 'RU' ? vac.typeRU : vac.typeEN}
-                    </span>
-                    <span className={`text-[10px] font-mono font-bold uppercase tracking-wider ${
-                      vac.accent === 'lime' ? 'text-rage-brand' : vac.accent === 'pink' ? 'text-rage-pink' : 'text-white'
-                    }`}>
-                      {lang === 'RU' ? vac.salaryRU : vac.salaryEN}
-                    </span>
-                  </div>
-
-                  <h3 className="font-display font-black text-2xl uppercase tracking-tight text-white mb-3 group-hover:text-rage-brand transition-colors">
-                    {vac.title}
-                  </h3>
-
-                  <p className="text-white/50 text-xs sm:text-sm leading-relaxed mb-6 font-sans">
-                    {lang === 'RU' ? vac.descRU : vac.descEN}
-                  </p>
-                </div>
-
-                <div>
-                  <div className="flex flex-wrap gap-2 pt-4 border-t border-white/5 mb-6">
-                    {(lang === 'RU' ? vac.tagsRU : vac.tagsEN).map(tag => (
-                      <span key={tag} className="text-[9px] font-sans text-white/40 bg-white/5 px-2 py-0.5 border border-white/5 rounded-sm uppercase tracking-wider">
-                        {tag}
+                  <div>
+                    <div className="flex justify-between items-start mb-4">
+                      <span className="text-[10px] font-mono font-black uppercase text-white/40 tracking-wider">
+                        {lang === 'RU' ? vac.typeRU : vac.typeEN}
                       </span>
-                    ))}
+                      <span className={`text-[10px] font-mono font-bold uppercase tracking-wider ${
+                        vac.accent === 'lime' ? 'text-rage-brand' : vac.accent === 'pink' ? 'text-rage-pink' : 'text-white'
+                      }`}>
+                        {lang === 'RU' ? vac.salaryRU : vac.salaryEN}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between gap-2 mb-3">
+                      <h3 className="font-display font-black text-2xl uppercase tracking-tight text-white group-hover:text-rage-brand transition-colors">
+                        {vac.title}
+                      </h3>
+                      <motion.div
+                        animate={{ rotate: isExpanded ? 180 : 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="text-white/40 group-hover:text-white"
+                      >
+                        <ChevronDown size={20} />
+                      </motion.div>
+                    </div>
+
+                    <p className="text-white/50 text-xs sm:text-sm leading-relaxed mb-4 font-sans">
+                      {lang === 'RU' ? vac.descRU : vac.descEN}
+                    </p>
+
+                    <AnimatePresence initial={false}>
+                      {isExpanded && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="overflow-hidden mb-6"
+                        >
+                          <div className="space-y-4 pt-2 pb-4 text-xs font-sans text-white/70">
+                            <div>
+                              <h4 className="font-bold uppercase tracking-wider text-[10px] text-rage-brand mb-1.5">
+                                {lang === 'RU' ? 'Обязанности:' : 'Responsibilities:'}
+                              </h4>
+                              <ul className="list-disc list-inside space-y-1 pl-1 text-white/60">
+                                {(lang === 'RU' ? vac.responsibilitiesRU : vac.responsibilitiesEN).map((item, idx) => (
+                                  <li key={idx}>{item}</li>
+                                ))}
+                              </ul>
+                            </div>
+                            <div>
+                              <h4 className="font-bold uppercase tracking-wider text-[10px] text-rage-brand mb-1.5">
+                                {lang === 'RU' ? 'Требования:' : 'Requirements:'}
+                              </h4>
+                              <ul className="list-disc list-inside space-y-1 pl-1 text-white/60">
+                                {(lang === 'RU' ? vac.requirementsRU : vac.requirementsEN).map((item, idx) => (
+                                  <li key={idx}>{item}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
 
-                  <button 
-                    onClick={() => handleApply(vac.title)}
-                    className={`w-full py-3 rounded-xl font-display font-black text-xs uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-1.5 border cursor-pointer ${
-                      vac.accent === 'lime' 
-                        ? 'bg-rage-brand text-black border-black hover:shadow-[0_0_15px_#ACFF2A]' 
-                        : vac.accent === 'pink'
-                        ? 'bg-rage-pink text-white border-white hover:shadow-[0_0_15px_#FF00FF]'
-                        : 'bg-white text-black border-black hover:bg-white/90'
-                    }`}
-                  >
-                    <span>{lang === 'RU' ? 'ОТКЛИКНУТЬСЯ' : 'APPLY'}</span>
-                    <ArrowUpRight size={14} />
-                  </button>
-                </div>
-              </motion.div>
-            ))}
+                  <div>
+                    <div className="flex flex-wrap gap-2 pt-4 border-t border-white/5 mb-6">
+                      {(lang === 'RU' ? vac.tagsRU : vac.tagsEN).map(tag => (
+                        <span key={tag} className="text-[9px] font-sans text-white/40 bg-white/5 px-2 py-0.5 border border-white/5 rounded-sm uppercase tracking-wider">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleApply(vac.title);
+                      }}
+                      className={`w-full py-3 rounded-xl font-display font-black text-xs uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-1.5 border cursor-pointer ${
+                        vac.accent === 'lime' 
+                          ? 'bg-rage-brand text-black border-black hover:shadow-[0_0_15px_#ACFF2A]' 
+                          : vac.accent === 'pink'
+                          ? 'bg-rage-pink text-white border-white hover:shadow-[0_0_15px_#f72689]'
+                          : 'bg-white text-black border-black hover:bg-white/90'
+                      }`}
+                    >
+                      <span>{lang === 'RU' ? 'ОТКЛИКНУТЬСЯ' : 'APPLY'}</span>
+                      <ArrowUpRight size={14} />
+                    </button>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -368,12 +452,12 @@ export default function Career() {
 
                   <div>
                     <label className="text-[10px] font-mono font-black uppercase tracking-widest text-white/50 block mb-1">
-                      {lang === 'RU' ? 'TELEGRAM / TELEPHONE' : 'TELEGRAM / PHONE'}
+                      {lang === 'RU' ? 'TELEGRAM / VK' : 'TELEGRAM / VK'}
                     </label>
                     <input 
                       type="text" 
                       required
-                      placeholder={lang === 'RU' ? '@username или +7...' : '@username or +1...'}
+                      placeholder={lang === 'RU' ? '@username или ссылка на VK' : '@username or VK link'}
                       value={formData.contact}
                       onChange={e => setFormData(p => ({ ...p, contact: e.target.value }))}
                       className="w-full bg-white/[0.03] border border-white/10 px-4 py-3 text-white text-sm focus:border-rage-brand outline-none transition-colors rounded-xl"

@@ -243,7 +243,7 @@ const SERVICES = [
     doodle: "🎬",
     doodleText: "PROD",
     color: "border-rage-pink",
-    glowColor: "group-hover:shadow-[0_0_30px_rgba(255,0,255,0.25)]",
+    glowColor: "group-hover:shadow-[0_0_30px_rgba(247,38,137,0.25)]",
     tag: "production"
   },
   {
@@ -279,7 +279,7 @@ const SERVICES = [
     doodle: "⭐",
     doodleText: "LAUNCH",
     color: "border-rage-pink",
-    glowColor: "group-hover:shadow-[0_0_30px_rgba(255,0,255,0.25)]",
+    glowColor: "group-hover:shadow-[0_0_30px_rgba(247,38,137,0.25)]",
     tag: "projects"
   }
 ];
@@ -392,6 +392,8 @@ function AutoScrollContainer({
   // Drag/swipe tracking refs
   const isDraggingRef = useRef(false);
   const startXRef = useRef(0);
+  const startYRef = useRef(0);
+  const isHorizontalSwipeRef = useRef<boolean | null>(null);
   const scrollLeftStartRef = useRef(0);
   const velocityRef = useRef(0);
   const lastXRef = useRef(0);
@@ -463,9 +465,11 @@ function AutoScrollContainer({
     const handleTouchStart = (e: TouchEvent) => {
       isInteractingRef.current = true;
       isDraggingRef.current = true;
+      isHorizontalSwipeRef.current = null; // undecided
       if (interactionTimeout) clearTimeout(interactionTimeout);
       if (momentumRafRef.current) cancelAnimationFrame(momentumRafRef.current);
       startXRef.current = e.touches[0].clientX;
+      startYRef.current = e.touches[0].clientY;
       scrollLeftStartRef.current = container.scrollLeft;
       lastXRef.current = e.touches[0].clientX;
       lastTimeRef.current = Date.now();
@@ -475,6 +479,27 @@ function AutoScrollContainer({
     const handleTouchMove = (e: TouchEvent) => {
       if (!isDraggingRef.current) return;
       const x = e.touches[0].clientX;
+      const y = e.touches[0].clientY;
+
+      // On first significant move, decide direction
+      if (isHorizontalSwipeRef.current === null) {
+        const dx = Math.abs(x - startXRef.current);
+        const dy = Math.abs(y - startYRef.current);
+        if (dx + dy > 10) { // threshold
+          isHorizontalSwipeRef.current = dx > dy;
+          if (!isHorizontalSwipeRef.current) {
+            // Vertical scroll — abort drag, let browser handle
+            isDraggingRef.current = false;
+            stopInteraction();
+            return;
+          }
+        } else {
+          return; // wait for more movement
+        }
+      }
+
+      if (!isHorizontalSwipeRef.current) return;
+
       const walk = startXRef.current - x;
       container.scrollLeft = scrollLeftStartRef.current + walk;
       // Track velocity for momentum
@@ -589,7 +614,7 @@ function AutoScrollContainer({
     <div
       ref={containerRef}
       className={cn("overflow-x-auto scrollbar-none flex select-none cursor-grab active:cursor-grabbing", className)}
-      style={{ WebkitOverflowScrolling: 'touch' }}
+      style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-y' }}
     >
       {children}
     </div>
@@ -648,7 +673,7 @@ function BloggerCard({
         </h4>
         <div className="flex items-center gap-1 sm:gap-3 mt-0.5 sm:mt-1">
           <span className={cn(
-            "text-[8px] sm:text-[16px] font-sans uppercase font-black px-1 py-0.5 sm:px-2 sm:py-1 rounded-sm flex items-center justify-center border leading-none",
+            "text-[8px] sm:text-[16px] font-sans uppercase font-black px-1 py-0.5 sm:px-2 sm:py-1 rounded-sm flex items-center justify-center border leading-none shadow-sm ring-1 ring-black/20",
             blg.engagement === 'exclusive' ? "bg-rage-pink text-white border-rage-pink" : "bg-neutral-400 text-white border-neutral-400"
           )}>
             {blg.engagement === 'exclusive' ? 'Э' : 'П'}
@@ -748,14 +773,14 @@ function CaseCard({
             </div>
           )}
           <div>
-            <h3 className="font-display font-black text-xl sm:text-2xl uppercase tracking-tighter text-black leading-none mb-1">
+            <h3 className="font-display font-black text-2xl sm:text-3xl uppercase tracking-tighter text-black leading-none mb-1">
               {item.name}
             </h3>
           </div>
         </div>
 
         <div className="text-left mt-3 flex-grow">
-          <p className="text-black text-[13px] sm:text-[15px] line-clamp-3 leading-normal font-bold">
+          <p className="text-black text-sm sm:text-base line-clamp-3 leading-normal font-bold">
             {lang === 'RU' ? item.descRU : item.descEN}
           </p>
         </div>
@@ -850,10 +875,10 @@ function CaseModal({
 
           {/* Description Section */}
           <div className="border-t border-black/10 pt-6">
-            <h4 className="font-mono text-[10px] font-black uppercase tracking-widest text-black/40 mb-2">
+            <h4 className="font-mono text-xs font-black uppercase tracking-widest text-black/40 mb-2">
               {lang === 'RU' ? 'ОПИСАНИЕ КЕЙСА' : 'CASE DETAILS'}
             </h4>
-            <p className="text-black text-sm sm:text-base md:text-lg leading-relaxed font-sans font-bold">
+            <p className="text-black text-base sm:text-lg md:text-xl leading-relaxed font-sans font-bold">
               {lang === 'RU' ? item.descRU : item.descEN}
             </p>
           </div>
@@ -867,7 +892,7 @@ function CaseModal({
                 const formElement = document.getElementById('contacts');
                 if (formElement) formElement.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="px-8 py-3 bg-black text-white font-display font-black text-xs uppercase tracking-wider rounded-md border-2 border-black shadow-[4px_4px_0px_#ACFF2A] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_#FF00FF] transition-all cursor-pointer"
+              className="px-8 py-3 bg-black text-white font-display font-black text-xs uppercase tracking-wider rounded-md border-2 border-black shadow-[4px_4px_0px_#ACFF2A] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_#f72689] transition-all cursor-pointer"
             >
               {lang === 'RU' ? 'ХОЧУ ТАК ЖЕ' : 'I WANT THIS'}
             </button>
@@ -1350,7 +1375,7 @@ export default function App() {
               <a
                 href="#contacts"
                 onClick={() => setFormData(p => ({ ...p, role: 'blogger' }))}
-                className="px-8 py-3.5 bg-transparent border border-rage-pink text-rage-pink font-extrabold rounded-full uppercase tracking-wider text-xs sm:text-sm transition-all duration-300 hover:scale-105 hover:bg-rage-pink/5 hover:shadow-[0_0_25px_rgba(255,0,255,0.3)] active:scale-95 flex items-center gap-2 cursor-pointer"
+                className="px-8 py-3.5 bg-transparent border border-rage-pink text-rage-pink font-extrabold rounded-full uppercase tracking-wider text-xs sm:text-sm transition-all duration-300 hover:scale-105 hover:bg-rage-pink/5 hover:shadow-[0_0_25px_rgba(247,38,137,0.3)] active:scale-95 flex items-center gap-2 cursor-pointer"
               >
                 {lang === 'RU' ? 'Я блогер' : 'I am a blogger'}
                 <ArrowUpRight size={16} className="text-rage-pink" />
@@ -1381,7 +1406,7 @@ export default function App() {
 
       {/* 4. BLOCK 2. CASES (Reference Photo #1 styling & infinite automatic marquee) */}
       <section id="cases" className="py-28 px-6 bg-transparent border-b border-white/5 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,0,255,0.015)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(247,38,137,0.015)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
 
         <div className="container mx-auto mb-16 relative z-10">
           <span className="text-rage-brand font-mono text-xs font-black uppercase tracking-widest block mb-2">
@@ -1645,17 +1670,12 @@ export default function App() {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
             <div>
               <span className="text-rage-pink font-mono text-xs font-black uppercase tracking-widest block mb-2">
-                INFLUENCE NETWORK
+                OUR BLOGGERS
               </span>
               <h2 className="section-title text-white">
-                {lang === 'RU' ? 'Голоса, которые слышит рынок' : 'Voices the Market Hears'}
+                {lang === 'RU' ? 'Наши блогеры' : 'Our Bloggers'}
               </h2>
             </div>
-            <p className="text-white/50 text-sm max-w-sm leading-relaxed font-sans">
-              {lang === 'RU'
-                ? 'Наша собственная эксклюзивная сеть топ-креаторов, геймеров и летсплееров. Полный доступ к целевой аудитории.'
-                : 'Our own exclusive network of top creators, gamers, and letsplayers. Complete access to your target audience.'}
-            </p>
           </div>
         </div>
 
@@ -1721,8 +1741,8 @@ export default function App() {
               </h3>
               <p className="text-white/60 text-sm sm:text-base leading-relaxed font-sans max-w-lg">
                 {lang === 'RU'
-                  ? 'Получите полный медиакит и персональную подборку блогеров под ваш бренд прямо сейчас.'
-                  : 'Get the complete media kit and a customized selection of bloggers for your brand right now.'}
+                  ? 'Список носит ознакомительный характер. Запросите медиакит и персональную подборку блогеров под ваш бренд и портрет ЦА прямо сейчас.'
+                  : 'This list is for reference only. Request our media kit and a personalized blogger selection for your brand and target audience right now.'}
               </p>
             </div>
 
@@ -1778,7 +1798,7 @@ export default function App() {
 
             {/* Diagonal tape corner markings for underground look */}
             <div className="absolute top-4 left-[-35px] w-32 bg-rage-brand text-black text-[8px] font-mono font-black uppercase tracking-widest text-center py-1.5 rotate-[-45deg] border-y border-black/10 z-10">
-              CLOSED CLUB
+              JOIN US
             </div>
             <div className="absolute bottom-4 right-[-35px] w-32 bg-rage-pink text-white text-[8px] font-mono font-black uppercase tracking-widest text-center py-1.5 rotate-[-45deg] border-y border-white/10 z-10">
               RAGE UNIT
@@ -1798,12 +1818,12 @@ export default function App() {
                   {lang === 'RU' ? (
                     <>
                       СТРОИМ НЕ АГЕНТСТВО. <br />
-                      <span className="text-rage-pink drop-shadow-[0_0_15px_rgba(255,0,255,0.15)]">СТРОИМ КУЛЬТУРУ.</span>
+                      <span className="text-rage-pink" style={{ WebkitTextStroke: '1.5px black', paintOrder: 'stroke fill' }}>СТРОИМ КУЛЬТУРУ.</span>
                     </>
                   ) : (
                     <>
                       NOT BUILDING AN AGENCY. <br />
-                      <span className="text-rage-pink drop-shadow-[0_0_15px_rgba(255,0,255,0.15)]">BUILDING A CULTURE.</span>
+                      <span className="text-rage-pink" style={{ WebkitTextStroke: '1.5px black', paintOrder: 'stroke fill' }}>BUILDING A CULTURE.</span>
                     </>
                   )}
                 </h2>
@@ -1817,7 +1837,7 @@ export default function App() {
 
               {/* Action Button flyer style */}
               <div className="shrink-0 flex flex-col items-center gap-2">
-                <div className="px-8 py-4 bg-black text-white font-display font-black text-xs sm:text-sm uppercase tracking-wider rounded-md border-2 border-black shadow-[6px_6px_0px_#ACFF2A] group-hover:translate-y-[-2px] group-hover:shadow-[8px_8px_0px_#FF00FF] transition-all">
+                <div className="px-8 py-4 bg-black text-white font-display font-black text-xs sm:text-sm uppercase tracking-wider rounded-md border-2 border-black shadow-[6px_6px_0px_#ACFF2A] group-hover:translate-y-[-2px] group-hover:shadow-[8px_8px_0px_#f72689] transition-all">
                   {lang === 'RU' ? 'Карьера в Rage Media' : 'Career at Rage Media'}
                 </div>
 
@@ -1874,23 +1894,26 @@ export default function App() {
                     </>
                   )}
                 </h3>
-                <p className="text-white/50 text-sm max-w-sm leading-relaxed mt-6 font-sans">
-                  {lang === 'RU'
-                    ? 'Обсудим вашу задачу и покажем, как превратить внимание в конкретный результат.'
-                    : "Let's discuss your task and show you how to turn attention into concrete results."}
-                </p>
+
               </div>
 
               {/* Direct channels links */}
               <div className="space-y-4 font-display">
                 <a
-                  href="tel:+79991234567"
-                  className="flex items-center gap-4 text-sm sm:text-base font-bold hover:text-rage-brand transition-all group w-fit"
+                  href="https://vk.ru/rage_media"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-4 text-sm sm:text-base font-bold text-blue-400 hover:text-blue-300 transition-all group w-fit cursor-pointer"
                 >
-                  <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center bg-white/5 group-hover:border-rage-brand group-hover:text-rage-brand transition-all">
-                    <Phone size={14} />
+                  <div className="w-10 h-10 rounded-full border border-blue-500/20 flex items-center justify-center bg-blue-500/5 group-hover:bg-blue-500/10 group-hover:border-blue-400 transition-all">
+                    <Users size={14} />
                   </div>
-                  <span>+7 (999) 123-45-67</span>
+                  <div className="flex flex-col">
+                    <span className="font-mono text-[9px] uppercase tracking-wider text-blue-500 font-extrabold leading-none mb-1">
+                      VK
+                    </span>
+                    <span>vk.ru/rage_media</span>
+                  </div>
                 </a>
 
                 <a
@@ -2143,8 +2166,8 @@ export default function App() {
 
             <div className="flex flex-wrap justify-center gap-6">
               <a href="/career" className="hover:text-rage-brand transition-all">{lang === 'RU' ? 'Карьера у нас' : 'Careers'}</a>
-              <a href="#privacy" className="hover:text-white transition-all">{lang === 'RU' ? 'Политика конфиденциальности' : 'Privacy Policy'}</a>
-              <a href="#terms" className="hover:text-white transition-all">{lang === 'RU' ? 'Публичная оферта' : 'Terms of Service'}</a>
+              <a href="/privacy" className="hover:text-white transition-all">{lang === 'RU' ? 'Политика конфиденциальности' : 'Privacy Policy'}</a>
+              <a href="/terms" className="hover:text-white transition-all">{lang === 'RU' ? 'Публичная оферта' : 'Terms of Service'}</a>
             </div>
           </div>
         </div>
