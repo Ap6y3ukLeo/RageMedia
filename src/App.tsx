@@ -1487,9 +1487,6 @@ export default function App() {
                   }}
                 />
                 <div className="flex flex-col items-center justify-center max-w-[85%] z-10 relative pointer-events-none">
-                  <span className="font-mono text-base sm:text-lg md:text-xl font-black uppercase tracking-wider block mb-1 opacity-90">
-                    {lang === 'RU' ? 'МЫ РЕАЛИЗОВАЛИ' : 'WE HAVE COMPLETED'}
-                  </span>
                   <div className="font-display font-black text-5xl sm:text-6xl leading-none tracking-tighter mb-1.5 text-black">
                     <Counter value="100+" />
                   </div>
@@ -1520,10 +1517,7 @@ export default function App() {
                     filter: "hue-rotate(15deg) saturate(1.1) brightness(0.98)"
                   }}
                 />
-                <div className="flex flex-col items-center justify-center max-w-[85%] z-10 relative pointer-events-none -translate-y-7 sm:-translate-y-9">
-                  <span className="font-mono text-base sm:text-lg md:text-xl font-black uppercase tracking-wider block mb-1 opacity-90">
-                    {lang === 'RU' ? 'ЕЖЕМЕСЯЧНЫЙ ОХВАТ' : 'MONTHLY REACH'}
-                  </span>
+                <div className="flex flex-col items-center justify-center max-w-[85%] z-10 relative pointer-events-none">
                   <div className="font-display font-black text-5xl sm:text-6xl leading-none tracking-tighter mb-1.5 text-black whitespace-nowrap flex items-baseline justify-center">
                     <Counter value="50+" />
                     <span className="text-xl sm:text-2xl ml-1 font-display font-black">{lang === 'RU' ? 'МЛН' : 'M'}</span>
@@ -1555,9 +1549,6 @@ export default function App() {
                   }}
                 />
                 <div className="flex flex-col items-center justify-center max-w-[85%] z-10 relative pointer-events-none">
-                  <span className="font-mono text-base sm:text-lg md:text-xl font-black uppercase tracking-wider block mb-1 opacity-90">
-                    {lang === 'RU' ? 'ЭКСКЛЮЗИВНЫЕ ЛИЦА' : 'EXCLUSIVE TALENTS'}
-                  </span>
                   <div className="font-display font-black text-5xl sm:text-6xl leading-none tracking-tighter mb-1.5 text-black">
                     <Counter value="60+" />
                   </div>
@@ -1627,7 +1618,7 @@ export default function App() {
                     onMouseLeave={() => setHoveredService(null)}
                     key={srv.titleRU}
                     whileHover={{ x: 8 }}
-                    className="flex flex-row items-center justify-between gap-4 min-h-[135px] sm:min-h-[160px] p-6 sm:p-8 relative select-none text-black cursor-pointer bg-transparent border-none shadow-none overflow-visible group"
+                    className="flex flex-row items-center justify-between gap-3 sm:gap-4 min-h-[100px] sm:min-h-[160px] p-4 sm:p-8 relative select-none text-black cursor-pointer bg-transparent border-none shadow-none overflow-visible group"
                     style={{
                       backgroundImage: `url('${hoveredService === idx ? getServicePaperImages(idx).hover : getServicePaperImages(idx).normal}')`,
                       backgroundSize: "100% 100%",
@@ -1635,25 +1626,25 @@ export default function App() {
                       backgroundRepeat: "no-repeat"
                     }}
                   >
-                    <div className="flex items-center gap-4 relative z-10">
-                      <div className={cn("w-12 h-12 rounded-lg flex items-center justify-center border transition-all duration-300", getServicePaperImages(idx).iconBg, getServicePaperImages(idx).textColor)}>
+                    <div className="flex items-center gap-3 sm:gap-4 relative z-10">
+                      <div className={cn("w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex-shrink-0 flex items-center justify-center border transition-all duration-300", getServicePaperImages(idx).iconBg, getServicePaperImages(idx).textColor)}>
                         {srv.icon}
                       </div>
 
                       <div>
-                        <h3 className="font-display font-black text-base sm:text-lg uppercase tracking-tight text-black leading-tight">
+                        <h3 className="font-display font-black text-sm sm:text-lg uppercase tracking-tight text-black leading-tight">
                           {lang === 'RU' ? srv.titleRU : srv.titleEN}
                         </h3>
-                        <p className="text-black/75 text-xs sm:text-sm font-sans mt-0.5 max-w-[580px] font-medium leading-tight">
+                        <p className="text-black/75 text-[11px] sm:text-sm font-sans mt-0.5 max-w-[580px] font-medium leading-tight">
                           {lang === 'RU' ? srv.detailRU : srv.detailEN}
                         </p>
                       </div>
                     </div>
 
                     {/* Doodle graphic overlay matching photo #3 */}
-                    <div className="flex items-center gap-3 relative z-10 self-center sm:self-auto">
-                      <div className={cn("w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-300", getServicePaperImages(idx).arrowBg)}>
-                        <ArrowUpRight size={16} className={cn("transition-transform duration-300", hoveredService === idx && "rotate-45")} />
+                    <div className="flex items-center gap-2 sm:gap-3 relative z-10 self-center sm:self-auto flex-shrink-0">
+                      <div className={cn("w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center border transition-all duration-300", getServicePaperImages(idx).arrowBg)}>
+                        <ArrowUpRight size={14} className={cn("transition-transform duration-300", hoveredService === idx && "rotate-45")} />
                       </div>
                     </div>
                   </motion.a>
@@ -1903,7 +1894,7 @@ export default function App() {
               </div>
 
               {/* Direct channels links */}
-              <div className="space-y-4 font-display">
+              <div className="hidden lg:block space-y-4 font-display">
                 <a
                   href="https://vk.ru/rage_media"
                   target="_blank"
@@ -1952,9 +1943,10 @@ export default function App() {
             </div>
 
             {/* Right Col: Interactive dynamic form matching Photo #5 */}
-            <div className="lg:col-span-7 bg-[#0b0b0d] border border-white/10 rounded-2xl p-6 sm:p-10 shadow-2xl relative">
+            <div className="lg:col-span-7 flex flex-col gap-6">
+              <div className="bg-[#0b0b0d] border border-white/10 rounded-2xl p-6 sm:p-10 shadow-2xl relative w-full">
 
-              {/* Form submit response state */}
+                {/* Form submit response state */}
               {submitStatus === 'success' ? (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
@@ -2160,7 +2152,46 @@ export default function App() {
               )}
 
             </div>
+
+            {/* Mobile-only contacts row */}
+            <div className="lg:hidden flex flex-row flex-wrap items-center justify-center gap-5 sm:gap-6 font-display pt-2">
+              <a
+                href="https://vk.ru/rage_media"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-xs font-bold text-blue-400 hover:text-blue-300 transition-all group cursor-pointer"
+              >
+                <div className="w-8 h-8 rounded-full border border-blue-500/20 flex items-center justify-center bg-blue-500/5 group-hover:bg-blue-500/10 group-hover:border-blue-400 transition-all flex-shrink-0">
+                  <Users size={12} />
+                </div>
+                <span>VK</span>
+              </a>
+
+              <a
+                href="https://t.me/RageAds"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-xs font-bold text-sky-400 hover:text-sky-300 transition-all group cursor-pointer"
+              >
+                <div className="w-8 h-8 rounded-full border border-sky-500/20 flex items-center justify-center bg-sky-500/5 group-hover:bg-sky-500/10 group-hover:border-sky-400 transition-all flex-shrink-0">
+                  <Send size={12} />
+                </div>
+                <span>Telegram</span>
+              </a>
+
+              <a
+                href="mailto:hello@ragemedia.ru"
+                className="flex items-center gap-2 text-xs font-bold text-white hover:text-rage-pink transition-all group"
+              >
+                <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center bg-white/5 group-hover:border-rage-pink group-hover:text-rage-pink transition-all flex-shrink-0">
+                  <Mail size={12} />
+                </div>
+                <span>hello@ragemedia.ru</span>
+              </a>
+            </div>
+
           </div>
+        </div>
 
           {/* Footer bottom legal references row matching Photo #5 */}
           <div className="pt-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6 text-white/40 text-xs font-mono">
