@@ -302,11 +302,6 @@ export default function Career() {
             )}
           </h1>
 
-          <p className="text-white/60 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed font-sans">
-            {lang === 'RU'
-              ? 'Мы не просто закупаем рекламу. Мы формируем тренды гейминг сообщества и продвигаем культуру креаторов. Ищешь закрытый клуб сильных профессионалов? Присоединяйся.'
-              : "We don't just buy advertising. We shape gaming community trends and promote creator culture. Looking for a closed club of strong professionals? Join us."}
-          </p>
         </div>
       </section>
 

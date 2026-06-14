@@ -1513,8 +1513,7 @@ export default function App() {
                     backgroundSize: "100% 100%",
                     backgroundPosition: "center",
                     backgroundRepeat: "no-repeat",
-                    backgroundColor: "transparent",
-                    filter: "hue-rotate(15deg) saturate(1.1) brightness(0.98)"
+                    backgroundColor: "transparent"
                   }}
                 />
                 <div className="flex flex-col items-center justify-center max-w-[85%] z-10 relative pointer-events-none">
@@ -1618,24 +1617,32 @@ export default function App() {
                     onMouseLeave={() => setHoveredService(null)}
                     key={srv.titleRU}
                     whileHover={{ x: 8 }}
-                    className="flex flex-row items-center justify-between gap-3 sm:gap-4 min-h-[100px] sm:min-h-[160px] p-4 sm:p-8 relative select-none text-black cursor-pointer bg-transparent border-none shadow-none overflow-visible group"
-                    style={{
-                      backgroundImage: `url('${hoveredService === idx ? getServicePaperImages(idx).hover : getServicePaperImages(idx).normal}')`,
-                      backgroundSize: "100% 100%",
-                      backgroundPosition: "center",
-                      backgroundRepeat: "no-repeat"
-                    }}
+                    className="flex flex-row items-center justify-between gap-2.5 sm:gap-4 min-h-[90px] sm:min-h-[160px] py-3 px-4 sm:p-8 relative select-none text-black cursor-pointer bg-transparent border-none shadow-none overflow-visible group"
                   >
-                    <div className="flex items-center gap-3 sm:gap-4 relative z-10">
-                      <div className={cn("w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex-shrink-0 flex items-center justify-center border transition-all duration-300", getServicePaperImages(idx).iconBg, getServicePaperImages(idx).textColor)}>
-                        {srv.icon}
+                    {/* Background image container that changes to crumpled version on hover */}
+                    <div
+                      className="absolute inset-0 z-0 transition-all duration-300 pointer-events-none"
+                      style={{
+                        backgroundImage: `url('${hoveredService === idx ? getServicePaperImages(idx).hover : getServicePaperImages(idx).normal}')`,
+                        backgroundSize: "100% 100%",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                        backgroundColor: "transparent"
+                      }}
+                    />
+
+                    <div className="flex items-center gap-2 sm:gap-4 relative z-10">
+                      <div className={cn("w-8.5 h-8.5 sm:w-12 sm:h-12 rounded-lg flex-shrink-0 flex items-center justify-center border transition-all duration-300", getServicePaperImages(idx).iconBg, getServicePaperImages(idx).textColor)}>
+                        <div className="scale-[0.8] sm:scale-100 flex items-center justify-center">
+                          {srv.icon}
+                        </div>
                       </div>
 
                       <div>
-                        <h3 className="font-display font-black text-sm sm:text-lg uppercase tracking-tight text-black leading-tight">
+                        <h3 className="font-display font-black text-[13px] sm:text-lg uppercase tracking-tight text-black leading-tight">
                           {lang === 'RU' ? srv.titleRU : srv.titleEN}
                         </h3>
-                        <p className="text-black/75 text-[11px] sm:text-sm font-sans mt-0.5 max-w-[580px] font-medium leading-tight">
+                        <p className="text-black/75 text-[10px] sm:text-sm font-sans mt-0.5 max-w-[580px] font-medium leading-tight">
                           {lang === 'RU' ? srv.detailRU : srv.detailEN}
                         </p>
                       </div>
@@ -1643,8 +1650,8 @@ export default function App() {
 
                     {/* Doodle graphic overlay matching photo #3 */}
                     <div className="flex items-center gap-2 sm:gap-3 relative z-10 self-center sm:self-auto flex-shrink-0">
-                      <div className={cn("w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center border transition-all duration-300", getServicePaperImages(idx).arrowBg)}>
-                        <ArrowUpRight size={14} className={cn("transition-transform duration-300", hoveredService === idx && "rotate-45")} />
+                      <div className={cn("w-7.5 h-7.5 sm:w-10 sm:h-10 rounded-full flex items-center justify-center border transition-all duration-300", getServicePaperImages(idx).arrowBg)}>
+                        <ArrowUpRight size={12} className={cn("transition-transform duration-300 sm:scale-100 scale-[0.8]", hoveredService === idx && "rotate-45")} />
                       </div>
                     </div>
                   </motion.a>
@@ -1810,21 +1817,21 @@ export default function App() {
                   // JOIN THE MOVEMENT
                 </span>
 
-                <h2 className="font-display font-black text-3.5xl sm:text-5xl md:text-6xl leading-[0.85] uppercase tracking-tighter text-black mb-6">
+                <h2 className="font-display font-black text-[38px] sm:text-5xl md:text-6xl leading-[0.85] uppercase tracking-tighter text-black mb-6">
                   {lang === 'RU' ? (
                     <>
                       СТРОИМ НЕ АГЕНТСТВО. <br />
-                      <span style={{ color: '#FF00FF', WebkitTextStroke: '1.5px black', paintOrder: 'stroke fill' }}>СТРОИМ КУЛЬТУРУ.</span>
+                      <span style={{ color: '#FF00FF' }}>СТРОИМ КУЛЬТУРУ.</span>
                     </>
                   ) : (
                     <>
                       NOT BUILDING AN AGENCY. <br />
-                      <span style={{ color: '#FF00FF', WebkitTextStroke: '1.5px black', paintOrder: 'stroke fill' }}>BUILDING A CULTURE.</span>
+                      <span style={{ color: '#FF00FF' }}>BUILDING A CULTURE.</span>
                     </>
                   )}
                 </h2>
 
-                <p className="text-black/80 text-sm sm:text-base leading-relaxed font-sans font-medium max-w-lg">
+                <p className="text-black/80 text-[13px] sm:text-base leading-relaxed font-sans font-medium max-w-lg">
                   {lang === 'RU'
                     ? 'Если тебе близок наш подход — нам есть о чем поговорить. Мы ищем тех, кто готов гореть проектами и выходить за рамки.'
                     : 'If you share our approach, we should talk. We are looking for those ready to burn for projects and push boundaries.'}
