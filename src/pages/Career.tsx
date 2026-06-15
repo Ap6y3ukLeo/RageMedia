@@ -196,19 +196,62 @@ export default function Career() {
       : `💼 RAGE MEDIA Job Application!\n👤 Name: ${formData.name}\n📋 Vacancy: ${formData.vacancy}\n📞 Contacts: ${formData.contact}\n🔗 CV/Portfolio: ${formData.portfolio || 'Not specified'}`;
 
     try {
-      const token = import.meta.env.VITE_TELEGRAM_BOT_TOKEN || '8661662093:AAEGFaoQuvZfuoDY-NPf3I59u4NRzk_jbS4';
-      const chatId = import.meta.env.VITE_TELEGRAM_CHAT_ID || '7592708940';
+      const getProxyUrl = () => {
+        const path = window.location.pathname;
+        let root = path;
+        if (path.endsWith('/career')) {
+          root = path.slice(0, -7);
+        } else if (path.endsWith('/privacy')) {
+          root = path.slice(0, -8);
+        } else if (path.endsWith('/terms')) {
+          root = path.slice(0, -6);
+        }
+        if (!root.endsWith('/')) {
+          root += '/';
+        }
+        return root + 'send-message.php';
+      };
 
-      const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          chat_id: chatId,
-          text: message,
-        }),
-      });
+      let response;
+      try {
+        response = await fetch(getProxyUrl(), {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            text: message,
+          }),
+        });
+      } catch (err) {
+        const token = import.meta.env.VITE_TELEGRAM_BOT_TOKEN || '8661662093:AAEGFaoQuvZfuoDY-NPf3I59u4NRzk_jbS4';
+        const chatId = import.meta.env.VITE_TELEGRAM_CHAT_ID || '7592708940';
+        response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: message,
+          }),
+        });
+      }
+
+      if (response.status === 404) {
+        const token = import.meta.env.VITE_TELEGRAM_BOT_TOKEN || '8661662093:AAEGFaoQuvZfuoDY-NPf3I59u4NRzk_jbS4';
+        const chatId = import.meta.env.VITE_TELEGRAM_CHAT_ID || '7592708940';
+        response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: message,
+          }),
+        });
+      }
 
       if (response.ok) {
         setSubmitSuccess(true);

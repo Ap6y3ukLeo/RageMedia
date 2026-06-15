@@ -1076,19 +1076,62 @@ export default function App() {
       : `⚡️ New RAGE MEDIA Request!\n👤 Name: ${formData.name}\n🏷 Role: ${typeText}\n📞 Contacts: ${formData.contact}${detailText}`;
 
     try {
-      const token = import.meta.env.VITE_TELEGRAM_BOT_TOKEN || '8661662093:AAEGFaoQuvZfuoDY-NPf3I59u4NRzk_jbS4';
-      const chatId = import.meta.env.VITE_TELEGRAM_CHAT_ID || '7592708940';
+      const getProxyUrl = () => {
+        const path = window.location.pathname;
+        let root = path;
+        if (path.endsWith('/career')) {
+          root = path.slice(0, -7);
+        } else if (path.endsWith('/privacy')) {
+          root = path.slice(0, -8);
+        } else if (path.endsWith('/terms')) {
+          root = path.slice(0, -6);
+        }
+        if (!root.endsWith('/')) {
+          root += '/';
+        }
+        return root + 'send-message.php';
+      };
 
-      const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          chat_id: chatId,
-          text: message,
-        }),
-      });
+      let response;
+      try {
+        response = await fetch(getProxyUrl(), {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            text: message,
+          }),
+        });
+      } catch (err) {
+        const token = import.meta.env.VITE_TELEGRAM_BOT_TOKEN || '8661662093:AAEGFaoQuvZfuoDY-NPf3I59u4NRzk_jbS4';
+        const chatId = import.meta.env.VITE_TELEGRAM_CHAT_ID || '7592708940';
+        response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: message,
+          }),
+        });
+      }
+
+      if (response.status === 404) {
+        const token = import.meta.env.VITE_TELEGRAM_BOT_TOKEN || '8661662093:AAEGFaoQuvZfuoDY-NPf3I59u4NRzk_jbS4';
+        const chatId = import.meta.env.VITE_TELEGRAM_CHAT_ID || '7592708940';
+        response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: message,
+          }),
+        });
+      }
 
       if (response.ok) {
         setSubmitStatus('success');
@@ -2007,8 +2050,8 @@ export default function App() {
                   </h4>
                   <p className="text-white/60 text-sm max-w-sm mx-auto mb-8 font-sans">
                     {lang === 'RU'
-                      ? 'Спасибо! Наш менеджер уже связывается с вами. Мы вернемся с аналитикой в течение 15 минут.'
-                      : "Thank you! Our manager is already reaching out to you. We'll get back to you with analytics within 15 minutes."}
+                      ? 'Спасибо! Наш менеджер уже связывается с вами. Мы вернёмся с обратной связью в ближайшее время.'
+                      : "Thank you! Our manager is already reaching out to you. We'll get back to you with feedback shortly."}
                   </p>
                   <button
                     onClick={() => setSubmitStatus('idle')}
