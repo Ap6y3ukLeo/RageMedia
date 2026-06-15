@@ -16,7 +16,6 @@ import {
   Zap,
   Sparkles,
   Phone,
-  Mail,
   CheckCircle,
   HelpCircle,
   Megaphone,
@@ -1958,16 +1957,6 @@ export default function App() {
                   </div>
                 </a>
 
-                <a
-                  href="mailto:hello@ragemedia.ru"
-                  className="flex items-center gap-4 text-sm sm:text-base font-bold hover:text-rage-pink transition-all group w-fit"
-                >
-                  <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center bg-white/5 group-hover:border-rage-pink group-hover:text-rage-pink transition-all">
-                    <Mail size={14} />
-                  </div>
-                  <span>hello@ragemedia.ru</span>
-                </a>
-
                 {/* Direct Telegram link */}
                 <a
                   href="https://t.me/RageAds"
@@ -2225,15 +2214,6 @@ export default function App() {
                 <span>Telegram</span>
               </a>
 
-              <a
-                href="mailto:hello@ragemedia.ru"
-                className="flex items-center gap-2 text-xs font-bold text-white hover:text-rage-pink transition-all group"
-              >
-                <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center bg-white/5 group-hover:border-rage-pink group-hover:text-rage-pink transition-all flex-shrink-0">
-                  <Mail size={12} />
-                </div>
-                <span>hello@ragemedia.ru</span>
-              </a>
             </div>
 
           </div>
