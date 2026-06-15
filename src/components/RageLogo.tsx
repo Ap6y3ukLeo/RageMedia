@@ -8,10 +8,14 @@ export default function RageLogo({ className = "" }: RageLogoProps) {
   return (
     <div className={`relative select-none flex items-center ${className}`}>
       <img 
-        src="/images/rage_logo_uploaded.png" 
+        src="/images/rage_logo_uploaded.webp" 
         alt="Rage Media Logo" 
         className="h-12 sm:h-15 w-auto object-contain"
         referrerPolicy="no-referrer"
+        width={625}
+        height={427}
+        loading="eager"
+        fetchPriority="high"
       />
     </div>
   );

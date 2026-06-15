@@ -217,7 +217,7 @@ export function LogoLoader({ onComplete }: { onComplete: () => void }) {
                   }}
                   transition={{ duration: 0.15 }}
                 >
-                  <img src="/images/rage_logo_uploaded.png" alt="" className="w-full h-auto object-contain pointer-events-none" />
+                  <img src="/images/rage_logo_uploaded.webp" alt="" className="w-full h-auto object-contain pointer-events-none" width={625} height={427} loading="eager" fetchPriority="high" />
                 </motion.div>
 
                 <motion.div
@@ -229,7 +229,7 @@ export function LogoLoader({ onComplete }: { onComplete: () => void }) {
                   }}
                   transition={{ duration: 0.15 }}
                 >
-                  <img src="/images/rage_logo_uploaded.png" alt="" className="w-full h-auto object-contain pointer-events-none" />
+                  <img src="/images/rage_logo_uploaded.webp" alt="" className="w-full h-auto object-contain pointer-events-none" width={625} height={427} loading="eager" fetchPriority="high" />
                 </motion.div>
 
                 <motion.div
@@ -237,7 +237,7 @@ export function LogoLoader({ onComplete }: { onComplete: () => void }) {
                   animate={logoAnimate}
                   transition={{ duration: 0.2 }}
                 >
-                  <img src="/images/rage_logo_uploaded.png" alt="Rage Media" className="w-full h-auto object-contain select-none" />
+                  <img src="/images/rage_logo_uploaded.webp" alt="Rage Media" className="w-full h-auto object-contain select-none" width={625} height={427} loading="eager" fetchPriority="high" />
                 </motion.div>
               </div>
 

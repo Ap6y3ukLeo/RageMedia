@@ -325,39 +325,39 @@ function Counter({ value, duration = 1.5 }: { value: string; duration?: number }
 
 // --- Brand and Collaboration Logos mapping ---
 const BLOGGER_AVATARS: Record<string, string> = {
-  "Магмуст": "/images/magmust_logo.jpg",
-  "Mud Flaps На Русском": "/images/mudflaps_logo.jpg",
-  "Краун4к": "/images/kraunchik_logo.jpg",
-  "EnoT": "/images/enot_logo.jpg",
-  "Honey": "/images/honey_logo.jpg",
-  "Неркин": "/images/av_u2uq5_logo.jpg",
-  "Tearz": "/images/tearz_logo.jpg",
-  "ReyZone": "/images/reyzone_logo.jpg",
-  "Soilinf": "/images/soilinf_logo.jpg",
-  "Шут": "/images/av_hk47u6_logo.jpg",
-  "Лолотрек": "/images/av_icq1u_logo.jpg",
-  "Гельмо": "/images/av_3li6bs_logo.jpg",
-  "Нео": "/images/av_tbmyvd_logo.jpg",
-  "PWGood": "/images/pwgood_logo.jpg",
-  "40 Литров Пива": "/images/40_logo.jpg",
-  "SKIJL": "/images/skijl_logo.jpg",
-  "Квист": "/images/av_584l4_logo.jpg",
-  "Мэншен": "/images/av_iabpv_logo.jpg",
-  "KtoWho": "/images/ktowho_logo.jpg",
-  "Myles На Русском": "/images/myles_logo.jpg"
+  "Магмуст": "/images/magmust_logo.webp",
+  "Mud Flaps На Русском": "/images/mudflaps_logo.webp",
+  "Краун4к": "/images/kraunchik_logo.webp",
+  "EnoT": "/images/enot_logo.webp",
+  "Honey": "/images/honey_logo.webp",
+  "Неркин": "/images/av_u2uq5_logo.webp",
+  "Tearz": "/images/tearz_logo.webp",
+  "ReyZone": "/images/reyzone_logo.webp",
+  "Soilinf": "/images/soilinf_logo.webp",
+  "Шут": "/images/av_hk47u6_logo.webp",
+  "Лолотрек": "/images/av_icq1u_logo.webp",
+  "Гельмо": "/images/av_3li6bs_logo.webp",
+  "Нео": "/images/av_tbmyvd_logo.webp",
+  "PWGood": "/images/pwgood_logo.webp",
+  "40 Литров Пива": "/images/40_logo.webp",
+  "SKIJL": "/images/skijl_logo.webp",
+  "Квист": "/images/av_584l4_logo.webp",
+  "Мэншен": "/images/av_iabpv_logo.webp",
+  "KtoWho": "/images/ktowho_logo.webp",
+  "Myles На Русском": "/images/myles_logo.webp"
 };
 
 const CASE_LOGOS: Record<string, string> = {
-  "War Thunder": "/images/warthunder_logo.jpg",
-  "Zona51": "/images/zone51_logo.jpg",
-  "Playerok": "/images/Playerok.png",
-  "Arknights Endfield": "/images/Arknights.jpg",
-  "NTE": "/images/NTE.png",
-  "Ded VPN": "/images/Дед ВПН.jpg",
-  "100 Балльный Репетитор": "/images/100 бальный.png",
-  "Arizona RP": "/images/Arizona RP.png",
-  "Block Blast": "/images/Block blast.jpg",
-  "Radmir RP": "/images/Radmir RP.jpg"
+  "War Thunder": "/images/warthunder_logo.webp",
+  "Zona51": "/images/zone51_logo.webp",
+  "Playerok": "/images/Playerok.webp",
+  "Arknights Endfield": "/images/Arknights.webp",
+  "NTE": "/images/NTE.webp",
+  "Ded VPN": "/images/Дед ВПН.webp",
+  "100 Балльный Репетитор": "/images/100 бальный.webp",
+  "Arizona RP": "/images/Arizona RP.webp",
+  "Block Blast": "/images/Block blast.webp",
+  "Radmir RP": "/images/Radmir RP.webp"
 };
 
 
@@ -663,6 +663,10 @@ function BloggerCard({
           src={BLOGGER_AVATARS[blg.name]}
           alt={blg.name}
           className="w-9 h-9 sm:w-[72px] sm:h-[72px] rounded-full object-cover shrink-0 border border-black/10 shadow-sm"
+          width={72}
+          height={72}
+          loading="lazy"
+          fetchPriority="low"
         />
       ) : (
         <div className={cn("w-9 h-9 sm:w-[72px] sm:h-[72px] rounded-full flex items-center justify-center font-display font-black text-base sm:text-2xl uppercase shrink-0 shadow-inner border", paper.badgeColor)}>
@@ -693,22 +697,22 @@ function BloggerCard({
 const getCasePaper = (index: number) => {
   const papers = [
     {
-      normal: "/images/case_paper_lime.png",
-      hover: "/images/case_paper_lime_hover.png",
+      normal: "/images/case_paper_lime.webp",
+      hover: "/images/case_paper_lime_hover.webp",
       badgeColor: "bg-black text-rage-brand border-black/15",
       accentText: "text-black",
       filterId: "torn-paper-0"
     },
     {
-      normal: "/images/case_paper_pink.png",
-      hover: "/images/case_paper_pink_hover.png",
+      normal: "/images/case_paper_pink.webp",
+      hover: "/images/case_paper_pink_hover.webp",
       badgeColor: "bg-black text-rage-pink border-black/15",
       accentText: "text-black",
       filterId: "torn-paper-1"
     },
     {
-      normal: "/images/case_paper_white.png",
-      hover: "/images/case_paper_white_hover.png",
+      normal: "/images/case_paper_white.webp",
+      hover: "/images/case_paper_white_hover.webp",
       badgeColor: "bg-black text-white border-black/15",
       accentText: "text-black",
       filterId: "torn-paper-2"
@@ -769,6 +773,10 @@ function CaseCard({
               src={CASE_LOGOS[item.name]}
               alt={item.name}
               className="w-20 h-20 rounded-2xl object-cover border border-black/10 shrink-0 shadow-sm"
+              width={80}
+              height={80}
+              loading="lazy"
+              fetchPriority="low"
             />
           ) : (
             <div className={cn("w-20 h-20 rounded-2xl flex items-center justify-center font-display font-black text-3xl uppercase shrink-0 shadow-inner border", paper.badgeColor)}>
@@ -823,7 +831,7 @@ function CaseModal({
         <div
           className="absolute inset-0 z-0 pointer-events-none"
           style={{
-            backgroundImage: "url('/images/white_torn_paper.png')",
+            backgroundImage: "url('/images/clean_white_torn_paper.webp')",
             backgroundSize: "100% 100%",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
@@ -860,6 +868,10 @@ function CaseModal({
                 src={CASE_LOGOS[item.name]}
                 alt={item.name}
                 className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl object-cover border-2 border-black/10 shadow-md shrink-0 bg-white"
+                width={96}
+                height={96}
+                loading="lazy"
+                fetchPriority="low"
               />
             ) : (
               <div className={cn("w-20 h-20 sm:w-24 sm:h-24 rounded-3xl flex items-center justify-center font-display font-black text-3xl sm:text-4xl uppercase shrink-0 shadow-md border-2 border-black/10", item.badgeColor)}>
@@ -995,30 +1007,32 @@ export default function App() {
 
   useEffect(() => {
     const imagesToPreload = [
-      "/images/lime_torn_paper.png",
-      "/images/lime_torn_paper_hover.png",
-      "/images/pink_torn_paper.png",
-      "/images/pink_torn_paper_hover.png",
-      "/images/white_torn_paper.png",
-      "/images/white_torn_paper_hover.png",
-      "/images/case_paper_lime.png",
-      "/images/case_paper_lime_hover.png",
-      "/images/case_paper_pink.png",
-      "/images/case_paper_pink_hover.png",
-      "/images/case_paper_white.png",
-      "/images/case_paper_white_hover.png",
-      "/images/blogger_paper_lime.png",
-      "/images/blogger_paper_lime_hover.png",
-      "/images/blogger_paper_pink.png",
-      "/images/blogger_paper_pink_hover.png",
-      "/images/blogger_paper_white.png",
-      "/images/blogger_paper_white_hover.png",
-      "/images/service_paper_lime.png",
-      "/images/service_paper_lime_hover.png",
-      "/images/service_paper_pink.png",
-      "/images/service_paper_pink_hover.png",
-      "/images/service_paper_white.png",
-      "/images/service_paper_white_hover.png"
+      "/images/lime_torn_paper.webp",
+      "/images/lime_torn_paper_hover.webp",
+      "/images/pink_torn_paper.webp",
+      "/images/pink_torn_paper_hover.webp",
+      "/images/white_torn_paper.webp",
+      "/images/white_torn_paper_hover.webp",
+      "/images/clean_white_torn_paper.webp",
+      "/images/clean_white_torn_paper_hover.webp",
+      "/images/case_paper_lime.webp",
+      "/images/case_paper_lime_hover.webp",
+      "/images/case_paper_pink.webp",
+      "/images/case_paper_pink_hover.webp",
+      "/images/case_paper_white.webp",
+      "/images/case_paper_white_hover.webp",
+      "/images/blogger_paper_lime.webp",
+      "/images/blogger_paper_lime_hover.webp",
+      "/images/blogger_paper_pink.webp",
+      "/images/blogger_paper_pink_hover.webp",
+      "/images/blogger_paper_white.webp",
+      "/images/blogger_paper_white_hover.webp",
+      "/images/service_paper_lime.webp",
+      "/images/service_paper_lime_hover.webp",
+      "/images/service_paper_pink.webp",
+      "/images/service_paper_pink_hover.webp",
+      "/images/service_paper_white.webp",
+      "/images/service_paper_white_hover.webp"
     ];
     imagesToPreload.forEach((src) => {
       const img = new Image();
@@ -1133,22 +1147,22 @@ export default function App() {
   const getBloggerPaper = (index: number) => {
     const papers = [
       {
-        img: "/images/blogger_paper_lime.png",
-        imgHover: "/images/blogger_paper_lime_hover.png",
+        img: "/images/blogger_paper_lime.webp",
+        imgHover: "/images/blogger_paper_lime_hover.webp",
         badgeColor: "bg-black text-rage-brand border-rage-brand/20",
         followersColor: "text-black/80",
         tagColor: "border-black/20 text-black/70 font-semibold"
       },
       {
-        img: "/images/blogger_paper_pink.png",
-        imgHover: "/images/blogger_paper_pink_hover.png",
+        img: "/images/blogger_paper_pink.webp",
+        imgHover: "/images/blogger_paper_pink_hover.webp",
         badgeColor: "bg-black text-rage-pink border-rage-pink/20",
         followersColor: "text-black/80",
         tagColor: "border-black/20 text-black/70 font-semibold"
       },
       {
-        img: "/images/blogger_paper_white.png",
-        imgHover: "/images/blogger_paper_white_hover.png",
+        img: "/images/blogger_paper_white.webp",
+        imgHover: "/images/blogger_paper_white_hover.webp",
         badgeColor: "bg-black text-white border-white/20",
         followersColor: "text-black/80",
         tagColor: "border-black/20 text-black/70 font-semibold"
@@ -1160,8 +1174,8 @@ export default function App() {
   const getServicePaperImages = (idx: number) => {
     const mapping = [
       {
-        normal: "/images/service_paper_lime.png",
-        hover: "/images/service_paper_lime_hover.png",
+        normal: "/images/service_paper_lime.webp",
+        hover: "/images/service_paper_lime_hover.webp",
         textColor: "text-black",
         iconColor: "text-black",
         iconBg: "bg-black/10 border-black/15",
@@ -1169,8 +1183,8 @@ export default function App() {
         doodleColor: "text-rage-pink border-black/15 bg-black/5"
       },
       {
-        normal: "/images/service_paper_pink.png",
-        hover: "/images/service_paper_pink_hover.png",
+        normal: "/images/service_paper_pink.webp",
+        hover: "/images/service_paper_pink_hover.webp",
         textColor: "text-black",
         iconColor: "text-black",
         iconBg: "bg-black/10 border-black/15",
@@ -1178,8 +1192,8 @@ export default function App() {
         doodleColor: "text-black border-black/15 bg-black/5"
       },
       {
-        normal: "/images/service_paper_white.png",
-        hover: "/images/service_paper_white_hover.png",
+        normal: "/images/service_paper_white.webp",
+        hover: "/images/service_paper_white_hover.webp",
         textColor: "text-black",
         iconColor: "text-black",
         iconBg: "bg-black/10 border-black/15",
@@ -1187,8 +1201,8 @@ export default function App() {
         doodleColor: "text-rage-brand border-black/15 bg-black/5"
       },
       {
-        normal: "/images/service_paper_lime.png",
-        hover: "/images/service_paper_lime_hover.png",
+        normal: "/images/service_paper_lime.webp",
+        hover: "/images/service_paper_lime_hover.webp",
         textColor: "text-black",
         iconColor: "text-black",
         iconBg: "bg-black/10 border-black/15",
@@ -1196,8 +1210,8 @@ export default function App() {
         doodleColor: "text-rage-pink border-black/15 bg-black/5"
       },
       {
-        normal: "/images/service_paper_pink.png",
-        hover: "/images/service_paper_pink_hover.png",
+        normal: "/images/service_paper_pink.webp",
+        hover: "/images/service_paper_pink_hover.webp",
         textColor: "text-black",
         iconColor: "text-black",
         iconBg: "bg-black/10 border-black/15",
@@ -1315,27 +1329,43 @@ export default function App() {
           <div className="relative h-auto w-full lg:h-[85%] max-h-[420px] sm:max-h-[520px] lg:max-h-[750px] aspect-[2146/1336] flex items-center justify-end mr-[-10%] lg:mr-[-2%]">
             {/* 1. Megaphone Base (lightnings static, RAGE text erased) */}
             <img
-              src="/images/hero_megaphone_no_rage.png"
+              src="/images/hero_megaphone_no_rage.webp"
               alt="Rage Media Megaphone Artwork"
               className="w-full h-full object-contain opacity-95 drop-shadow-[0_25px_80px_rgba(0,0,0,0.7)] animate-megaphone-float"
+              width={2624}
+              height={1632}
+              loading="eager"
+              fetchPriority="high"
             />
             {/* 2. Base static RAGE text */}
             <img
-              src="/images/hero_rage_text_only.png"
+              src="/images/hero_rage_text_only.webp"
               alt="Rage Text Base"
               className="absolute inset-0 w-full h-full object-contain pointer-events-none"
+              width={2146}
+              height={1336}
+              loading="eager"
+              fetchPriority="high"
             />
             {/* 3. Glitching overlay 1 (Pink/Red shift) */}
             <img
-              src="/images/hero_rage_text_only.png"
+              src="/images/hero_rage_text_only.webp"
               alt="Rage Text Glitch 1"
               className="absolute inset-0 w-full h-full object-contain animate-rage-glitch-1 mix-blend-screen pointer-events-none"
+              width={2146}
+              height={1336}
+              loading="eager"
+              fetchPriority="high"
             />
             {/* 4. Glitching overlay 2 (Cyan/Blue shift) */}
             <img
-              src="/images/hero_rage_text_only.png"
+              src="/images/hero_rage_text_only.webp"
               alt="Rage Text Glitch 2"
               className="absolute inset-0 w-full h-full object-contain animate-rage-glitch-2 mix-blend-screen pointer-events-none"
+              width={2146}
+              height={1336}
+              loading="eager"
+              fetchPriority="high"
             />
           </div>
         </div>
@@ -1465,28 +1495,28 @@ export default function App() {
           </div>
 
           {/* Sticker layout from Reference Photo #2 Option 2 */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-[1750px] mx-auto px-4 md:px-12">
 
             {/* Sticker 1: Lime Green card */}
-            <div className="relative group/card flex flex-col">
+            <div className="relative group/card flex flex-col w-full max-w-md md:max-w-none mx-auto">
               <motion.div
                 onMouseEnter={() => setHoveredStat(0)}
                 onMouseLeave={() => setHoveredStat(null)}
                 whileHover={{ rotate: 1, scale: 1.02 }}
-                className="sticker-card text-black rotate-[-1.5deg] min-h-[240px] sm:min-h-[260px] md:min-h-[280px] p-4 sm:p-6 flex flex-col justify-center items-center text-center border-none shadow-none overflow-visible relative"
+                className="sticker-card text-black rotate-[-1.5deg] aspect-[1.6] w-full p-6 sm:p-8 md:p-12 flex flex-col justify-center items-center text-center border-none shadow-none overflow-visible relative"
               >
                 {/* Background image container that changes to crumpled version on hover */}
                 <div
                   className="absolute inset-0 z-0 transition-all duration-300 pointer-events-none"
                   style={{
-                    backgroundImage: `url('${hoveredStat === 0 ? "/images/lime_torn_paper_hover.png" : "/images/lime_torn_paper.png"}')`,
+                    backgroundImage: `url('${hoveredStat === 0 ? "/images/lime_torn_paper_hover.webp?v=2" : "/images/lime_torn_paper.webp?v=2"}')`,
                     backgroundSize: "100% 100%",
                     backgroundPosition: "center",
                     backgroundRepeat: "no-repeat",
                     backgroundColor: "transparent"
                   }}
                 />
-                <div className="flex flex-col items-center justify-center max-w-[85%] z-10 relative pointer-events-none">
+                <div className="sr-only">
                   <div className="font-display font-black text-5xl sm:text-6xl leading-none tracking-tighter mb-1.5 text-black">
                     <Counter value="100+" />
                   </div>
@@ -1498,25 +1528,25 @@ export default function App() {
             </div>
 
             {/* Sticker 2: Neon Pink card */}
-            <div className="relative group/card flex flex-col">
+            <div className="relative group/card flex flex-col w-full max-w-md md:max-w-none mx-auto">
               <motion.div
                 onMouseEnter={() => setHoveredStat(1)}
                 onMouseLeave={() => setHoveredStat(null)}
                 whileHover={{ rotate: -1, scale: 1.02 }}
-                className="sticker-card text-black rotate-[1deg] min-h-[240px] sm:min-h-[260px] md:min-h-[280px] p-4 sm:p-6 flex flex-col justify-center items-center text-center border-none shadow-none overflow-visible relative"
+                className="sticker-card text-black rotate-[1deg] aspect-[1.59] w-full p-6 sm:p-8 md:p-12 flex flex-col justify-center items-center text-center border-none shadow-none overflow-visible relative"
               >
                 {/* Background image container that changes to crumpled version on hover */}
                 <div
                   className="absolute inset-0 z-0 transition-all duration-300 pointer-events-none"
                   style={{
-                    backgroundImage: `url('${hoveredStat === 1 ? "/images/pink_torn_paper_hover.png" : "/images/pink_torn_paper.png"}')`,
+                    backgroundImage: `url('${hoveredStat === 1 ? "/images/pink_torn_paper_hover.webp?v=2" : "/images/pink_torn_paper.webp?v=2"}')`,
                     backgroundSize: "100% 100%",
                     backgroundPosition: "center",
                     backgroundRepeat: "no-repeat",
                     backgroundColor: "transparent"
                   }}
                 />
-                <div className="flex flex-col items-center justify-center max-w-[85%] z-10 relative pointer-events-none">
+                <div className="sr-only">
                   <div className="font-display font-black text-5xl sm:text-6xl leading-none tracking-tighter mb-1.5 text-black whitespace-nowrap flex items-baseline justify-center">
                     <Counter value="50+" />
                     <span className="text-xl sm:text-2xl ml-1 font-display font-black">{lang === 'RU' ? 'МЛН' : 'M'}</span>
@@ -1528,26 +1558,27 @@ export default function App() {
               </motion.div>
             </div>
 
-            {/* Sticker 3: Industrial Dark gray / paper sticker card */}
-            <div className="relative group/card flex flex-col">
+            {/* Sticker 3: White card */}
+            <div className="relative group/card flex flex-col w-full max-w-md md:max-w-none mx-auto">
               <motion.div
                 onMouseEnter={() => setHoveredStat(2)}
                 onMouseLeave={() => setHoveredStat(null)}
                 whileHover={{ rotate: 2, scale: 1.02 }}
-                className="sticker-card text-black rotate-[-2deg] min-h-[240px] sm:min-h-[260px] md:min-h-[280px] p-4 sm:p-6 flex flex-col justify-center items-center text-center border-none shadow-none overflow-visible relative"
+                className="sticker-card text-black rotate-[-2deg] aspect-[1.42] w-full p-6 sm:p-8 md:p-12 flex flex-col justify-center items-center text-center border-none shadow-none overflow-visible relative"
               >
                 {/* Background image container that changes to crumpled version on hover */}
                 <div
                   className="absolute inset-0 z-0 transition-all duration-300 pointer-events-none"
                   style={{
-                    backgroundImage: `url('${hoveredStat === 2 ? "/images/white_torn_paper_hover.png" : "/images/white_torn_paper.png"}')`,
+                    backgroundImage: `url('${hoveredStat === 2 ? "/images/white_torn_paper_hover.webp?v=2" : "/images/white_torn_paper.webp?v=2"}')`,
                     backgroundSize: "100% 100%",
                     backgroundPosition: "center",
                     backgroundRepeat: "no-repeat",
                     backgroundColor: "transparent"
                   }}
                 />
-                <div className="flex flex-col items-center justify-center max-w-[85%] z-10 relative pointer-events-none">
+
+                <div className="sr-only">
                   <div className="font-display font-black text-5xl sm:text-6xl leading-none tracking-tighter mb-1.5 text-black">
                     <Counter value="60+" />
                   </div>
@@ -1570,17 +1601,25 @@ export default function App() {
           <div className="relative h-full w-auto flex items-center justify-center">
             {/* TV Casing */}
             <img
-              src="/images/tv_casing_only.png"
+              src="/images/tv_casing_only.webp"
               alt="Cyberpunk CRT TV monitor casing"
               className="h-full w-auto object-contain filter brightness-[1.1] contrast-[1.1] saturate-[1.05]"
               referrerPolicy="no-referrer"
+              width={1024}
+              height={742}
+              loading="lazy"
+              fetchPriority="low"
             />
             {/* Animated Green RAGE Graffiti overlay */}
             <img
-              src="/images/tv_rage_text.png"
+              src="/images/tv_rage_text.webp"
               alt="Rage Media animated screen text"
               className="absolute inset-0 w-full h-full object-contain animate-tv-glitch"
               referrerPolicy="no-referrer"
+              width={1024}
+              height={742}
+              loading="lazy"
+              fetchPriority="low"
             />
           </div>
         </div>
@@ -1791,7 +1830,7 @@ export default function App() {
             <div
               className="absolute inset-0 z-0 transition-all duration-300 pointer-events-none"
               style={{
-                backgroundImage: `url('${hoveredCareer ? "/images/white_torn_paper_hover.png" : "/images/white_torn_paper.png"}')`,
+                backgroundImage: `url('${hoveredCareer ? "/images/clean_white_torn_paper_hover.webp" : "/images/clean_white_torn_paper.webp"}')`,
                 backgroundSize: "100% 100%",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",

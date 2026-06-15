@@ -11,6 +11,8 @@ interface Vacancy {
   salaryEN: string;
   descRU: string;
   descEN: string;
+  shortDescRU?: string;
+  shortDescEN?: string;
   responsibilitiesRU: string[];
   responsibilitiesEN: string[];
   requirementsRU: string[];
@@ -98,7 +100,9 @@ const OPEN_VACANCIES: Vacancy[] = [
     salaryRU: "",
     salaryEN: "",
     descRU: "Мы ищем человека, который поможет развивать присутствие агентства в социальных сетях, создавать контент и участвовать в разработке креативных идей для продвижения. Нам нужен специалист, который следит за трендами, понимает специфику digital-среды и умеет превращать идеи в понятный и интересный контент.",
+    shortDescRU: "Мы ищем человека, который поможет развивать присутствие агентства в социальных сетях, создавать контент и участвовать в разработке креативных идей для продвижения. Нам нужен специалист, который следит за трендами, понимает специфику digital-среды...",
     descEN: "We are looking for a person who will help develop the agency's presence in social media, create content, and participate in developing creative ideas for promotion. We need a specialist who follows trends, understands the specifics of the digital environment, and knows how to turn ideas into clear and engaging content.",
+    shortDescEN: "We are looking for a person who will help develop the agency's presence in social media, create content, and participate in developing creative ideas for promotion. We need a specialist who follows trends, understands the specifics of the digital environment...",
     responsibilitiesRU: [
       "Ведение социальных сетей агентства.",
       "Разработка креативных концепций для контента и рекламных активностей.",
@@ -365,7 +369,10 @@ export default function Career() {
                     </div>
 
                     <p className="text-white/50 text-xs sm:text-sm leading-relaxed mb-4 font-sans">
-                      {lang === 'RU' ? vac.descRU : vac.descEN}
+                      {isExpanded
+                        ? (lang === 'RU' ? vac.descRU : vac.descEN)
+                        : (lang === 'RU' ? (vac.shortDescRU || vac.descRU) : (vac.shortDescEN || vac.descEN))
+                      }
                     </p>
 
                     <AnimatePresence initial={false}>
