@@ -45,14 +45,19 @@ npm run build
 
 ## Отправка заявок с сайта
 
-Форма отправляет заявки в Telegram через `public/send-message.php`.
-Токен бота и chat id в репозитории не хранятся.
+Форма отправляет заявки через `public/send-message.php`: сначала в Telegram,
+а если сервер не может до него достучаться — письмом на email из конфига.
+Токен бота, chat id и адрес почты в репозитории не хранятся.
 
 1. Скопируйте `public/config.example.php` в `public/config.php`.
-2. Укажите в нём реальные значения `$telegramBotToken` и `$telegramChatId`.
+2. Укажите реальные значения `$telegramBotToken`, `$telegramChatId` и `$contactEmailAddress`.
 3. Загрузите `config.php` на хостинг вместе с остальными файлами (файл в git не попадает).
 
-Альтернативно можно задать переменные окружения `TELEGRAM_BOT_TOKEN` и `TELEGRAM_CHAT_ID` на сервере.
+Если хостинг не может подключиться к `api.telegram.org`, укажите в `$telegramProxy`
+HTTP/SOCKS-прокси — тогда заявки снова пойдут в Telegram.
+
+Альтернативно можно задать переменные окружения `TELEGRAM_BOT_TOKEN`,
+`TELEGRAM_CHAT_ID`, `CONTACT_EMAIL` и `TELEGRAM_PROXY` на сервере.
 
 ## Структура проекта
 

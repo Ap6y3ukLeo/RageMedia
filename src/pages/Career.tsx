@@ -251,7 +251,14 @@ export default function Career() {
         response = await sendViaTelegramApi();
       }
 
-      if (response.ok) {
+      let result: { ok?: boolean; error?: string; details?: string[] } | null = null;
+      try {
+        result = await response.json();
+      } catch {
+        result = null;
+      }
+
+      if (response.ok && result?.ok === true) {
         setSubmitSuccess(true);
         setFormData({
           name: '',
@@ -260,7 +267,7 @@ export default function Career() {
           portfolio: ''
         });
       } else {
-        console.error('Telegram API error:', await response.text());
+        console.error('Form submission failed:', response.status, result);
         setSubmitError(true);
       }
     } catch (err) {
