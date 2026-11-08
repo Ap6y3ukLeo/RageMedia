@@ -1747,7 +1747,7 @@ export default function App() {
                 <div
                   className="absolute inset-0 z-0 transition-all duration-300 pointer-events-none"
                   style={{
-                    backgroundImage: `url('${hoveredStat === 0 ? "/images/lime_torn_paper_hover.webp?v=3" : "/images/lime_torn_paper.webp?v=3"}')`,
+                    backgroundImage: `url('${hoveredStat === 0 ? "/images/lime_torn_paper_hover.webp?v=4" : "/images/lime_torn_paper.webp?v=4"}')`,
                     backgroundSize: "100% 100%",
                     backgroundPosition: "center",
                     backgroundRepeat: "no-repeat",
@@ -1808,7 +1808,7 @@ export default function App() {
                 <div
                   className="absolute inset-0 z-0 transition-all duration-300 pointer-events-none"
                   style={{
-                    backgroundImage: `url('${hoveredStat === 2 ? "/images/white_torn_paper_hover.webp?v=3" : "/images/white_torn_paper.webp?v=3"}')`,
+                    backgroundImage: `url('${hoveredStat === 2 ? "/images/white_torn_paper_hover.webp?v=4" : "/images/white_torn_paper.webp?v=4"}')`,
                     backgroundSize: "100% 100%",
                     backgroundPosition: "center",
                     backgroundRepeat: "no-repeat",
