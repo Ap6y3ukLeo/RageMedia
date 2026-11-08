@@ -6,3 +6,13 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Local dev scratch files
+scratch/
+__pycache__/
+
+# Secrets
+public/config.php
+
+# Accidental screenshots
+public/images/25 июл.*

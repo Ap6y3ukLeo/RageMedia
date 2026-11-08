@@ -1,5 +1,5 @@
 <div align="center">
-<img width="1200" height="475" alt="RageMedia Banner" src="public/images/rage_logo_uploaded.png" />
+<img width="1200" height="475" alt="RageMedia Banner" src="public/images/rage_logo_uploaded.webp" />
 </div>
 
 # RageMedia
@@ -42,6 +42,17 @@ npm run dev
 ```bash
 npm run build
 ```
+
+## Отправка заявок с сайта
+
+Форма отправляет заявки в Telegram через `public/send-message.php`.
+Токен бота и chat id в репозитории не хранятся.
+
+1. Скопируйте `public/config.example.php` в `public/config.php`.
+2. Укажите в нём реальные значения `$telegramBotToken` и `$telegramChatId`.
+3. Загрузите `config.php` на хостинг вместе с остальными файлами (файл в git не попадает).
+
+Альтернативно можно задать переменные окружения `TELEGRAM_BOT_TOKEN` и `TELEGRAM_CHAT_ID` на сервере.
 
 ## Структура проекта
 

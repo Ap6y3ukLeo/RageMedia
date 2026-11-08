@@ -503,3 +503,64 @@
   animation: megaphone-float 6s steps(180) ease-in-out infinite;
 }
 
+/* Card hover performance optimizations (pure CSS hardware accelerated transitions) */
+.blogger-card-hover,
+.case-card-hover,
+.stat-card-hover,
+.service-card-hover,
+.career-card-hover {
+  transition: transform 0.3s ease, scale 0.3s ease, rotate 0.3s ease, translate 0.3s ease;
+  will-change: transform, scale, rotate, translate;
+}
+
+.blogger-card-hover:hover {
+  scale: 1.05;
+  rotate: 1deg;
+}
+
+.case-card-hover:hover {
+  scale: 1.03;
+  rotate: -0.5deg;
+}
+
+.stat-card-hover:hover {
+  scale: 1.02;
+}
+
+.service-card-hover:hover {
+  transform: translateX(8px);
+}
+
+.career-card-hover:hover {
+  translate: 0 -6px;
+  rotate: 0.5deg;
+}
+
+/* Disable hover transformations and show normal background during active page scroll to prevent jank */
+body.is-scrolling .blogger-card-hover,
+body.is-scrolling .case-card-hover,
+body.is-scrolling .stat-card-hover,
+body.is-scrolling .service-card-hover,
+body.is-scrolling .career-card-hover {
+  scale: none !important;
+  rotate: none !important;
+  translate: none !important;
+  transform: none !important;
+}
+
+body.is-scrolling .blogger-card-hover .bg-hover,
+body.is-scrolling .case-card-hover .bg-hover,
+body.is-scrolling .stat-card-hover .bg-hover,
+body.is-scrolling .service-card-hover .bg-hover,
+body.is-scrolling .career-card-hover .bg-hover {
+  opacity: 0 !important;
+}
+
+body.is-scrolling .blogger-card-hover .bg-normal,
+body.is-scrolling .case-card-hover .bg-normal,
+body.is-scrolling .stat-card-hover .bg-normal,
+body.is-scrolling .service-card-hover .bg-normal,
+body.is-scrolling .career-card-hover .bg-normal {
+  opacity: 1 !important;
+}
+

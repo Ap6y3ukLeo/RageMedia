@@ -80,7 +80,7 @@ const CASES: CaseItem[] = [
     accentText: "text-orange-500"
   },
   {
-    name: "Zona51",
+    name: "Zone 51",
     categoryRU: "Спецпроект",
     categoryEN: "Special Project",
     descRU: "Ежемесячно организуем размещения на бартерной основе более чем у 15 авторов, обеспечивая стабильное присутствие бренда в инфлюенс-маркетинге.",
@@ -195,6 +195,32 @@ const CASES: CaseItem[] = [
     badgeColor: "bg-teal-500 text-black",
     glowColor: "shadow-[0_0_20px_rgba(20,184,166,0.45)] hover:border-teal-500",
     accentText: "text-teal-500"
+  },
+  {
+    name: "Genshin Impact",
+    categoryRU: "Медиа-кампания",
+    categoryEN: "Media Campaign",
+    descRU: "Масштабная кампания к выходу обновления с привлечением ключевых авторов игрового сегмента.",
+    descEN: "Large-scale campaign for the major update launch engaging key gaming creators.",
+    resultsRU: "8.5M+ Просмотров",
+    resultsEN: "8.5M+ Views",
+    link: "#contacts",
+    badgeColor: "bg-cyan-500 text-black",
+    glowColor: "shadow-[0_0_20px_rgba(6,182,212,0.45)] hover:border-cyan-400",
+    accentText: "text-cyan-400"
+  },
+  {
+    name: "Honkai: Star Rail",
+    categoryRU: "Запуск",
+    categoryEN: "Launch",
+    descRU: "Комплекс стримов и интеграций к релизу патча с акцентом на высокую конверсию и вовлеченность игроков.",
+    descEN: "Series of streams and integrations for the patch release focusing on high conversion and engagement.",
+    resultsRU: "1.2M+ Инсталлов",
+    resultsEN: "1.2M+ Installs",
+    link: "#contacts",
+    badgeColor: "bg-violet-600 text-white",
+    glowColor: "shadow-[0_0_20px_rgba(139,92,246,0.45)] hover:border-purple-500",
+    accentText: "text-purple-400"
   }
 ];
 
@@ -349,7 +375,7 @@ const BLOGGER_AVATARS: Record<string, string> = {
 
 const CASE_LOGOS: Record<string, string> = {
   "War Thunder": "/images/warthunder_logo.webp",
-  "Zona51": "/images/zone51_logo.webp",
+  "Zone 51": "/images/zone51_logo.webp",
   "Playerok": "/images/Playerok.webp",
   "Arknights Endfield": "/images/Arknights.webp",
   "NTE": "/images/NTE.webp",
@@ -357,7 +383,9 @@ const CASE_LOGOS: Record<string, string> = {
   "100 Балльный Репетитор": "/images/100 бальный.webp",
   "Arizona RP": "/images/Arizona RP.webp",
   "Block Blast": "/images/Block blast.webp",
-  "Radmir RP": "/images/Radmir RP.webp"
+  "Radmir RP": "/images/Radmir RP.webp",
+  "Genshin Impact": "/images/genshin_logo.webp",
+  "Honkai: Star Rail": "/images/hsr_logo.webp"
 };
 
 
@@ -378,6 +406,7 @@ function AutoScrollContainer({
 }: AutoScrollContainerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const isInteractingRef = useRef(false);
+  const isHoveredRef = useRef(false);
   const rafRef = useRef<number | null>(null);
   // Drag/swipe tracking refs
   const isDraggingRef = useRef(false);
@@ -391,23 +420,38 @@ function AutoScrollContainer({
   const momentumRafRef = useRef<number | null>(null);
   const interactionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const stopInteraction = () => {
+  // Optimized animation & layout refs
+  const scrollLeftRef = useRef(0);
+  const oneThirdRef = useRef(0);
+  const totalWidthRef = useRef(0);
+  const visibleWidthRef = useRef(0);
+  const isVisibleRef = useRef(false);
+
+  const stopInteraction = (delay = 2000) => {
     if (interactionTimeoutRef.current) clearTimeout(interactionTimeoutRef.current);
     interactionTimeoutRef.current = setTimeout(() => {
       const container = containerRef.current;
       if (container) {
-        let totalWidth = container.scrollWidth;
-        let visibleWidth = container.clientWidth;
-        let oneThird = totalWidth / 3;
+        // Measure once when interaction stops
+        totalWidthRef.current = container.scrollWidth;
+        visibleWidthRef.current = container.clientWidth;
+        oneThirdRef.current = totalWidthRef.current / 3;
+
         const currentScroll = container.scrollLeft;
-        if (currentScroll >= oneThird * 2) {
-          container.scrollLeft -= oneThird;
-        } else if (currentScroll <= oneThird) {
-          container.scrollLeft += oneThird;
+        const oneThird = oneThirdRef.current;
+        if (oneThird > 0) {
+          if (currentScroll >= oneThird * 2) {
+            container.scrollLeft = currentScroll - oneThird;
+          } else if (currentScroll <= oneThird) {
+            container.scrollLeft = currentScroll + oneThird;
+          }
         }
+        scrollLeftRef.current = container.scrollLeft;
       }
-      isInteractingRef.current = false;
-    }, 2000);
+      if (!isHoveredRef.current) {
+        isInteractingRef.current = false;
+      }
+    }, delay);
   };
 
   const handleManualScroll = (dir: 'left' | 'right') => {
@@ -419,7 +463,7 @@ function AutoScrollContainer({
 
       const scrollOffset = dir === 'left' ? -380 : 380;
       container.scrollBy({ left: scrollOffset, behavior: 'smooth' });
-      stopInteraction();
+      stopInteraction(2500);
     }
   };
 
@@ -428,15 +472,12 @@ function AutoScrollContainer({
     if (!container) return;
 
     let scrollAmount = direction === 'ltr' ? speed : -speed;
-    let totalWidth = container.scrollWidth;
-    let visibleWidth = container.clientWidth;
-    let oneThird = totalWidth / 3;
 
     const updateDimensions = () => {
       if (container) {
-        totalWidth = container.scrollWidth;
-        visibleWidth = container.clientWidth;
-        oneThird = totalWidth / 3;
+        totalWidthRef.current = container.scrollWidth;
+        visibleWidthRef.current = container.clientWidth;
+        oneThirdRef.current = totalWidthRef.current / 3;
       }
     };
 
@@ -445,36 +486,87 @@ function AutoScrollContainer({
     // Set initial scroll position to the center to allow seamless looping
     const setInitialScroll = () => {
       if (container) {
-        totalWidth = container.scrollWidth;
-        visibleWidth = container.clientWidth;
-        oneThird = totalWidth / 3;
-        container.scrollLeft = (totalWidth - visibleWidth) / 2;
+        updateDimensions();
+        const initialScroll = (totalWidthRef.current - visibleWidthRef.current) / 2;
+        scrollLeftRef.current = initialScroll;
+        container.scrollLeft = initialScroll;
       }
     };
 
     const timer = setTimeout(setInitialScroll, 100);
 
-    const wrapScroll = () => {
-      if (!container) return;
-      const currentScroll = container.scrollLeft;
-      if (currentScroll >= oneThird * 2) {
-        container.scrollLeft -= oneThird;
-      } else if (currentScroll <= oneThird) {
-        container.scrollLeft += oneThird;
-      }
-    };
+    let rafId: number | null = null;
 
     const animate = () => {
-      if (!isInteractingRef.current && container) {
-        container.scrollLeft += scrollAmount;
-        wrapScroll();
+      if (container && isVisibleRef.current) {
+        if (!isInteractingRef.current && !isHoveredRef.current) {
+          scrollLeftRef.current += scrollAmount;
+          const oneThird = oneThirdRef.current;
+          if (oneThird > 0) {
+            if (scrollLeftRef.current >= oneThird * 2) {
+              scrollLeftRef.current -= oneThird;
+            } else if (scrollLeftRef.current <= oneThird) {
+              scrollLeftRef.current += oneThird;
+            }
+          }
+          container.scrollLeft = scrollLeftRef.current;
+        }
+        rafId = requestAnimationFrame(animate);
       }
-      rafRef.current = requestAnimationFrame(animate);
     };
 
-    rafRef.current = requestAnimationFrame(animate);
+    // Set up intersection observer to only animate when in view
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisibleRef.current = entry.isIntersecting;
+        if (entry.isIntersecting) {
+          if (!rafId) {
+            rafId = requestAnimationFrame(animate);
+          }
+        } else {
+          if (rafId) {
+            cancelAnimationFrame(rafId);
+            rafId = null;
+          }
+        }
+      },
+      { threshold: 0.01 }
+    );
+    observer.observe(container);
 
-    // --- Touch handlers (we let the browser handle native scrolling on mobile) ---
+    // --- Hover handlers (pause auto-scroll when user hovers mouse over cards) ---
+    const handleMouseEnter = () => {
+      isHoveredRef.current = true;
+      isInteractingRef.current = true;
+      if (interactionTimeoutRef.current) clearTimeout(interactionTimeoutRef.current);
+    };
+
+    const handleMouseLeaveContainer = () => {
+      isHoveredRef.current = false;
+      if (isDraggingRef.current) {
+        isDraggingRef.current = false;
+        container.style.cursor = '';
+      }
+      stopInteraction(1000);
+    };
+
+    // --- Mouse wheel scroll handler ---
+    const handleWheel = (e: WheelEvent) => {
+      if (!container) return;
+      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+      if (Math.abs(delta) > 0.5) {
+        e.preventDefault(); // Prevent vertical page scrolling when wheeling over the carousel
+        isInteractingRef.current = true;
+        if (interactionTimeoutRef.current) clearTimeout(interactionTimeoutRef.current);
+        if (momentumRafRef.current) cancelAnimationFrame(momentumRafRef.current);
+        
+        container.scrollLeft += delta * 1.2;
+        scrollLeftRef.current = container.scrollLeft;
+        stopInteraction(2000);
+      }
+    };
+
+    // --- Touch handlers (native touch drag on mobile) ---
     const handleTouchStart = () => {
       isInteractingRef.current = true;
       if (interactionTimeoutRef.current) clearTimeout(interactionTimeoutRef.current);
@@ -482,11 +574,25 @@ function AutoScrollContainer({
     };
 
     const handleTouchEnd = () => {
-      stopInteraction();
+      stopInteraction(2000);
     };
 
     const handleScroll = () => {
-      wrapScroll();
+      if (isInteractingRef.current && container) {
+        scrollLeftRef.current = container.scrollLeft;
+        
+        const currentScroll = scrollLeftRef.current;
+        const oneThird = oneThirdRef.current;
+        if (oneThird > 0) {
+          if (currentScroll >= oneThird * 2) {
+            container.scrollLeft = currentScroll - oneThird;
+            scrollLeftRef.current = container.scrollLeft;
+          } else if (currentScroll <= oneThird) {
+            container.scrollLeft = currentScroll + oneThird;
+            scrollLeftRef.current = container.scrollLeft;
+          }
+        }
+      }
     };
 
     // --- Mouse drag handlers (desktop) ---
@@ -495,6 +601,9 @@ function AutoScrollContainer({
       isDraggingRef.current = true;
       if (interactionTimeoutRef.current) clearTimeout(interactionTimeoutRef.current);
       if (momentumRafRef.current) cancelAnimationFrame(momentumRafRef.current);
+      
+      updateDimensions();
+      
       startXRef.current = e.clientX;
       scrollLeftStartRef.current = container.scrollLeft;
       lastXRef.current = e.clientX;
@@ -508,7 +617,9 @@ function AutoScrollContainer({
       e.preventDefault();
       const x = e.clientX;
       const walk = startXRef.current - x;
-      container.scrollLeft = scrollLeftStartRef.current + walk;
+      scrollLeftRef.current = scrollLeftStartRef.current + walk;
+      container.scrollLeft = scrollLeftRef.current;
+      
       const now = Date.now();
       const dt = now - lastTimeRef.current;
       if (dt > 0) {
@@ -526,48 +637,54 @@ function AutoScrollContainer({
       const decel = 0.95;
       const applyMomentum = () => {
         if (Math.abs(v) < 0.5) {
-          stopInteraction();
+          stopInteraction(2000);
           return;
         }
-        container.scrollLeft += v;
+        scrollLeftRef.current += v;
         v *= decel;
-        wrapScroll();
+        
+        const oneThird = oneThirdRef.current;
+        if (oneThird > 0) {
+          if (scrollLeftRef.current >= oneThird * 2) {
+            scrollLeftRef.current -= oneThird;
+          } else if (scrollLeftRef.current <= oneThird) {
+            scrollLeftRef.current += oneThird;
+          }
+        }
+        container.scrollLeft = scrollLeftRef.current;
         momentumRafRef.current = requestAnimationFrame(applyMomentum);
       };
       momentumRafRef.current = requestAnimationFrame(applyMomentum);
     };
 
-    const handleMouseLeave = () => {
-      if (isDraggingRef.current) {
-        isDraggingRef.current = false;
-        container.style.cursor = '';
-      }
-      stopInteraction();
-    };
-
+    container.addEventListener('mouseenter', handleMouseEnter);
+    container.addEventListener('mouseleave', handleMouseLeaveContainer);
+    container.addEventListener('wheel', handleWheel, { passive: false });
     container.addEventListener('touchstart', handleTouchStart, { passive: true });
     container.addEventListener('touchend', handleTouchEnd, { passive: true });
     container.addEventListener('touchcancel', handleTouchEnd, { passive: true });
     container.addEventListener('scroll', handleScroll, { passive: true });
     container.addEventListener('mousedown', handleMouseDown);
     container.addEventListener('mousemove', handleMouseMove);
-    container.addEventListener('mouseup', handleMouseUp);
-    container.addEventListener('mouseleave', handleMouseLeave);
+    window.addEventListener('mouseup', handleMouseUp);
 
     return () => {
       window.removeEventListener('resize', updateDimensions);
       clearTimeout(timer);
       if (interactionTimeoutRef.current) clearTimeout(interactionTimeoutRef.current);
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      if (rafId) cancelAnimationFrame(rafId);
       if (momentumRafRef.current) cancelAnimationFrame(momentumRafRef.current);
+      observer.disconnect();
+      container.removeEventListener('mouseenter', handleMouseEnter);
+      container.removeEventListener('mouseleave', handleMouseLeaveContainer);
+      container.removeEventListener('wheel', handleWheel);
       container.removeEventListener('touchstart', handleTouchStart);
       container.removeEventListener('touchend', handleTouchEnd);
       container.removeEventListener('touchcancel', handleTouchEnd);
       container.removeEventListener('scroll', handleScroll);
       container.removeEventListener('mousedown', handleMouseDown);
       container.removeEventListener('mousemove', handleMouseMove);
-      container.removeEventListener('mouseup', handleMouseUp);
-      container.removeEventListener('mouseleave', handleMouseLeave);
+      window.removeEventListener('mouseup', handleMouseUp);
     };
   }, [direction, speed]);
 
@@ -585,7 +702,7 @@ function AutoScrollContainer({
 
   return (
     <div className={cn(outerClasses)}>
-      {/* Left Navigation Arrow (shown only on desktop on container hover) */}
+      {/* Left Navigation Arrow */}
       {showArrows && (
         <button
           onClick={(e) => {
@@ -593,13 +710,14 @@ function AutoScrollContainer({
             e.stopPropagation();
             handleManualScroll('left');
           }}
-          className="absolute left-6 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-black/85 hover:bg-rage-brand text-white hover:text-black border border-white/10 hover:border-rage-brand flex items-center justify-center cursor-pointer shadow-[0_0_15px_rgba(0,0,0,0.5)] opacity-0 group-hover/scroll-container:opacity-100 transition-all duration-300 hidden md:flex active:scale-95 animate-fade-in"
+          aria-label="Scroll Left"
+          className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-black/90 hover:bg-rage-brand text-white hover:text-black border border-white/20 hover:border-rage-brand flex items-center justify-center cursor-pointer shadow-[0_0_20px_rgba(0,0,0,0.8)] opacity-90 sm:opacity-0 group-hover/scroll-container:opacity-100 transition-all duration-300 active:scale-95"
         >
-          <ChevronLeft size={20} />
+          <ChevronLeft size={22} />
         </button>
       )}
 
-      {/* Right Navigation Arrow (shown only on desktop on container hover) */}
+      {/* Right Navigation Arrow */}
       {showArrows && (
         <button
           onClick={(e) => {
@@ -607,16 +725,17 @@ function AutoScrollContainer({
             e.stopPropagation();
             handleManualScroll('right');
           }}
-          className="absolute right-6 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-black/85 hover:bg-rage-brand text-white hover:text-black border border-white/10 hover:border-rage-brand flex items-center justify-center cursor-pointer shadow-[0_0_15px_rgba(0,0,0,0.5)] opacity-0 group-hover/scroll-container:opacity-100 transition-all duration-300 hidden md:flex active:scale-95 animate-fade-in"
+          aria-label="Scroll Right"
+          className="absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-black/90 hover:bg-rage-brand text-white hover:text-black border border-white/20 hover:border-rage-brand flex items-center justify-center cursor-pointer shadow-[0_0_20px_rgba(0,0,0,0.8)] opacity-90 sm:opacity-0 group-hover/scroll-container:opacity-100 transition-all duration-300 active:scale-95"
         >
-          <ChevronRight size={20} />
+          <ChevronRight size={22} />
         </button>
       )}
 
       <div
         ref={containerRef}
         className={cn(innerClasses)}
-        style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-y' }}
+        style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-x pan-y', willChange: 'scroll-position' }}
       >
         {children}
       </div>
@@ -640,56 +759,70 @@ function BloggerCard({
   };
   lang: 'RU' | 'EN';
 }) {
-  const [isHovered, setIsHovered] = useState(false);
-
   return (
-    <motion.a
+    <a
       href={blg.link}
       target="_blank"
       rel="noopener noreferrer"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      whileHover={{ scale: 1.05, rotate: 1 }}
-      className="w-[220px] sm:w-[480px] h-[85px] sm:h-[156px] px-4 py-3 sm:px-10 sm:py-6 flex items-center gap-2 sm:gap-6 shrink-0 cursor-pointer bg-transparent border-none shadow-none overflow-visible text-black select-none"
-      style={{
-        backgroundImage: `url('${isHovered ? paper.imgHover : paper.img}')`,
-        backgroundSize: "100% 100%",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat"
-      }}
+      className="w-[220px] sm:w-[480px] h-[85px] sm:h-[156px] px-4 py-3 sm:px-10 sm:py-6 flex items-center gap-2 sm:gap-6 shrink-0 cursor-pointer bg-transparent border-none shadow-none overflow-visible text-black select-none relative group/blogger-card blogger-card-hover"
     >
-      {BLOGGER_AVATARS[blg.name] ? (
-        <img
-          src={BLOGGER_AVATARS[blg.name]}
-          alt={blg.name}
-          className="w-9 h-9 sm:w-[72px] sm:h-[72px] rounded-full object-cover shrink-0 border border-black/10 shadow-sm"
-          width={72}
-          height={72}
-          loading="lazy"
-          fetchPriority="low"
-        />
-      ) : (
-        <div className={cn("w-9 h-9 sm:w-[72px] sm:h-[72px] rounded-full flex items-center justify-center font-display font-black text-base sm:text-2xl uppercase shrink-0 shadow-inner border", paper.badgeColor)}>
-          {blg.name[0]}
-        </div>
-      )}
+      {/* Background normal */}
+      <div
+        className="absolute inset-0 z-0 transition-opacity duration-300 pointer-events-none opacity-100 group-hover/blogger-card:opacity-0 bg-normal"
+        style={{
+          backgroundImage: `url('${paper.img}')`,
+          backgroundSize: "100% 100%",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          willChange: "opacity"
+        }}
+      />
+      {/* Background hover */}
+      <div
+        className="absolute inset-0 z-0 transition-opacity duration-300 pointer-events-none opacity-0 group-hover/blogger-card:opacity-100 bg-hover"
+        style={{
+          backgroundImage: `url('${paper.imgHover}')`,
+          backgroundSize: "100% 100%",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          willChange: "opacity"
+        }}
+      />
 
-      <div className="text-black text-left">
-        <h4 className="font-display font-black text-xs sm:text-xl uppercase text-black leading-none mb-1 truncate max-w-[110px] sm:max-w-[320px]">
-          {blg.name}
-        </h4>
-        <div className="flex items-center gap-1 sm:gap-3 mt-0.5 sm:mt-1">
-          <span className={cn(
-            "text-[8px] sm:text-[16px] font-sans uppercase font-black px-1 py-0.5 sm:px-2 sm:py-1 rounded-sm flex items-center justify-center border leading-none shadow-sm ring-1 ring-black/20",
-            blg.engagement === 'exclusive' ? "bg-rage-pink text-white border-rage-pink" : "bg-neutral-400 text-white border-neutral-400"
-          )}>
-            {blg.engagement === 'exclusive' ? 'Э' : 'П'}
-          </span>
-          <span className="text-[10px] sm:text-[20px] font-mono uppercase font-black tracking-wider text-black/85 leading-none flex items-center gap-0.5 sm:gap-1"><Eye size={10} className="sm:w-[18px] sm:h-[18px] text-black/60" />{blg.followers}</span>
-          <span className={cn("text-[8px] sm:text-[16px] font-sans uppercase border px-1 py-0.5 sm:px-2 sm:py-1 rounded-sm leading-none", paper.tagColor)}>{lang === 'RU' ? blg.tagRU : blg.tagEN}</span>
+      <div className="relative z-10 flex items-center gap-2 sm:gap-6 w-full h-full pointer-events-none">
+        {BLOGGER_AVATARS[blg.name] ? (
+          <img
+            src={BLOGGER_AVATARS[blg.name]}
+            alt={blg.name}
+            className="w-9 h-9 sm:w-[72px] sm:h-[72px] rounded-full object-cover shrink-0 border border-black/10 shadow-sm"
+            width={72}
+            height={72}
+            loading="lazy"
+            fetchPriority="low"
+          />
+        ) : (
+          <div className={cn("w-9 h-9 sm:w-[72px] sm:h-[72px] rounded-full flex items-center justify-center font-display font-black text-base sm:text-2xl uppercase shrink-0 shadow-inner border", paper.badgeColor)}>
+            {blg.name[0]}
+          </div>
+        )}
+
+        <div className="text-black text-left">
+          <h4 className="font-display font-black text-xs sm:text-xl uppercase text-black leading-none mb-1 truncate max-w-[110px] sm:max-w-[320px]">
+            {blg.name}
+          </h4>
+          <div className="flex items-center gap-1 sm:gap-3 mt-0.5 sm:mt-1">
+            <span className={cn(
+              "text-[8px] sm:text-[16px] font-sans uppercase font-black px-1 py-0.5 sm:px-2 sm:py-1 rounded-sm flex items-center justify-center border leading-none shadow-sm ring-1 ring-black/20",
+              blg.engagement === 'exclusive' ? "bg-rage-pink text-white border-rage-pink" : "bg-neutral-400 text-white border-neutral-400"
+            )}>
+              {blg.engagement === 'exclusive' ? 'Э' : 'П'}
+            </span>
+            <span className="text-[10px] sm:text-[20px] font-mono uppercase font-black tracking-wider text-black/85 leading-none flex items-center gap-0.5 sm:gap-1"><Eye size={10} className="sm:w-[18px] sm:h-[18px] text-black/60" />{blg.followers}</span>
+            <span className={cn("text-[8px] sm:text-[16px] font-sans uppercase border px-1 py-0.5 sm:px-2 sm:py-1 rounded-sm leading-none", paper.tagColor)}>{lang === 'RU' ? blg.tagRU : blg.tagEN}</span>
+          </div>
         </div>
       </div>
-    </motion.a>
+    </a>
   );
 }
 
@@ -739,29 +872,35 @@ function CaseCard({
   lang: 'RU' | 'EN';
   onSelect: (item: CaseItem) => void;
 }) {
-  const [isHovered, setIsHovered] = useState(false);
-
   return (
-    <motion.a
+    <a
       href={item.link}
       onClick={(e) => {
         e.preventDefault();
         onSelect(item);
       }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      whileHover={{ scale: 1.03, rotate: -0.5 }}
-      className="w-[280px] sm:w-[360px] h-[220px] sm:h-[260px] bg-transparent flex flex-col justify-between transition-all duration-300 group shrink-0 relative overflow-visible cursor-pointer select-none text-black p-6 sm:p-8 border-none shadow-none"
+      className="w-[280px] sm:w-[360px] h-[220px] sm:h-[260px] bg-transparent flex flex-col justify-between group/case-card case-card-hover shrink-0 relative overflow-visible cursor-pointer select-none text-black p-6 sm:p-8 border-none shadow-none"
     >
-      {/* Background with SVG torn paper filter applied */}
+      {/* Background normal */}
       <div
-        className="absolute inset-0 z-0 transition-transform duration-300 pointer-events-none"
+        className="absolute inset-0 z-0 transition-opacity duration-300 pointer-events-none opacity-100 group-hover/case-card:opacity-0 bg-normal"
         style={{
-          backgroundImage: `url('${isHovered ? paper.hover : paper.normal}')`,
+          backgroundImage: `url('${paper.normal}')`,
           backgroundSize: "100% 100%",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
-          filter: `url(#${paper.filterId})`
+          willChange: "opacity"
+        }}
+      />
+      {/* Background hover */}
+      <div
+        className="absolute inset-0 z-0 transition-opacity duration-300 pointer-events-none opacity-0 group-hover/case-card:opacity-100 bg-hover"
+        style={{
+          backgroundImage: `url('${paper.hover}')`,
+          backgroundSize: "100% 100%",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          willChange: "opacity"
         }}
       />
 
@@ -796,7 +935,7 @@ function CaseCard({
           </p>
         </div>
       </div>
-    </motion.a>
+    </a>
   );
 }
 
@@ -938,28 +1077,36 @@ function StatCard({
   rotateClass: string;
   children: React.ReactNode;
 }) {
-  const [isHovered, setIsHovered] = useState(false);
-
   return (
     <div className="relative group/card flex flex-col">
-      <motion.div
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        whileHover={{ rotate: rotateClass.includes('-') ? -0.5 : 0.5, scale: 1.02 }}
+      <div
         className={cn(
-          "sticker-card text-black min-h-[240px] sm:min-h-[260px] md:min-h-[280px] p-4 sm:p-6 flex flex-col justify-center items-center text-center border-none shadow-none overflow-visible relative",
+          "sticker-card text-black min-h-[240px] sm:min-h-[260px] md:min-h-[280px] p-4 sm:p-6 flex flex-col justify-center items-center text-center border-none shadow-none overflow-visible relative group/stat-card stat-card-hover",
           rotateClass
         )}
       >
-        {/* Background with SVG torn paper filter applied */}
+        {/* Background normal */}
         <div
-          className="absolute inset-0 z-0 pointer-events-none"
+          className="absolute inset-0 z-0 transition-opacity duration-300 pointer-events-none opacity-100 group-hover/stat-card:opacity-0 bg-normal"
           style={{
-            backgroundImage: `url('${isHovered ? paper.hover : paper.normal}')`,
+            backgroundImage: `url('${paper.normal}')`,
             backgroundSize: "100% 100%",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
-            filter: `url(#${paper.filterId})`
+            opacity: 1,
+            willChange: "opacity"
+          }}
+        />
+        {/* Background hover */}
+        <div
+          className="absolute inset-0 z-0 transition-opacity duration-300 pointer-events-none opacity-0 group-hover/stat-card:opacity-100 bg-hover"
+          style={{
+            backgroundImage: `url('${paper.hover}')`,
+            backgroundSize: "100% 100%",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            opacity: 0,
+            willChange: "opacity"
           }}
         />
 
@@ -972,7 +1119,7 @@ function StatCard({
             {desc}
           </p>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }
@@ -1005,6 +1152,31 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('rage_lang', lang);
   }, [lang]);
+
+  // Disable hover effects during vertical page scroll to eliminate mouse wheel jank
+  useEffect(() => {
+    let scrollTimeout: number;
+    let isScrolling = false;
+
+    const handleScroll = () => {
+      if (!isScrolling) {
+        document.body.classList.add('is-scrolling');
+        isScrolling = true;
+      }
+      
+      window.clearTimeout(scrollTimeout);
+      scrollTimeout = window.setTimeout(() => {
+        document.body.classList.remove('is-scrolling');
+        isScrolling = false;
+      }, 150);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.clearTimeout(scrollTimeout);
+    };
+  }, []);
 
   useEffect(() => {
     const imagesToPreload = [
@@ -1100,6 +1272,26 @@ export default function App() {
         return root + 'send-message.php';
       };
 
+      // Optional client-side fallback. Requires VITE_TELEGRAM_BOT_TOKEN /
+      // VITE_TELEGRAM_CHAT_ID at build time; never hardcode the token here.
+      const sendViaTelegramApi = () => {
+        const token = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
+        const chatId = import.meta.env.VITE_TELEGRAM_CHAT_ID;
+        if (!token || !chatId) {
+          throw new Error('Telegram fallback is not configured');
+        }
+        return fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: message,
+          }),
+        });
+      };
+
       let response;
       try {
         response = await fetch(getProxyUrl(), {
@@ -1112,33 +1304,11 @@ export default function App() {
           }),
         });
       } catch (err) {
-        const token = import.meta.env.VITE_TELEGRAM_BOT_TOKEN || '8661662093:AAEGFaoQuvZfuoDY-NPf3I59u4NRzk_jbS4';
-        const chatId = import.meta.env.VITE_TELEGRAM_CHAT_ID || '7592708940';
-        response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            chat_id: chatId,
-            text: message,
-          }),
-        });
+        response = await sendViaTelegramApi();
       }
 
       if (response.status === 404) {
-        const token = import.meta.env.VITE_TELEGRAM_BOT_TOKEN || '8661662093:AAEGFaoQuvZfuoDY-NPf3I59u4NRzk_jbS4';
-        const chatId = import.meta.env.VITE_TELEGRAM_CHAT_ID || '7592708940';
-        response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            chat_id: chatId,
-            text: message,
-          }),
-        });
+        response = await sendViaTelegramApi();
       }
 
       if (response.ok) {
@@ -1305,7 +1475,10 @@ export default function App() {
       <div className="absolute top-[2800px] right-[-300px] w-[600px] h-[600px] bg-rage-pink/3 blur-[120px] rounded-full pointer-events-none -z-10" />
 
       {/* 2. HEADER (Navbar) */}
-      <nav className="fixed top-0 left-0 w-full z-50 px-6 py-4 bg-black/85 backdrop-blur-md border-b border-white/5 transition-all">
+      <nav className={cn(
+        "fixed top-0 left-0 w-full z-50 px-6 py-4 backdrop-blur-md transition-all duration-200",
+        isMenuOpen ? "bg-black/95 border-b border-white/10" : "bg-black/85 border-b border-white/5"
+      )}>
         <div className="container mx-auto flex items-center justify-between">
           {/* Logo with click to top */}
           <div className="cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
@@ -1560,7 +1733,7 @@ export default function App() {
                 <div
                   className="absolute inset-0 z-0 transition-all duration-300 pointer-events-none"
                   style={{
-                    backgroundImage: `url('${hoveredStat === 0 ? "/images/lime_torn_paper_hover.webp?v=2" : "/images/lime_torn_paper.webp?v=2"}')`,
+                    backgroundImage: `url('${hoveredStat === 0 ? "/images/lime_torn_paper_hover.webp?v=3" : "/images/lime_torn_paper.webp?v=3"}')`,
                     backgroundSize: "100% 100%",
                     backgroundPosition: "center",
                     backgroundRepeat: "no-repeat",
@@ -1569,7 +1742,7 @@ export default function App() {
                 />
                 <div className="sr-only">
                   <div className="font-display font-black text-5xl sm:text-6xl leading-none tracking-tighter mb-1.5 text-black">
-                    <Counter value="100+" />
+                    <Counter value="120+" />
                   </div>
                   <p className="font-sans font-black uppercase text-[10px] sm:text-xs tracking-tight leading-tight text-black/95">
                     {lang === 'RU' ? 'Успешных рекламных кампаний под ключ' : 'Successful turnkey ad campaigns'}
@@ -1621,7 +1794,7 @@ export default function App() {
                 <div
                   className="absolute inset-0 z-0 transition-all duration-300 pointer-events-none"
                   style={{
-                    backgroundImage: `url('${hoveredStat === 2 ? "/images/white_torn_paper_hover.webp?v=2" : "/images/white_torn_paper.webp?v=2"}')`,
+                    backgroundImage: `url('${hoveredStat === 2 ? "/images/white_torn_paper_hover.webp?v=3" : "/images/white_torn_paper.webp?v=3"}')`,
                     backgroundSize: "100% 100%",
                     backgroundPosition: "center",
                     backgroundRepeat: "no-repeat",
@@ -1631,7 +1804,7 @@ export default function App() {
 
                 <div className="sr-only">
                   <div className="font-display font-black text-5xl sm:text-6xl leading-none tracking-tighter mb-1.5 text-black">
-                    <Counter value="60+" />
+                    <Counter value="100+" />
                   </div>
                   <p className="font-sans font-black uppercase text-[10px] sm:text-xs tracking-tight leading-tight text-black/95">
                     {lang === 'RU' ? 'Блогеров в нашей эксклюзивной сети' : 'Bloggers in our exclusive network'}
@@ -1691,61 +1864,72 @@ export default function App() {
 
               {/* Service Cards from Reference Photo #3 layout */}
               <div className="space-y-4 w-full max-w-3xl">
-                {SERVICES.map((srv, idx) => (
-                  <motion.a
-                    href="#contacts"
-                    onClick={() => {
-                      setFormData(p => ({
-                        ...p,
-                        role: 'advertiser',
-                        desc: lang === 'RU'
-                          ? `Меня интересует услуга: ${srv.titleRU}. `
-                          : `I am interested in the service: ${srv.titleEN}. `
-                      }));
-                    }}
-                    onMouseEnter={() => setHoveredService(idx)}
-                    onMouseLeave={() => setHoveredService(null)}
-                    key={srv.titleRU}
-                    whileHover={{ x: 8 }}
-                    className="flex flex-row items-center justify-between gap-2.5 sm:gap-4 min-h-[90px] sm:min-h-[160px] py-3 px-4 sm:p-8 relative select-none text-black cursor-pointer bg-transparent border-none shadow-none overflow-visible group"
-                  >
-                    {/* Background image container that changes to crumpled version on hover */}
-                    <div
-                      className="absolute inset-0 z-0 transition-all duration-300 pointer-events-none"
-                      style={{
-                        backgroundImage: `url('${hoveredService === idx ? getServicePaperImages(idx).hover : getServicePaperImages(idx).normal}')`,
-                        backgroundSize: "100% 100%",
-                        backgroundPosition: "center",
-                        backgroundRepeat: "no-repeat",
-                        backgroundColor: "transparent"
+                {SERVICES.map((srv, idx) => {
+                  const paper = getServicePaperImages(idx);
+                  return (
+                    <a
+                      href="#contacts"
+                      onClick={() => {
+                        setFormData(p => ({
+                          ...p,
+                          role: 'advertiser',
+                          desc: lang === 'RU'
+                            ? `Меня интересует услуга: ${srv.titleRU}. `
+                            : `I am interested in the service: ${srv.titleEN}. `
+                        }));
                       }}
-                    />
+                      key={srv.titleRU}
+                      className="flex flex-row items-center justify-between gap-2.5 sm:gap-4 min-h-[90px] sm:min-h-[160px] py-3 px-4 sm:p-8 relative select-none text-black cursor-pointer bg-transparent border-none shadow-none overflow-visible group/service-card service-card-hover"
+                    >
+                      {/* Background normal */}
+                      <div
+                        className="absolute inset-0 z-0 transition-opacity duration-300 pointer-events-none opacity-100 group-hover/service-card:opacity-0 bg-normal"
+                        style={{
+                          backgroundImage: `url('${paper.normal}')`,
+                          backgroundSize: "100% 100%",
+                          backgroundPosition: "center",
+                          backgroundRepeat: "no-repeat",
+                          willChange: "opacity"
+                        }}
+                      />
+                      {/* Background hover */}
+                      <div
+                        className="absolute inset-0 z-0 transition-opacity duration-300 pointer-events-none opacity-0 group-hover/service-card:opacity-100 bg-hover"
+                        style={{
+                          backgroundImage: `url('${paper.hover}')`,
+                          backgroundSize: "100% 100%",
+                          backgroundPosition: "center",
+                          backgroundRepeat: "no-repeat",
+                          willChange: "opacity"
+                        }}
+                      />
 
-                    <div className="flex items-center gap-2 sm:gap-4 relative z-10">
-                      <div className={cn("w-8.5 h-8.5 sm:w-12 sm:h-12 rounded-lg flex-shrink-0 flex items-center justify-center border transition-all duration-300", getServicePaperImages(idx).iconBg, getServicePaperImages(idx).textColor)}>
-                        <div className="scale-[0.8] sm:scale-100 flex items-center justify-center">
-                          {srv.icon}
+                      <div className="flex items-center gap-2 sm:gap-4 relative z-10">
+                        <div className={cn("w-8.5 h-8.5 sm:w-12 sm:h-12 rounded-lg flex-shrink-0 flex items-center justify-center border transition-all duration-300", paper.iconBg, paper.textColor)}>
+                          <div className="scale-[0.8] sm:scale-100 flex items-center justify-center">
+                            {srv.icon}
+                          </div>
+                        </div>
+
+                        <div>
+                          <h3 className="font-display font-black text-[13px] sm:text-lg uppercase tracking-tight text-black leading-tight">
+                            {lang === 'RU' ? srv.titleRU : srv.titleEN}
+                          </h3>
+                          <p className="text-black/75 text-[10px] sm:text-sm font-sans mt-0.5 max-w-[580px] font-medium leading-tight">
+                            {lang === 'RU' ? srv.detailRU : srv.detailEN}
+                          </p>
                         </div>
                       </div>
 
-                      <div>
-                        <h3 className="font-display font-black text-[13px] sm:text-lg uppercase tracking-tight text-black leading-tight">
-                          {lang === 'RU' ? srv.titleRU : srv.titleEN}
-                        </h3>
-                        <p className="text-black/75 text-[10px] sm:text-sm font-sans mt-0.5 max-w-[580px] font-medium leading-tight">
-                          {lang === 'RU' ? srv.detailRU : srv.detailEN}
-                        </p>
+                      {/* Doodle graphic overlay matching photo #3 */}
+                      <div className="flex items-center gap-2 sm:gap-3 relative z-10 self-center sm:self-auto flex-shrink-0">
+                        <div className={cn("w-7.5 h-7.5 sm:w-10 sm:h-10 rounded-full flex items-center justify-center border transition-all duration-300", paper.arrowBg)}>
+                          <ArrowUpRight size={12} className="transition-transform duration-300 sm:scale-100 scale-[0.8] group-hover/service-card:rotate-45" />
+                        </div>
                       </div>
-                    </div>
-
-                    {/* Doodle graphic overlay matching photo #3 */}
-                    <div className="flex items-center gap-2 sm:gap-3 relative z-10 self-center sm:self-auto flex-shrink-0">
-                      <div className={cn("w-7.5 h-7.5 sm:w-10 sm:h-10 rounded-full flex items-center justify-center border transition-all duration-300", getServicePaperImages(idx).arrowBg)}>
-                        <ArrowUpRight size={12} className={cn("transition-transform duration-300 sm:scale-100 scale-[0.8]", hoveredService === idx && "rotate-45")} />
-                      </div>
-                    </div>
-                  </motion.a>
-                ))}
+                    </a>
+                  );
+                })}
               </div>
             </div>
 
@@ -1870,22 +2054,32 @@ export default function App() {
         <div className="container mx-auto max-w-5xl relative z-20">
 
           {/* Music label flyer graphic card */}
-          <motion.a
+          <a
             href="/career"
-            onMouseEnter={() => setHoveredCareer(true)}
-            onMouseLeave={() => setHoveredCareer(false)}
-            whileHover={{ y: -6, rotate: 0.5 }}
-            className="block relative p-8 sm:p-14 rounded-3xl overflow-visible shadow-3xl group cursor-pointer"
+            className="block relative p-8 sm:p-14 rounded-3xl overflow-visible shadow-3xl group/career-card career-card-hover cursor-pointer"
           >
-            {/* Background image container for crumpled torn paper */}
+            {/* Background normal */}
             <div
-              className="absolute inset-0 z-0 transition-all duration-300 pointer-events-none"
+              className="absolute inset-0 z-0 transition-opacity duration-300 pointer-events-none opacity-100 group-hover/career-card:opacity-0 bg-normal"
               style={{
-                backgroundImage: `url('${hoveredCareer ? "/images/clean_white_torn_paper_hover.webp" : "/images/clean_white_torn_paper.webp"}')`,
+                backgroundImage: "url('/images/clean_white_torn_paper.webp')",
                 backgroundSize: "100% 100%",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
-                backgroundColor: "transparent"
+                backgroundColor: "transparent",
+                willChange: "opacity"
+              }}
+            />
+            {/* Background hover */}
+            <div
+              className="absolute inset-0 z-0 transition-opacity duration-300 pointer-events-none opacity-0 group-hover/career-card:opacity-100 bg-hover"
+              style={{
+                backgroundImage: "url('/images/clean_white_torn_paper_hover.webp')",
+                backgroundSize: "100% 100%",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                backgroundColor: "transparent",
+                willChange: "opacity"
               }}
             />
 
@@ -1949,7 +2143,7 @@ export default function App() {
                 </div>
               </div>
             </div>
-          </motion.a>
+          </a>
         </div>
       </section>
 

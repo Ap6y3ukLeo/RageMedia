@@ -212,6 +212,26 @@ export default function Career() {
         return root + 'send-message.php';
       };
 
+      // Optional client-side fallback. Requires VITE_TELEGRAM_BOT_TOKEN /
+      // VITE_TELEGRAM_CHAT_ID at build time; never hardcode the token here.
+      const sendViaTelegramApi = () => {
+        const token = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
+        const chatId = import.meta.env.VITE_TELEGRAM_CHAT_ID;
+        if (!token || !chatId) {
+          throw new Error('Telegram fallback is not configured');
+        }
+        return fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: message,
+          }),
+        });
+      };
+
       let response;
       try {
         response = await fetch(getProxyUrl(), {
@@ -224,33 +244,11 @@ export default function Career() {
           }),
         });
       } catch (err) {
-        const token = import.meta.env.VITE_TELEGRAM_BOT_TOKEN || '8661662093:AAEGFaoQuvZfuoDY-NPf3I59u4NRzk_jbS4';
-        const chatId = import.meta.env.VITE_TELEGRAM_CHAT_ID || '7592708940';
-        response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            chat_id: chatId,
-            text: message,
-          }),
-        });
+        response = await sendViaTelegramApi();
       }
 
       if (response.status === 404) {
-        const token = import.meta.env.VITE_TELEGRAM_BOT_TOKEN || '8661662093:AAEGFaoQuvZfuoDY-NPf3I59u4NRzk_jbS4';
-        const chatId = import.meta.env.VITE_TELEGRAM_CHAT_ID || '7592708940';
-        response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            chat_id: chatId,
-            text: message,
-          }),
-        });
+        response = await sendViaTelegramApi();
       }
 
       if (response.ok) {
