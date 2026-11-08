@@ -200,8 +200,8 @@ const CASES: CaseItem[] = [
     name: "Genshin Impact",
     categoryRU: "Медиа-кампания",
     categoryEN: "Media Campaign",
-    descRU: "Масштабная кампания к выходу обновления с привлечением ключевых авторов игрового сегмента.",
-    descEN: "Large-scale campaign for the major update launch engaging key gaming creators.",
+    descRU: "Масштабная кампания к выходу крупного обновления: подобрали ключевых авторов игрового сегмента, сняли нативные интеграции и синхронизировали размещения с датой релиза, чтобы собрать максимум охвата в первые дни.",
+    descEN: "Large-scale campaign for a major update launch: we picked key gaming creators, produced native integrations and synced placements with the release date to maximize reach in the first days.",
     resultsRU: "8.5M+ Просмотров",
     resultsEN: "8.5M+ Views",
     link: "#contacts",
@@ -213,14 +213,27 @@ const CASES: CaseItem[] = [
     name: "Honkai: Star Rail",
     categoryRU: "Запуск",
     categoryEN: "Launch",
-    descRU: "Комплекс стримов и интеграций к релизу патча с акцентом на высокую конверсию и вовлеченность игроков.",
-    descEN: "Series of streams and integrations for the patch release focusing on high conversion and engagement.",
+    descRU: "Комплекс стримов и интеграций к релизу патча: выстроили сетку размещений у профильных авторов и сделали ставку на вовлечение — зрители не просто смотрели, а переходили в игру.",
+    descEN: "A series of streams and integrations for the patch release: we built a placement grid across dedicated creators and focused on engagement — viewers didn't just watch, they jumped into the game.",
     resultsRU: "1.2M+ Инсталлов",
     resultsEN: "1.2M+ Installs",
     link: "#contacts",
     badgeColor: "bg-violet-600 text-white",
     glowColor: "shadow-[0_0_20px_rgba(139,92,246,0.45)] hover:border-purple-500",
     accentText: "text-purple-400"
+  },
+  {
+    name: "Т-Банк",
+    categoryRU: "Спецпроект",
+    categoryEN: "Special Project",
+    descRU: "Серия нативных интеграций у гейминговых авторов для продвижения карты Т-Банка среди молодой аудитории: встроили оффер в сценарии роликов и стримов, сохранив живой формат контента.",
+    descEN: "A series of native integrations with gaming creators to promote the T-Bank card to a younger audience: we wove the offer into video and stream scenarios while keeping the content authentic.",
+    resultsRU: "2.5M+ Охватов",
+    resultsEN: "2.5M+ Reach",
+    link: "#contacts",
+    badgeColor: "bg-yellow-400 text-black",
+    glowColor: "shadow-[0_0_20px_rgba(250,204,21,0.45)] hover:border-yellow-400",
+    accentText: "text-yellow-400"
   }
 ];
 
@@ -385,7 +398,8 @@ const CASE_LOGOS: Record<string, string> = {
   "Block Blast": "/images/Block blast.webp",
   "Radmir RP": "/images/Radmir RP.webp",
   "Genshin Impact": "/images/genshin_logo.webp",
-  "Honkai: Star Rail": "/images/hsr_logo.webp"
+  "Honkai: Star Rail": "/images/hsr_logo.webp",
+  "Т-Банк": "/images/tbank_logo.webp"
 };
 
 
